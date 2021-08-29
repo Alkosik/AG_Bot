@@ -1,0 +1,26 @@
+{
+  "name": "piesek2",
+  "version": "1.0.0",
+  "description": "A sequel to the Discord Bot Piesek.",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alkosik/Piesek2.git"
+  },
+  "keywords": [
+    "Discord"
+  ],
+  "author": "Alkosik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alkosik/Piesek2/issues"
+  },
+  "homepage": "https://github.com/Alkosik/Piesek2#readme",
+  "dependencies": {
+    "discord.js": "^13.1.0",
+    "dotenv": "^10.0.0"
+  }
+}
