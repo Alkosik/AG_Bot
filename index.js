@@ -10,6 +10,9 @@ myIntents.add([Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS
 const client = new Client({ intents: myIntents });
 const { joinVoiceChannel, VoiceConnectionStatus, createAudioPlayer, createAudioResource, getVoiceConnection } = require('@discordjs/voice');
 
+// + Webserver
+const http = require('http');
+const server = http.createServer();
 
 // + Environment
 if (process.env.NODE_ENV !== 'production') {
@@ -158,4 +161,9 @@ client.on('messageCreate', async message => {
 	if (message.content.startsWith('she') && message.content.endsWith('esh')) {
 		message.reply('Sheesh!');
 	}
+});
+
+// Webserver
+server.listen(process.env.PORT, () => {
+	console.log('Server listening on port: ' + process.env.PORT);
 });
