@@ -165,5 +165,5 @@ client.on('messageCreate', async message => {
 
 // Webserver
 server.listen(process.env.PORT, () => {
-	console.log('Server listening on port: ' + process.env.PORT);
+	console.log(chalk.greenBright('WEB INFO'), 'Server listening on port: ' + process.env.PORT);
 });
