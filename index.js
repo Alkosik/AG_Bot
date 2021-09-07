@@ -159,7 +159,7 @@ client.on('messageCreate', async message => {
 	})();
 
 	// Other
-	if (message.content.toLowerCase().includes('she') && message.content.toLowerCase().includes('esh') && !message.author.bot) {
+	if (message.content.toLowerCase().startsWith('she') && message.content.toLowerCase().endsWith('esh') && !message.author.bot) {
 		message.reply('Sheesh!');
 	}
 

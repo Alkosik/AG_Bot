@@ -59,6 +59,7 @@ module.exports = {
 				reply = `**${value.user.username}** został zbanowany za ${reason}`;
 				ban_user.send(`Zostałeś zbanowany na Gangu Słoni za ${reason}.`);
 			}
+			LogEvent();
 			color = 'GREEN';
 			value.ban().catch(() => null);
 		});
@@ -68,6 +69,32 @@ module.exports = {
 		const replyEmbed = new MessageEmbed()
 			.setDescription(reply)
 			.setColor(color);
-		await interaction.reply({ embeds: [replyEmbed], ephemeral: isEphemeral });
+
+		function LogEvent() {
+			const logChannel = interaction.guild.channels.cache.find(channel => channel.name === 'logs');
+			const logEmbed = new MessageEmbed()
+				.setAuthor('Moderation logs', interaction.guild.iconURL())
+				.setColor('#4d33de')
+				.setThumbnail(ban_member.user.displayAvatarURL({
+					dynamic: true,
+				}))
+				.setFooter(interaction.guild.name, interaction.guild.iconURL())
+				.addField('**Moderation**', 'ban')
+				.addField('**Banned**', ban_member.user.username)
+				.addField('**ID**', `${ban_member.id}`)
+				.addField('**Banned By**', interaction.user.username)
+				.addField('**Reason**', `${reason || '**No Reason**'}`)
+				.addField('**Date**', interaction.createdAt.toLocaleString())
+				.setTimestamp();
+			if (!logChannel) {
+				console.log('log channel not found');
+				return;
+			}
+			logChannel.send({ embeds: [logEmbed] });
+		}
+
+		await interaction.deferReply();
+		await snooze(1000);
+		await interaction.editReply({ embeds: [replyEmbed], ephemeral: isEphemeral });
 	},
 };
