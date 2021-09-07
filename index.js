@@ -17,7 +17,7 @@ const server = http.createServer();
 // + Environment
 if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();
-	console.log(chalk.greenBright('INFO'), `Current environment: ${process.env.NODE_ENV}`);
+	console.log(chalk.greenBright('INIT INFO'), `Current environment: ${process.env.NODE_ENV}`);
 }
 
 // + Other
@@ -88,6 +88,7 @@ client.login(process.env.TOKEN);
 // eslint-disable-next-line no-unused-vars
 const AlbertReminder = schedule.scheduleJob('1 1 * * *', function() {
 	(async () => {
+		console.log(chalk.green('CRON INFO'), 'Initiating Albert\'s Reminder.');
 		const janus = client.emojis.cache.find(emoji => emoji.name === 'JanusChamp');
 		const pepo_love = client.emojis.cache.find(emoji => emoji.name === 'PepoLove');
 
@@ -138,7 +139,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 client.on('messageCreate', async message => {
 	// Link detection
 	(async () => {
-		if (message.content.includes('discord.gg/' || 'discordapp.com/invite/')) {
+		if (message.content.toLowerCase().includes('discord.gg/' || 'discordapp.com/invite/')) {
 			let sentwarnmsg;
 			const warnmsg = new MessageEmbed()
 				.setThumbnail('https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
@@ -158,8 +159,12 @@ client.on('messageCreate', async message => {
 	})();
 
 	// Other
-	if (message.content.startsWith('she') && message.content.endsWith('esh')) {
+	if (message.content.toLowerCase().includes('she') && message.content.toLowerCase().includes('esh') && !message.author.bot) {
 		message.reply('Sheesh!');
+	}
+
+	if (message.content.toLowerCase().includes('yuh') && !message.author.bot) {
+		message.reply('Yuh');
 	}
 });
 
