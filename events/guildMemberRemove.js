@@ -10,5 +10,10 @@ module.exports = {
 		const memberCountChannel = client.channels.cache.get('726734001347231784');
 		const memCount = guild.memberCount;
 		memberCountChannel.setName(`Ludzie: ${memCount} 👤`);
+
+		const channel = member.guild.channels.cache.find(ch => ch.id === '511224486545326100');
+		if (!channel) return;
+
+		channel.send(`**${member.displayName}** opuścił serwer, albo został wyrzucony ;(`);
 	},
 };
