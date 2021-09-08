@@ -7,11 +7,13 @@ module.exports = {
 	async execute(interaction) {
 		const result = Math.random() * (4 - 1) + 1;
 		const player = interaction.member;
+		let reply;
 
 		switch (Math.floor(result)) {
 		case 1:
 			if (player.kickable) {
 				player.ban();
+				reply = 'Banicja';
 			} else {
 				return interaction.reply('kurwo nie mam permisji');
 			}
@@ -19,6 +21,7 @@ module.exports = {
 		case 2:
 			if (player.kickable) {
 				player.kick();
+				reply = 'Kop na klate';
 			} else {
 				return interaction.reply('kurwo nie mam permisji');
 			}
@@ -28,6 +31,7 @@ module.exports = {
 				return interaction.reply('kurwo nie ma cie na kanale');
 			} else {
 				player.voice.setMute(true);
+				reply = 'Wyciszenie';
 			}
 			break;
 		case 4:
@@ -35,10 +39,11 @@ module.exports = {
 				return interaction.reply('kurwo nie ma cie na kanale');
 			} else {
 				player.voice.setDeaf(true);
+				reply = 'Ogluszenie';
 			}
 			break;
 		}
 		console.log(Math.floor(result));
-		await interaction.reply(String(Math.floor(result)));
+		await interaction.reply(reply);
 	},
 };
