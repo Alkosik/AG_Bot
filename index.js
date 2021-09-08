@@ -2,6 +2,7 @@
 const fs = require('fs');
 const chalk = require('chalk');
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
+const config = require('./config.json');
 
 // + Discord
 const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
@@ -24,7 +25,7 @@ if (process.env.NODE_ENV !== 'production') {
 const schedule = require('node-schedule');
 
 // + Other non-packages
-const main_channel_id = '510941195929649153';
+const main_channel_id = config.mainChannelId;
 let currently_playing = false;
 
 // * Collections
@@ -35,6 +36,7 @@ client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const modCommandFiles = fs.readdirSync('./commands/mod').filter(file => file.endsWith('.js'));
 const utilCommandFiles = fs.readdirSync('./commands/utility').filter(file => file.endsWith('.js'));
+const funCommandFiles = fs.readdirSync('./commands/fun').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -52,6 +54,13 @@ for (const file of modCommandFiles) {
 
 for (const file of utilCommandFiles) {
 	const command = require(`./commands/utility/${file}`);
+	// Set a new item in the Collection
+	// With the key as the command name and the value as the exported module
+	client.commands.set(command.data.name, command);
+}
+
+for (const file of funCommandFiles) {
+	const command = require(`./commands/fun/${file}`);
 	// Set a new item in the Collection
 	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);
@@ -100,11 +109,14 @@ const AlbertReminder = schedule.scheduleJob('1 1 * * *', function() {
 		const janus = client.emojis.cache.find(emoji => emoji.name === 'JanusChamp');
 		const pepo_love = client.emojis.cache.find(emoji => emoji.name === 'PepoLove');
 
-		const mood = Math.random() * (10 - 1) + 1;
-		if (mood >= 5) {
+		const mood = Math.random() * (20 - 1) + 1;
+		if (mood >= 10) {
 			client.channels.cache.get(main_channel_id).send(`<@430140838345965595>, kocham cie ${pepo_love}`);
+		} else if (mood == 1) {
+			client.channels.cache.get(main_channel_id).send(`<@430140838345965595>, kocham cie ${pepo_love} ~ Kacperek`);
 		} else {
 			client.channels.cache.get(main_channel_id).send(`<@430140838345965595>, nienawidze cie ${janus}`);
+
 		}
 	})();
 });

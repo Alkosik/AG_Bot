@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+const config = require('../../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -25,12 +26,13 @@ module.exports = {
 		const reason = interaction.options.getString('powód');
 
 		const promise = new Promise(function(resolve, reject) {
-			if (ban_member.roles.cache.some(r => r.name === 'Administracja')) {
+			if (ban_member.roles.cache.some(role => role.name === config.adminRoleName)) {
 				reject(reply = '**Członek administracji nie może zostać zbanowany**');
 			}
-			if (!interaction.member.roles.cache.some(r => r.name === 'Administracja')) {
+			if (!interaction.member.roles.cache.has(role => role.name === config.adminRoleName)) {
 				reject(reply = '**Nie masz permisji do banowania - [Administracja]**');
 			}
+			snooze(500);
 			if (ban_member.id === interaction.member.id) {
 				reject(reply = '**Nie możesz zbanować sam siebie**');
 			}
