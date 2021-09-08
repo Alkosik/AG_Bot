@@ -6,9 +6,13 @@ module.exports = {
 		.setName('cipa')
 		.setDescription('Prawdziwa cipa.'),
 	async execute(interaction) {
+		const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 		const cipaEmbed = new MessageEmbed()
 			.setTitle('Ale cipa')
 			.setImage('https://i.imgur.com/qs17Hey.jpg');
-		await interaction.reply({ embeds: [cipaEmbed] });
+		await interaction.deferReply();
+		snooze(1000);
+		await interaction.editReply({ embeds: [cipaEmbed] });
 	},
 };

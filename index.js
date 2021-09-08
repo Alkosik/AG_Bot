@@ -34,6 +34,7 @@ client.commands = new Collection();
 // #region Command Handler
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const modCommandFiles = fs.readdirSync('./commands/mod').filter(file => file.endsWith('.js'));
+const utilCommandFiles = fs.readdirSync('./commands/utility').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -44,6 +45,13 @@ for (const file of commandFiles) {
 
 for (const file of modCommandFiles) {
 	const command = require(`./commands/mod/${file}`);
+	// Set a new item in the Collection
+	// With the key as the command name and the value as the exported module
+	client.commands.set(command.data.name, command);
+}
+
+for (const file of utilCommandFiles) {
+	const command = require(`./commands/utility/${file}`);
 	// Set a new item in the Collection
 	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);

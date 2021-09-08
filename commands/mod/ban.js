@@ -73,18 +73,19 @@ module.exports = {
 		function LogEvent() {
 			const logChannel = interaction.guild.channels.cache.find(channel => channel.name === 'logs');
 			const logEmbed = new MessageEmbed()
-				.setAuthor('Moderation logs', interaction.guild.iconURL())
+				.setAuthor('Ban Log', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
 				.setColor('#4d33de')
-				.setThumbnail(ban_member.user.displayAvatarURL({
+				.setThumbnail(interaction.user.displayAvatarURL({
 					dynamic: true,
 				}))
-				.setFooter(interaction.guild.name, interaction.guild.iconURL())
-				.addField('**Moderation**', 'ban')
-				.addField('**Banned**', ban_member.user.username)
-				.addField('**ID**', `${ban_member.id}`)
-				.addField('**Banned By**', interaction.user.username)
+				.setFooter(interaction.guild.name, 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
+				.addFields(
+					{ name: '**Banned**', value: ban_member.user.username, inline: true },
+					{ name: 'Banned By', value: interaction.user.username, inline: true },
+					{ name: 'Date', value: interaction.createdAt.toLocaleString(), inline: false },
+				)
+				.addField('**ID**', ban_member.id)
 				.addField('**Reason**', `${reason || '**No Reason**'}`)
-				.addField('**Date**', interaction.createdAt.toLocaleString())
 				.setTimestamp();
 			if (!logChannel) {
 				console.log('log channel not found');
