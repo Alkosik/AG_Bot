@@ -71,6 +71,7 @@ client.on('interactionCreate', async interaction => {
 
 	const command = client.commands.get(interaction.commandName);
 
+	if (config.commandsDisabled == true && interaction.commandName != 'disablecommands') return interaction.reply('Interakcje zostały wyłączone na czas testów.');
 	if (!command) return;
 
 	try {

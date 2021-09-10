@@ -11,6 +11,10 @@ module.exports = {
 		const playerUser = interaction.user;
 		let reply;
 
+		if (player.id == '284366115348414466') {
+			return interaction.reply('Your use of this commands has been suspended because of abusive usage.');
+		}
+
 		switch (Math.floor(result)) {
 		case 1:
 			if (player.kickable) {

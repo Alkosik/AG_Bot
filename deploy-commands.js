@@ -1,5 +1,6 @@
-// dotenv and chalk
+// dotenv, chalk and snooze
 const chalk = require('chalk');
+const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();
 	console.log(chalk.greenBright('INFO'), `Current environment: ${process.env.NODE_ENV}`);
@@ -26,24 +27,28 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	console.log(chalk.green('CMD_REG INFO'), 'Registering command: ' + command.data.name);
 	commands.push(command.data.toJSON());
+	snooze(1000);
 }
 
 for (const file of modCommandFiles) {
 	const command = require(`./commands/mod/${file}`);
 	console.log(chalk.green('CMD_REG INFO'), 'Registering moderation command: ' + command.data.name);
 	commands.push(command.data.toJSON());
+	snooze(1000);
 }
 
 for (const file of utilCommandFiles) {
 	const command = require(`./commands/utility/${file}`);
 	console.log(chalk.green('CMD_REG INFO'), 'Registering utility command: ' + command.data.name);
 	commands.push(command.data.toJSON());
+	snooze(1000);
 }
 
 for (const file of funCommandFiles) {
 	const command = require(`./commands/fun/${file}`);
 	console.log(chalk.green('CMD_REG INFO'), 'Registering fun command: ' + command.data.name);
 	commands.push(command.data.toJSON());
+	snooze(1000);
 }
 
 const rest = new REST({ version: '9' }).setToken(token);

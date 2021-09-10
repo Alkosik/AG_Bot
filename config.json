@@ -1,4 +1,5 @@
 {
 	"mainChannelId": "510941195929649153",
-	"adminRoleName": "Administracja"
+	"adminRoleName": "Administracja",
+	"commandsDisabled": "false"
 }
