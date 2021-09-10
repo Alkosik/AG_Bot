@@ -22,10 +22,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // + Other
-const schedule = require('node-schedule');
+// will be
 
 // + Other non-packages
-const main_channel_id = config.mainChannelId;
 let currently_playing = false;
 
 // * Collections
@@ -33,6 +32,7 @@ client.commands = new Collection();
 
 
 // #region Command Handler
+console.log(chalk.green('INIT INFO'), 'Started commands initialization');
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const modCommandFiles = fs.readdirSync('./commands/mod').filter(file => file.endsWith('.js'));
 const utilCommandFiles = fs.readdirSync('./commands/utility').filter(file => file.endsWith('.js'));
@@ -87,6 +87,7 @@ client.on('interactionCreate', async interaction => {
 // #endregion
 
 // #region Event Handler
+console.log(chalk.green('INIT INFO'), 'Started events initialization');
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 
 for (const file of eventFiles) {
@@ -99,29 +100,22 @@ for (const file of eventFiles) {
 }
 // #endregion
 
+// #region Cron Handler
+console.log(chalk.green('INIT INFO'), 'Started cron jobs initialization');
+const cronFiles = fs.readdirSync('./cronjobs').filter(file => file.endsWith('.js'));
+
+for (const file of cronFiles) {
+	const cron = `./cronjobs/${file}`;
+	const newCron = cron.slice(0, -3);
+	require(String(newCron))(config, client, chalk);
+	console.log(chalk.green('CRON INFO'), 'Loaded ' + file.slice(0, -3));
+}
+// #endregion
 
 client.login(process.env.TOKEN);
 
 // Cron Jobs
 // eslint-disable-next-line no-unused-vars
-const AlbertReminder = schedule.scheduleJob('1 1 * * *', function() {
-	(async () => {
-		console.log(chalk.green('CRON INFO'), 'Initiating Albert\'s Reminder.');
-		const janus = client.emojis.cache.find(emoji => emoji.name === 'JanusChamp');
-		const pepo_love = client.emojis.cache.find(emoji => emoji.name === 'PepoLove');
-
-		const mood = Math.random() * (20 - 1) + 1;
-		const moodFloored = Math.floor(mood);
-		if (moodFloored >= 10) {
-			client.channels.cache.get(main_channel_id).send(`<@430140838345965595>, kocham cie ${pepo_love}`);
-		} else if (moodFloored < 3) {
-			client.channels.cache.get(main_channel_id).send(`<@430140838345965595>, kocham cie ${pepo_love} ~ Kacperek`);
-		} else {
-			client.channels.cache.get(main_channel_id).send(`<@430140838345965595>, nienawidze cie ${janus}`);
-
-		}
-	})();
-});
 
 // Voice
 client.on('voiceStateUpdate', (oldState, newState) => {
