@@ -29,7 +29,7 @@ module.exports = {
 			}
 			break;
 		case 3:
-			if (!player.voice) {
+			if (player.voice.sessionId == null) {
 				return interaction.reply('kurwo nie ma cie na kanale');
 			} else {
 				player.voice.setMute(true);
@@ -37,7 +37,7 @@ module.exports = {
 			}
 			break;
 		case 4:
-			if (!player.voice) {
+			if (player.voice.sessionId == null) {
 				return interaction.reply('kurwo nie ma cie na kanale');
 			} else {
 				player.voice.setDeaf(true);
