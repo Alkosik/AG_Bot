@@ -8,6 +8,7 @@ module.exports = {
 		// return interaction.reply('Ruletka zostala chwilowo wylaczona.');
 		const result = Math.random() * (8 - 1) + 1;
 		const player = interaction.member;
+		const playerUser = interaction.user;
 		let reply;
 
 		switch (Math.floor(result)) {
@@ -46,6 +47,8 @@ module.exports = {
 		default:
 			return interaction.reply('Wygrałeś.');
 		}
+
+		playerUser.send(reply);
 		console.log(Math.floor(result));
 		await interaction.reply(reply);
 	},
