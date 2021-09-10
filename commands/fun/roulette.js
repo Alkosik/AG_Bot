@@ -5,8 +5,8 @@ module.exports = {
 		.setName('rr')
 		.setDescription('Russian roulette.'),
 	async execute(interaction) {
-		return interaction.reply('Ruletka zostala chwilowo wylaczona.');
-		const result = Math.random() * (4 - 1) + 1;
+		// return interaction.reply('Ruletka zostala chwilowo wylaczona.');
+		const result = Math.random() * (8 - 1) + 1;
 		const player = interaction.member;
 		let reply;
 
@@ -43,6 +43,8 @@ module.exports = {
 				reply = 'Ogluszenie';
 			}
 			break;
+		default:
+			return interaction.reply('Wygrałeś.');
 		}
 		console.log(Math.floor(result));
 		await interaction.reply(reply);
