@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageButton } = require('discord.js');
+const wait = require('util').promisify(setTimeout);
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -8,30 +9,87 @@ module.exports = {
 		.addUserOption(option =>
 			option.setName('partner')
 				.setDescription('Partner do duo')
-				.setRequired(false))
+				.setRequired(true)),
 	async execute(interaction) {
+
+		// Emoji
+		const gunLeft = interaction.client.emojis.cache.find(emoji => emoji.name === 'gun');
+		const gunRight = interaction.client.emojis.cache.find(emoji => emoji.name === 'gunright');
 
 		// Player 1
 		const player = interaction.member;
-		const playerUser = interaction.user;
 
 		// Player 2
 		const duoPlayer = interaction.options.getMember('partner');
-		const duoPlayerUser = interaction.options.getUser('partner');
-		// return interaction.reply('Ruletka zostala chwilowo wylaczona.');
-		const result = Math.random() * (8 - 1) + 1;
-		let reply;
 
-		console.log(duoPlayer);
+		// RR result
+		const result = Math.random() * (15 - 1) + 1;
+
+		if (duoPlayer.user.id == player.id) {
+			return interaction.reply('Nie możesz grać sam ze sobą.');
+		}
+
+
+		// Invitation
+		const filter = i => i.customId === 'rraccept' && i.user.id === duoPlayer.user.id;
+		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 15000 });
 
 		const inviteRow = new MessageActionRow()
 			.addComponents(
 				new MessageButton()
-					.setCustomId('primary')
+					.setCustomId('rraccept')
 					.setLabel('Akceptuj')
-					.setStyle('PRIMARY'),
+					.setStyle('DANGER')
+					.setEmoji(gunLeft),
 			);
 
-		await interaction.reply({ content: `Zostałeś zaproszony do zagrania w ruletkę z ${player.user.username}`, components: [inviteRow] });
+		await interaction.reply({ content: `${duoPlayer}, Zostałeś zaproszony do zagrania w ruletkę z ${player.user.username}`, components: [inviteRow] });
+
+		// const accpetEmbed = new MessageEmbed()
+		// 	.setTitle('Zaproszenie zaakceptowane.')
+		// 	.setColor('GREEN');
+		await collector.on('collect', async i => {
+			if (i.customId === 'rraccept') {
+				await interaction.editReply({ content: 'Zaproszenie zaakceptowane.', components: [] });
+			}
+			StartGame();
+		});
+
+		async function StartGame() {
+			let stepped = true;
+			await wait(1000);
+			await interaction.editReply('Rozpoczynanie gry.');
+			await wait(1000);
+			await interaction.editReply('Rozpoczynanie gry..');
+			await wait(1000);
+			await interaction.editReply('Rozpoczynanie gry...');
+			await wait(1000);
+			for (let step = 0; step < result; step++) {
+				await wait(200);
+				if (stepped == true) {
+					await interaction.editReply(`${player} ${gunLeft} ${duoPlayer}`);
+					stepped = false;
+				} else {
+					await interaction.editReply(`${player} ${gunRight} ${duoPlayer}`);
+					stepped = true;
+				}
+			}
+			if (stepped == false) {
+				await interaction.followUp(`${duoPlayer} wygrał. Kickowanie ${player}.`);
+				if (!player.kickable) {
+					await interaction.followUp('jebac was');
+				} else {
+					player.kick();
+				}
+			} else {
+				await interaction.followUp(`${player} wygrał. Kickownie ${duoPlayer}`);
+				if (!duoPlayer.kickable) {
+					await interaction.followUp('jebac was');
+				} else {
+					duoPlayer.kick();
+				}
+			}
+		}
+		// await interaction.reply({ content: `Zostałeś zaproszony do zagrania w ruletkę z ${player.user.username}`, components: [inviteRow] });
 	},
 };
