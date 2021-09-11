@@ -79,6 +79,7 @@ module.exports = {
 				if (!player.kickable) {
 					await interaction.followUp('jebac was');
 				} else {
+					player.send('https://discord.gg/7XcYkDU');
 					player.kick();
 				}
 			} else {
@@ -86,6 +87,7 @@ module.exports = {
 				if (!duoPlayer.kickable) {
 					await interaction.followUp('jebac was');
 				} else {
+					duoPlayer.send('https://discord.gg/7XcYkDU');
 					duoPlayer.kick();
 				}
 			}
