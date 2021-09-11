@@ -5,7 +5,7 @@ const wait = require('util').promisify(setTimeout);
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('rr')
-		.setDescription('Russian roulette but with a friend.')
+		.setDescription('Russian roulette with a friend(s).')
 		.addUserOption(option =>
 			option.setName('partner')
 				.setDescription('Partner do duo')
@@ -23,7 +23,7 @@ module.exports = {
 		const duoPlayer = interaction.options.getMember('partner');
 
 		// RR result
-		const result = Math.random() * (15 - 1) + 1;
+		const result = Math.random() * (15 - 5) + 5;
 
 		if (duoPlayer.user.id == player.id) {
 			return interaction.reply('Nie możesz grać sam ze sobą.');
