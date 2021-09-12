@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { RiotAPI, RiotAPITypes, PlatformId } = require('@fightmegg/riot-api');
-const wait = require('util').promisify(setTimeout);
+const { RiotAPI, PlatformId } = require('@fightmegg/riot-api');
+// const wait = require('util').promisify(setTimeout);
 
 if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();
@@ -25,7 +25,7 @@ module.exports = {
 		const nick = interaction.options.getString('nick');
 		// const regionChoice = interaction.options.getString('region');
 
-		const rAPI = new RiotAPI('RGAPI-21dc7bae-f291-4823-ac1d-7a4d58f01a56');
+		const rAPI = new RiotAPI(process.env.RIOT_API);
 
 		const summoner = await rAPI.summoner.getBySummonerName({
 			region: PlatformId.EUNE1,
