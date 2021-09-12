@@ -34,6 +34,7 @@ A sequel to the private Discord Bot Piesek.
 * Handlers
 	* Command Handler
 	* Event Handler
-	* Cronjob Handle
+	* Cronjob Handler
+	* Error Handler
 * Automatic invite removal
 * Sheesh and Yuh
