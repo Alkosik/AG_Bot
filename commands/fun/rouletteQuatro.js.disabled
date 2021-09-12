@@ -4,11 +4,19 @@ const wait = require('util').promisify(setTimeout);
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('rr')
-		.setDescription('Russian roulette with a friend.')
+		.setName('rrq')
+		.setDescription('Russian roulette with friends.')
 		.addUserOption(option =>
-			option.setName('partner')
-				.setDescription('Partner do duo')
+			option.setName('partner0')
+				.setDescription('Partner nr 1')
+				.setRequired(true))
+		.addUserOption(option =>
+			option.setName('partner1')
+				.setDescription('Partner nr 2')
+				.setRequired(true))
+		.addUserOption(option =>
+			option.setName('partner2')
+				.setDescription('Partner nr 2')
 				.setRequired(true)),
 	async execute(interaction) {
 
@@ -16,28 +24,24 @@ module.exports = {
 		const gunLeft = interaction.client.emojis.cache.find(emoji => emoji.name === 'gun');
 		const gunRight = interaction.client.emojis.cache.find(emoji => emoji.name === 'gunright');
 
-		// Player 1
-		const player = interaction.member;
-
-		// Player 2
-		const duoPlayer = interaction.options.getMember('partner');
+		// Players
+		const stPlayer = interaction.member;
+		const ndPlayer = interaction.options.getMember('partner0');
+		const rdPlayer = interaction.options.getMember('partner1');
+		const thPlayer = interaction.options.getMember('partner2');
 
 		// RR result
 		const result = Math.random() * (15 - 5) + 5;
 
-		if (duoPlayer.user.id == player.id) {
-			return interaction.reply('Nie możesz grać sam ze sobą.');
-		}
-
 
 		// Invitation
-		const filter = i => i.customId === 'rraccept' && i.user.id === duoPlayer.user.id;
+		const filter = i => i.customId === 'rrqaccept' && i.user.id === duoPlayer.user.id;
 		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 15000 });
 
 		const inviteRow = new MessageActionRow()
 			.addComponents(
 				new MessageButton()
-					.setCustomId('rraccept')
+					.setCustomId('rrqaccept')
 					.setLabel('Akceptuj')
 					.setStyle('DANGER')
 					.setEmoji(gunLeft),

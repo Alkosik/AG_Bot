@@ -37,6 +37,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 const modCommandFiles = fs.readdirSync('./commands/mod').filter(file => file.endsWith('.js'));
 const utilCommandFiles = fs.readdirSync('./commands/utility').filter(file => file.endsWith('.js'));
 const funCommandFiles = fs.readdirSync('./commands/fun').filter(file => file.endsWith('.js'));
+const apiCommandFiles = fs.readdirSync('./commands/apis').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -61,6 +62,13 @@ for (const file of utilCommandFiles) {
 
 for (const file of funCommandFiles) {
 	const command = require(`./commands/fun/${file}`);
+	// Set a new item in the Collection
+	// With the key as the command name and the value as the exported module
+	client.commands.set(command.data.name, command);
+}
+
+for (const file of apiCommandFiles) {
+	const command = require(`./commands/apis/${file}`);
 	// Set a new item in the Collection
 	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);

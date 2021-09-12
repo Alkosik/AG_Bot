@@ -22,6 +22,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 const modCommandFiles = fs.readdirSync('./commands/mod').filter(file => file.endsWith('.js'));
 const utilCommandFiles = fs.readdirSync('./commands/utility').filter(file => file.endsWith('.js'));
 const funCommandFiles = fs.readdirSync('./commands/fun').filter(file => file.endsWith('.js'));
+const apiCommandFiles = fs.readdirSync('./commands/apis').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -47,6 +48,13 @@ for (const file of utilCommandFiles) {
 for (const file of funCommandFiles) {
 	const command = require(`./commands/fun/${file}`);
 	console.log(chalk.green('CMD_REG INFO'), 'Registering fun command: ' + command.data.name);
+	commands.push(command.data.toJSON());
+	snooze(1000);
+}
+
+for (const file of apiCommandFiles) {
+	const command = require(`./commands/apis/${file}`);
+	console.log(chalk.green('CMD_REG INFO'), 'Registering api command: ' + command.data.name);
 	commands.push(command.data.toJSON());
 	snooze(1000);
 }

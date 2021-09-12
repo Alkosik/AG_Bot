@@ -26,20 +26,15 @@ module.exports = {
 		const reason = interaction.options.getString('powód');
 
 		const promise = new Promise(function(resolve, reject) {
-			if (ban_member.roles.cache.some(role => role.name === config.adminRoleName)) {
+			if (ban_member.roles.cache.find(r => r.id === config.adminRoleId)) {
 				reject(reply = '**Członek administracji nie może zostać zbanowany**');
-			}
-			if (!interaction.member.roles.cache.has(role => role.name === config.adminRoleName)) {
+			} else if (!interaction.member.roles.cache.find(r => r.id === config.adminRoleId)) {
 				reject(reply = '**Nie masz permisji do banowania - [Administracja]**');
-			}
-			snooze(500);
-			if (ban_member.id === interaction.member.id) {
+			} else if (ban_member.id === interaction.member.id) {
 				reject(reply = '**Nie możesz zbanować sam siebie**');
-			}
-			if (!ban_member.kickable) {
+			} else if (!ban_member.kickable) {
 				reject(reply = '**Nie możesz zbanować tej osoby**');
-			}
-			if (ban_member.user.bot) {
+			} else if (ban_member.user.bot) {
 				reject(reply = '**Nie możesz zbanować bota**');
 			}
 			resolve(ban_member);

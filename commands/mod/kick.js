@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+const config = require('../../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -25,19 +26,15 @@ module.exports = {
 		const reason = interaction.options.getString('powód');
 
 		const promise = new Promise(function(resolve, reject) {
-			if (kick_member.roles.cache.some(r => r.name === 'Administracja')) {
+			if (kick_member.roles.cache.find(r => r.id === config.adminRoleId)) {
 				reject(reply = '**Członek administracji nie może zostać wyrzucony**');
-			}
-			if (!interaction.member.roles.cache.some(r => r.name === 'Administracja')) {
+			} else if (!interaction.member.roles.cache.find(r => r.id === config.adminRoleId)) {
 				reject(reply = '**Nie masz permisji do kickowania - [Administracja]**');
-			}
-			if (kick_member.id === interaction.member.id) {
+			} else if (kick_member.id === interaction.member.id) {
 				reject(reply = '**Nie możesz wyrzucić sam siebie**');
-			}
-			if (!kick_member.kickable) {
+			} else if (!kick_member.kickable) {
 				reject(reply = '**Nie możesz wyrzucić tej osoby**');
-			}
-			if (kick_member.user.bot) {
+			} else if (kick_member.user.bot) {
 				reject(reply = '**Nie możesz wyrzucić bota**');
 			}
 			resolve(kick_member);
