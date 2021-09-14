@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { RiotAPI, PlatformId } = require('@fightmegg/riot-api');
+const _ = require('lodash');
 // const wait = require('util').promisify(setTimeout);
 
 if (process.env.NODE_ENV !== 'production') {
@@ -23,22 +24,39 @@ module.exports = {
 				.addChoice('NA', 'NA1')),
 	async execute(interaction) {
 		const nick = interaction.options.getString('nick');
-		// const regionChoice = interaction.options.getString('region');
+		const regionChoice = interaction.options.getString('region');
+		let region;
+		console.log(regionChoice);
+
+		if (regionChoice == 'EUNE1') {
+			region = PlatformId.EUNE1;
+		} else if (regionChoice == 'EUW1') {
+			region = PlatformId.EUW1;
+		} else if (regionChoice == 'NA1') {
+			region = PlatformId.NA1;
+		}
 
 		const rAPI = new RiotAPI(process.env.RIOT_API);
 
 		const summoner = await rAPI.summoner.getBySummonerName({
-			region: PlatformId.EUNE1,
+			region: region,
 			summonerName: nick,
 		});
 
-		const something = await rAPI.match.getMatchlistByAccount({
-			region: PlatformId.EUNE1,
+		const match = await rAPI.match.getMatchlistByAccount({
+			region: region,
 			accountId: summoner.accountId,
 		});
 
-		// console.log(something);
+		const ranked = await rAPI.league.getEntriesBySummonerId({
+			region: region,
+			summonerId: summoner.id,
+		});
 
-		await interaction.reply(`Nick: ${summoner.name}, Poziom: ${summoner.summonerLevel}, Gry w sezonie: ${something.totalGames}`);
+		// console.log(ranked);
+		const filtered = _.filter(ranked, { queueType: 'RANKED_SOLO_5x5' });
+		// console.log(filtered[0].tier);
+
+		await interaction.reply(`Nick: ${summoner.name}, Poziom: ${summoner.summonerLevel}, Gry w sezonie: ${match.totalGames}, Region: ${regionChoice}, Ranga: ${filtered[0].tier} ${filtered[0].rank}`);
 	},
 };
