@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { RiotAPI, PlatformId } = require('@fightmegg/riot-api');
+const { MessageEmbed } = require('discord.js');
 const _ = require('lodash');
 // const wait = require('util').promisify(setTimeout);
 
@@ -23,6 +24,8 @@ module.exports = {
 				.addChoice('EUW', 'EUW1')
 				.addChoice('NA', 'NA1')),
 	async execute(interaction) {
+		await interaction.deferReply();
+
 		const nick = interaction.options.getString('nick');
 		const regionChoice = interaction.options.getString('region');
 		let region;
@@ -56,7 +59,29 @@ module.exports = {
 		// console.log(ranked);
 		const filtered = _.filter(ranked, { queueType: 'RANKED_SOLO_5x5' });
 		// console.log(filtered[0].tier);
+		const currentRank = `${filtered[0].tier} ${filtered[0].rank}`;
 
-		await interaction.reply(`Nick: ${summoner.name}, Poziom: ${summoner.summonerLevel}, Gry w sezonie: ${match.totalGames}, Region: ${regionChoice}, Ranga: ${filtered[0].tier} ${filtered[0].rank}`);
+		const winratio = filtered[0].wins / (filtered[0].wins + filtered[0].losses);
+		const roundedWr = Math.round((winratio + Number.EPSILON) * 100) / 100 * 100;
+
+		console.log('WR:' + roundedWr);
+
+		const iconLink = `http://ddragon.leagueoflegends.com/cdn/10.18.1/img/profileicon/${summoner.profileIconId}.png`;
+
+		const statsEmbed = new MessageEmbed()
+			.setAuthor(summoner.name)
+			.setColor('#ff0099')
+			.setThumbnail(iconLink)
+			.setFooter(`Region: ${regionChoice}`)
+			.addFields(
+				{ name: 'Poziom', value: summoner.summonerLevel.toLocaleString(), inline: true },
+				{ name: '\u200B', value: '\u200B', inline: true },
+				{ name: 'Gry w sezonie', value: match.totalGames.toLocaleString(), inline: true },
+				{ name: 'Ranga', value: currentRank, inline: true },
+				{ name: 'Winratio', value: roundedWr.toLocaleString() + '%', inline: true },
+			);
+
+		// await interaction.reply(`Nick: ${summoner.name}, Poziom: ${summoner.summonerLevel}, Gry w sezonie: ${match.totalGames}, Region: ${regionChoice}, Ranga: ${filtered[0].tier} ${filtered[0].rank}`);
+		await interaction.editReply({ embeds: [statsEmbed] });
 	},
 };
