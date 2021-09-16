@@ -59,7 +59,7 @@ module.exports = {
 		// console.log(ranked);
 		const filtered = _.filter(ranked, { queueType: 'RANKED_SOLO_5x5' });
 		// console.log(filtered[0].tier);
-		const currentRank = `${filtered[0].tier} ${filtered[0].rank}`;
+		const currentRank = `${filtered[0].tier} ${filtered[0].rank} ${filtered[0].leaguePoints}LP`;
 
 		const winratio = filtered[0].wins / (filtered[0].wins + filtered[0].losses);
 		const roundedWr = Math.round((winratio + Number.EPSILON) * 100) / 100 * 100;
@@ -78,6 +78,7 @@ module.exports = {
 				{ name: '\u200B', value: '\u200B', inline: true },
 				{ name: 'Gry w sezonie', value: match.totalGames.toLocaleString(), inline: true },
 				{ name: 'Ranga', value: currentRank, inline: true },
+				{ name: '\u200B', value: '\u200B', inline: true },
 				{ name: 'Winratio', value: roundedWr.toLocaleString() + '%', inline: true },
 			);
 
