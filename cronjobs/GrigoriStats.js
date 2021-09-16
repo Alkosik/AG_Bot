@@ -37,14 +37,15 @@ module.exports = (config, client, chalk) => {
 
 			const statsEmbed = new MessageEmbed()
 				.setAuthor('Staty Grzegorza na dziś')
-				.setColor('#ff0099')
+				.setColor('#ffffff')
 				.setThumbnail(iconLink)
-				.setFooter('Gang Słoni 2.0')
+				.setFooter('Gang Słoni 2.0', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
 				.addFields(
 					{ name: 'Poziom', value: summoner.summonerLevel.toLocaleString(), inline: true },
 					{ name: '\u200B', value: '\u200B', inline: true },
 					{ name: 'Gry w sezonie', value: match.totalGames.toLocaleString(), inline: true },
 					{ name: 'Ranga', value: currentRank, inline: true },
+					{ name: '\u200B', value: '\u200B', inline: true },
 					{ name: 'Winratio', value: roundedWr.toLocaleString() + '%', inline: true },
 				);
 
