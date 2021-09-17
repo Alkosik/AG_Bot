@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
-const { getLyrics, getSong } = require('genius-lyrics-api');
+const { getSong } = require('genius-lyrics-api');
 
 if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();
