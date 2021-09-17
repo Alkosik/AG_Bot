@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+const config = require('../../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -32,8 +33,8 @@ module.exports = {
 			if (mute_member.roles.cache.some(r => r.name === 'Administracja')) {
 				reject(reply = '**Członek administracji nie może zostać zmutowany**');
 			}
-			if (!interaction.member.roles.cache.some(r => r.name === 'Administracja')) {
-				reject(reply = '**Nie masz permisji do mutowania - [Administracja]**');
+			if (!interaction.member.roles.cache.find(r => r.id === config.adminRoleId) && !interaction.member.roles.cache.find(r => r.id === config.modRoleId)) {
+				reject(reply = '**Nie masz permisji do mutowania - [Admin/Mod]**');
 			}
 			if (mute_member.id === interaction.member.id) {
 				reject(reply = '**Nie możesz zmutować sam siebie**');

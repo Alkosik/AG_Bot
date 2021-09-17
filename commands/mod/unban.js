@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+const config = require('../../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -19,8 +20,8 @@ module.exports = {
 		const banned_id = interaction.options.getString('id');
 
 		const promise = new Promise(function(resolve, reject) {
-			if (!interaction.member.roles.cache.some(r => r.name === 'Administracja')) {
-				reject(reply = '**Nie masz permisji do odbanowania - [Administracja]**');
+			if (!interaction.member.roles.cache.find(r => r.id === config.adminRoleId)) {
+				reject(reply = '**Nie masz permisji do odbanowania - [Admin]**');
 			}
 			resolve();
 		}).catch(() => {

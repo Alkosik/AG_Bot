@@ -29,7 +29,7 @@ module.exports = {
 			if (ban_member.roles.cache.find(r => r.id === config.adminRoleId)) {
 				reject(reply = '**Członek administracji nie może zostać zbanowany**');
 			} else if (!interaction.member.roles.cache.find(r => r.id === config.adminRoleId)) {
-				reject(reply = '**Nie masz permisji do banowania - [Administracja]**');
+				reject(reply = '**Nie masz permisji do banowania - [Admin]**');
 			} else if (ban_member.id === interaction.member.id) {
 				reject(reply = '**Nie możesz zbanować sam siebie**');
 			} else if (!ban_member.kickable) {

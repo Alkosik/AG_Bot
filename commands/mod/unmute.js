@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+const config = require('../../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -24,8 +25,8 @@ module.exports = {
 		);
 
 		const promise = new Promise(function(resolve, reject) {
-			if (!interaction.member.roles.cache.some(r => r.name === 'Administracja')) {
-				reject(reply = '**Nie masz permisji do odmutowywania - [Administracja]**');
+			if (!interaction.member.roles.cache.find(r => r.id === config.adminRoleId) && !interaction.member.roles.cache.find(r => r.id === config.modRoleId)) {
+				reject(reply = '**Nie masz permisji do odmutowywania - [Admin/Mod]**');
 			}
 			if (!mute_member.roles.cache.some(r => r.name === 'Muted')) {
 				reject(reply = '**Ta osoba nie jest zmutowana**');

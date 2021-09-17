@@ -28,8 +28,8 @@ module.exports = {
 		const promise = new Promise(function(resolve, reject) {
 			if (kick_member.roles.cache.find(r => r.id === config.adminRoleId)) {
 				reject(reply = '**Członek administracji nie może zostać wyrzucony**');
-			} else if (!interaction.member.roles.cache.find(r => r.id === config.adminRoleId)) {
-				reject(reply = '**Nie masz permisji do kickowania - [Administracja]**');
+			} else if (!interaction.member.roles.cache.find(r => r.id === config.adminRoleId) && !interaction.member.roles.cache.find(r => r.id === config.modRoleId)) {
+				reject(reply = '**Nie masz permisji do kickowania - [Admin/Mod]**');
 			} else if (kick_member.id === interaction.member.id) {
 				reject(reply = '**Nie możesz wyrzucić sam siebie**');
 			} else if (!kick_member.kickable) {
