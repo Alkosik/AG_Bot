@@ -26,7 +26,7 @@ module.exports = {
 		const reason = interaction.options.getString('powód');
 
 		const promise = new Promise(function(resolve, reject) {
-			if (ban_member.roles.cache.find(r => r.id === config.adminRoleId)) {
+			if (ban_member.roles.cache.find(r => r.id === config.adminRoleId) || ban_member.roles.cache.find(r => r.id === config.modRoleId)) {
 				reject(reply = '**Członek administracji nie może zostać zbanowany**');
 			} else if (!interaction.member.roles.cache.find(r => r.id === config.adminRoleId)) {
 				reject(reply = '**Nie masz permisji do banowania - [Admin]**');

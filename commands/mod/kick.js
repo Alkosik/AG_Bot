@@ -26,7 +26,7 @@ module.exports = {
 		const reason = interaction.options.getString('powód');
 
 		const promise = new Promise(function(resolve, reject) {
-			if (kick_member.roles.cache.find(r => r.id === config.adminRoleId)) {
+			if (kick_member.roles.cache.find(r => r.id === config.adminRoleId) || kick_member.roles.cache.find(r => r.id === config.modRoleId)) {
 				reject(reply = '**Członek administracji nie może zostać wyrzucony**');
 			} else if (!interaction.member.roles.cache.find(r => r.id === config.adminRoleId) && !interaction.member.roles.cache.find(r => r.id === config.modRoleId)) {
 				reject(reply = '**Nie masz permisji do kickowania - [Admin/Mod]**');
