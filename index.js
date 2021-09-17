@@ -22,13 +22,26 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // + Other
-// will be
+const mysql = require('mysql');
 
 // + Other non-packages
 let currently_playing = false;
 
+const connection = mysql.createConnection({
+	host: process.env.HOST,
+	user: process.env.USER,
+	password: process.env.PASSWORD,
+	database: 'www5056_gsmaindb',
+});
+
 // * Collections
 client.commands = new Collection();
+
+connection.connect(function(err) {
+	console.log(chalk.green('INIT INFO'), 'Connecting to db...');
+	if (err) throw err;
+	console.log(chalk.green('INIT INFO'), 'Database connection established');
+});
 
 
 // #region Command Handler
@@ -103,7 +116,7 @@ for (const file of eventFiles) {
 	if (event.once) {
 		client.once(event.name, (...args) => event.execute(...args));
 	} else {
-		client.on(event.name, (...args) => event.execute(...args, client));
+		client.on(event.name, (...args) => event.execute(...args, client, connection));
 	}
 }
 // #endregion
@@ -122,15 +135,12 @@ for (const file of cronFiles) {
 
 client.login(process.env.TOKEN);
 
-// Cron Jobs
-// eslint-disable-next-line no-unused-vars
-
 // Voice
 client.on('voiceStateUpdate', (oldState, newState) => {
 	const channel = client.channels.cache.get('790343982877900820');
 	if (newState.channelId === '790343982877900820' && newState.id != '883767138433765386' && currently_playing == false) {
 		console.log(chalk.green('VOICE INFO'), 'Connecting to voice channel.');
-		const connection = joinVoiceChannel({
+		const voiceConnection = joinVoiceChannel({
 			channelId: channel.id,
 			guildId: channel.guild.id,
 			adapterCreator: channel.guild.voiceAdapterCreator,
@@ -141,9 +151,9 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 		const resource = createAudioResource('./3435.mp3');
 
 		// eslint-disable-next-line no-unused-vars
-		const subscription = connection.subscribe(audioPlayer);
+		const subscription = voiceConnection.subscribe(audioPlayer);
 
-		connection.on(VoiceConnectionStatus.Ready, () => {
+		voiceConnection.on(VoiceConnectionStatus.Ready, () => {
 			console.log(chalk.green('VOICE INFO'), 'The connection has entered the Ready state.');
 			audioPlayer.play(resource);
 			currently_playing = true;
@@ -151,8 +161,8 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 		});
 	// eslint-disable-next-line no-empty
 	} else if (currently_playing == true && oldState.channelId === '790343982877900820' && channel.members.size == 1) {
-		const connection = getVoiceConnection(channel.guild.id);
-		connection.destroy();
+		const voiceConnection = getVoiceConnection(channel.guild.id);
+		voiceConnection.destroy();
 		console.log(chalk.green('VOICE INFO'), 'Connection closed.');
 		currently_playing = false;
 	}
