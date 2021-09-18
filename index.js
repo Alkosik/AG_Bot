@@ -137,6 +137,9 @@ client.login(process.env.TOKEN);
 
 // Voice
 client.on('voiceStateUpdate', (oldState, newState) => {
+	function getRandomInt(max) {
+		return Math.floor(Math.random() * max);
+	}
 	const channel = client.channels.cache.get('790343982877900820');
 	if (newState.channelId === '790343982877900820' && newState.id != '883767138433765386' && currently_playing == false) {
 		console.log(chalk.green('VOICE INFO'), 'Connecting to voice channel.');
@@ -148,7 +151,12 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 		console.log(chalk.green('VOICE INFO'), 'Succesfully connected to voice channel.');
 
 		const audioPlayer = createAudioPlayer();
-		const resource = createAudioResource('./3435.mp3');
+		let resource;
+		if (getRandomInt(2) == 1) {
+			resource = createAudioResource('./3435.mp3');
+		} else {
+			resource = createAudioResource('./cwel.mp3');
+		}
 
 		// eslint-disable-next-line no-unused-vars
 		const subscription = voiceConnection.subscribe(audioPlayer);
