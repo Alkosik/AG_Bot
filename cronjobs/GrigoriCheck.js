@@ -27,7 +27,7 @@ module.exports = (config, client, chalk) => {
 				spectatorError = err;
 			});
 
-			if (spectatorError.status == 404) {
+			if (spectatorError.status) {
 				return console.log(chalk.green('CRON INFO'), 'Grigori is not currently playing.');
 			}
 
