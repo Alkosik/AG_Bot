@@ -3,5 +3,11 @@
 	"testChannelId": "879456954232209508",
 	"adminRoleId": "888419344432922644",
 	"modRoleId": "888419873439510578",
-	"commandsDisabled": "false"
+	"commandsDisabled": "false",
+	"level6RoleId": "888708769104670740",
+	"level5RoleId": "888708971349815296",
+	"level4RoleId": "888708961312849930",
+	"level3RoleId": "888708953951858760",
+	"level2RoleId": "888708947610075136",
+	"level1RoleId": "888708915028709376"
 }
