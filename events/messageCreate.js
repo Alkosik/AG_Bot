@@ -48,7 +48,7 @@ module.exports = {
 								.setFooter('Gang Słoni 2.0', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
 								.setDescription(`sheeeesh, ${message.author.username} wbiles poziom ${rows[0].level + 1}`)
 								.setColor('#B512E6');
-							const lvlupmsg = await message.channel.send(lvlup);
+							const lvlupmsg = await message.channel.send({ embeds: [lvlup] });
 							await snooze(5000);
 							lvlupmsg.delete().catch(error => {
 								// Only log the error if it is not an Unknown Message error
