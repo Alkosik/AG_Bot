@@ -18,7 +18,7 @@ connection.connect(function(err) {
 
 module.exports = {
 	name: 'guildMemberAdd',
-	execute(client, member) {
+	execute(member, client) {
 		console.log(chalk.green('INFO'), 'A new member has joined the server.');
 
 		const guild = client.guilds.cache.get('510941195267080214');
