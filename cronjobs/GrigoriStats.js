@@ -10,7 +10,7 @@ module.exports = (config, client, chalk) => {
 		(async () => {
 			console.log(chalk.green('CRON INFO'), 'Initiating Grigori\'s Stats.');
 
-			const rAPI = new RiotAPI(process.env.RIOT_API);
+			const rAPI = new RiotAPI(process.env.API_RIOT);
 
 			const summoner = await rAPI.summoner.getBySummonerName({
 				region: PlatformId.EUW1,

@@ -28,9 +28,9 @@ const mysql = require('mysql');
 let currently_playing = false;
 
 const connection = mysql.createConnection({
-	host: process.env.HOST,
-	user: process.env.USER,
-	password: process.env.PASSWORD,
+	host: process.env.DB_HOST,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASS,
 	database: 'www5056_gsmaindb',
 });
 
@@ -38,9 +38,9 @@ const connection = mysql.createConnection({
 client.commands = new Collection();
 
 connection.connect(function(err) {
-	console.log(chalk.green('INIT INFO'), 'Connecting to db...');
+	console.log(chalk.green('DB INFO'), 'Connecting to database...');
 	if (err) throw err;
-	console.log(chalk.green('INIT INFO'), 'Database connection established');
+	console.log(chalk.green('DB INFO'), 'Database connection established');
 });
 
 

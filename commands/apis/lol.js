@@ -39,7 +39,7 @@ module.exports = {
 			region = PlatformId.NA1;
 		}
 
-		const rAPI = new RiotAPI(process.env.RIOT_API);
+		const rAPI = new RiotAPI(process.env.API_RIOT);
 
 		const summoner = await rAPI.summoner.getBySummonerName({
 			region: region,

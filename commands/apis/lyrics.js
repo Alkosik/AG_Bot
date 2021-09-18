@@ -19,7 +19,7 @@ module.exports = {
 		const songName = interaction.options.getString('piosenka');
 
 		const options = {
-			apiKey: process.env.GENIUS_API,
+			apiKey: process.env.API_GENIUS,
 			title: songName,
 			artist: 'Ariana Grande',
 			optimizeQuery: true,
