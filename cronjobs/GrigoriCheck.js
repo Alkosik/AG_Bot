@@ -8,7 +8,6 @@ let oldGameId;
 
 module.exports = (config, client, chalk) => {
 	const channelId = config.mainChannelId;
-	let spectatorError;
 	cron.scheduleJob('*/3 * * * *', function() {
 		(async () => {
 			console.log(chalk.green('CRON INFO'), 'Initiating Grigori Check.');
@@ -24,12 +23,9 @@ module.exports = (config, client, chalk) => {
 				region: PlatformId.EUW1,
 				summonerId: summoner.id,
 			}).catch((err) => {
-				spectatorError = err;
-			});
-
-			if (spectatorError.status) {
+				console.log(err.status);
 				return console.log(chalk.green('CRON INFO'), 'Grigori is not currently playing.');
-			}
+			});
 
 			const ranked = await rAPI.league.getEntriesBySummonerId({
 				region: PlatformId.EUW1,
