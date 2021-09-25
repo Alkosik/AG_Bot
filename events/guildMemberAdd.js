@@ -1,5 +1,6 @@
 // const { MessageEmbed } = require('discord.js');
 const chalk = require('chalk');
+const config = require('../config.json');
 
 const mysql = require('mysql');
 
@@ -28,8 +29,31 @@ module.exports = {
 
 		connection.query(`SELECT * FROM account WHERE id = ${member.user.id}`, function(err, rows) {
 			if (err) throw err;
+
+			// Ganja role
 			if (rows[0].ganja == 1) {
 				member.roles.add(member.guild.roles.cache.find(r => r.id === '817530671609544706'));
+			}
+
+			// Level Roles
+			if (rows[0].level >= 100) {
+				const role = member.guild.roles.cache.find(r => r.id === config.level6RoleId);
+				member.roles.add(role);
+			} else if (rows[0].level >= 50) {
+				const role = member.guild.roles.cache.find(r => r.id === config.level5RoleId);
+				member.roles.add(role);
+			} else if (rows[0].level >= 30) {
+				const role = member.guild.roles.cache.find(r => r.id === config.level4RoleId);
+				member.roles.add(role);
+			} else if (rows[0].level >= 15) {
+				const role = member.guild.roles.cache.find(r => r.id === config.level3RoleId);
+				member.roles.add(role);
+			} else if (rows[0].level >= 5) {
+				const role = member.guild.roles.cache.find(r => r.id === config.level2RoleId);
+				member.roles.add(role);
+			} else if (rows[0].level >= 1) {
+				const role = member.guild.roles.cache.find(r => r.id === config.level1RoleId);
+				member.roles.add(role);
 			}
 		});
 	},
