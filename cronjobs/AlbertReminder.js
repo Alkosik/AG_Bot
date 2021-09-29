@@ -8,10 +8,10 @@ module.exports = (config, client, chalk) => {
 			const janus = client.emojis.cache.find(emoji => emoji.name === 'JanusChamp');
 			const pepo_love = client.emojis.cache.find(emoji => emoji.name === 'peepoLove');
 
-			const mood = Math.random() * (30 - 1) + 1;
+			const mood = Math.random() * (20 - 1) + 1;
 			const moodFloored = Math.floor(mood);
 
-			if (moodFloored >= 15) {
+			if (moodFloored >= 10) {
 				client.channels.cache.get(main_channel_id).send(`<@430140838345965595>, kocham cie ${pepo_love}`);
 			} else if (moodFloored < 4) {
 				client.channels.cache.get(main_channel_id).send(`<@430140838345965595>, kocham cie ${pepo_love} ~ Kacperek`);
