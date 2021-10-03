@@ -7,7 +7,7 @@ const config = require('./config.json');
 // + Discord
 const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
 const myIntents = new Intents();
-myIntents.add([Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Intents.FLAGS.GUILD_MEMBERS]);
+myIntents.add([Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_BANS]);
 const client = new Client({ intents: myIntents });
 const { joinVoiceChannel, VoiceConnectionStatus, createAudioPlayer, createAudioResource, getVoiceConnection } = require('@discordjs/voice');
 
@@ -38,9 +38,9 @@ const connection = mysql.createConnection({
 client.commands = new Collection();
 
 connection.connect(function(err) {
-	console.log(chalk.green('DB INFO'), 'Connecting to database...');
+	console.log(chalk.green('DB INFO'), 'index: Connecting to database...');
 	if (err) throw err;
-	console.log(chalk.green('DB INFO'), 'Database connection established');
+	console.log(chalk.green('DB INFO'), 'index: Database connection established');
 });
 
 

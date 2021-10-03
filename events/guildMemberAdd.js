@@ -12,9 +12,9 @@ const connection = mysql.createConnection({
 });
 
 connection.connect(function(err) {
-	console.log(chalk.green('DB INFO'), 'Connecting to database...');
+	console.log(chalk.green('DB INFO'), 'guildMemAdd: Connecting to database...');
 	if (err) throw err;
-	console.log(chalk.green('DB INFO'), 'Database connection established');
+	console.log(chalk.green('DB INFO'), 'guildMemAdd: Database connection established');
 });
 
 module.exports = {
