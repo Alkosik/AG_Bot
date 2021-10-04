@@ -33,10 +33,12 @@ module.exports = {
 		const track = await player.search(query, {
 			requestedBy: interaction.user,
 		}).then(x => x.tracks[0]);
-		if (!track) return await interaction.followUp({ content: `Piosenka **${query}** nie znaleziona` });
+		if (!track) return await interaction.editReply({ content: `Piosenka **${query}** nie znaleziona` });
 
-		queue.play(track);
+		queue.addTrack(track);
+		interaction.followUp(String(queue.tracks));
 
+		if (!queue.playing) await queue.play();
 		return await interaction.followUp({ content: `Ładowanie **${track.title}**` });
 	},
 };

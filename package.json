@@ -26,6 +26,7 @@
     "@discordjs/voice": "^0.6.0",
     "@fightmegg/riot-api": "^0.0.7",
     "chalk": "^4.1.2",
+    "cronitor": "^2.2.3",
     "discord-api-types": "^0.22.0",
     "discord-player": "^5.1.0",
     "discord.js": "^13.1.0",

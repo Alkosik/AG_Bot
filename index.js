@@ -3,6 +3,7 @@ const fs = require('fs');
 const chalk = require('chalk');
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 const config = require('./config.json');
+const cronitor = require('cronitor')(process.env.CRONITOR);
 
 // + Discord
 const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
@@ -23,9 +24,13 @@ if (process.env.NODE_ENV !== 'production') {
 
 // + Other
 const mysql = require('mysql');
+const { Player } = require('discord-player');
+const monitor = new cronitor.Monitor('Discord Heartbeat');
+monitor.ping({ message: 'Alive' });
 
 // + Other non-packages
 let currently_playing = false;
+const { registerPlayerEvents } = require('./events/player/events');
 
 const connection = mysql.createConnection({
 	host: process.env.DB_HOST,
@@ -222,3 +227,7 @@ client.on('messageCreate', async message => {
 server.listen(process.env.PORT, () => {
 	console.log(chalk.greenBright('WEB INFO'), 'Server listening on port: ' + process.env.PORT);
 });
+
+// Discord Player
+client.player = new Player(client);
+registerPlayerEvents(client.player);
