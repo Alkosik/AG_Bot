@@ -12,7 +12,7 @@ module.exports = {
 	async execute(interaction) {
 		const player = new Player(interaction.client);
 
-		player.on('trackStart', (queue, track) => queue.metadata.channel.send(`Teraz leci **${track.title}**!`));
+		player.on('trackStart', (queue, track) => queue.metadata.channel.send(`Teraz leci **${track.title}**`));
 		if (!interaction.member.voice.channelId) return await interaction.reply({ content: 'Nie znajdujesz się na kanale głosowym', ephemeral: true });
 		if (interaction.guild.me.voice.channelId && interaction.member.voice.channelId !== interaction.guild.me.voice.channelId) return await interaction.reply({ content: 'Nie znajdujesz się w moim kanale głosowym', ephemeral: true });
 		const query = interaction.options.get('nazwa').value;
