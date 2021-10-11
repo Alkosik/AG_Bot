@@ -4,6 +4,7 @@ const chalk = require('chalk');
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 const config = require('./config.json');
 const cronitor = require('cronitor')(process.env.API_CRONITOR);
+// const admin = require('firebase-admin');
 
 // + Discord
 const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
@@ -15,6 +16,9 @@ const { joinVoiceChannel, VoiceConnectionStatus, createAudioPlayer, createAudioR
 // + Webserver
 const http = require('http');
 const server = http.createServer();
+
+// + Firebase
+// const serviceAccount = require('./gang-sloni-app-firebase-adminsdk-obr28-0c7efef094.json');
 
 // + Environment
 if (process.env.NODE_ENV !== 'production') {

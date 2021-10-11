@@ -15,6 +15,7 @@ module.exports = {
 		player.on('trackStart', (queue, track) => queue.metadata.channel.send(`Teraz leci **${track.title}**`));
 		if (!interaction.member.voice.channelId) return await interaction.reply({ content: 'Nie znajdujesz się na kanale głosowym', ephemeral: true });
 		if (interaction.guild.me.voice.channelId && interaction.member.voice.channelId !== interaction.guild.me.voice.channelId) return await interaction.reply({ content: 'Nie znajdujesz się w moim kanale głosowym', ephemeral: true });
+		console.log(player.queues);
 		const query = interaction.options.get('nazwa').value;
 		const queue = player.createQueue(interaction.guild, {
 			metadata: {
@@ -25,7 +26,8 @@ module.exports = {
 		try {
 			if (!queue.connection) await queue.connect(interaction.member.voice.channel);
 		} catch {
-			queue.destroy();
+			console.log(interaction);
+			void player.deleteQueue(interaction.guild.id);
 			return await interaction.reply({ content: 'Nie udało się dołączyć na twój kanał', ephemeral: true });
 		}
 
@@ -38,7 +40,9 @@ module.exports = {
 		queue.addTrack(track);
 		interaction.followUp(String(queue.tracks));
 
-		if (!queue.playing) await queue.play();
+		if (!queue.playing || queue.playing == false) {
+			await queue.play();
+		}
 		return await interaction.followUp({ content: `Ładowanie **${track.title}**` });
 	},
 };
