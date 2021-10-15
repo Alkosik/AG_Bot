@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Player } = require('discord-player');
+// const { Player } = require('discord-player');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -10,23 +10,27 @@ module.exports = {
 				.setDescription('Nazwa piosenki')
 				.setRequired(true)),
 	async execute(interaction) {
-		const player = new Player(interaction.client);
+		if (interaction.channel.id != '510941382454673408' && interaction.channel.id != '879456954232209508') {
+			return await interaction.reply('Ta interakcja moze byc uzywana tylko na kanale od muzyki');
+		}
+		// console.log(interaction.client);
+		const player = interaction.client.player;
 
-		player.on('trackStart', (queue, track) => queue.metadata.channel.send(`Teraz leci **${track.title}**`));
+		// Events
+		// player.on('trackStart', (queue, track) => queue.metadata.channel.send(`Teraz leci **${track.title}**`));
+
+		const queue = await interaction.client.player.createQueue(interaction.guild, {
+			metadata: interaction.channel,
+		});
+
 		if (!interaction.member.voice.channelId) return await interaction.reply({ content: 'Nie znajdujesz się na kanale głosowym', ephemeral: true });
 		if (interaction.guild.me.voice.channelId && interaction.member.voice.channelId !== interaction.guild.me.voice.channelId) return await interaction.reply({ content: 'Nie znajdujesz się w moim kanale głosowym', ephemeral: true });
-		console.log(player.queues);
 		const query = interaction.options.get('nazwa').value;
-		const queue = player.createQueue(interaction.guild, {
-			metadata: {
-				channel: interaction.channel,
-			},
-		});
 
 		try {
 			if (!queue.connection) await queue.connect(interaction.member.voice.channel);
 		} catch {
-			console.log(interaction);
+			// console.log(interaction);
 			void player.deleteQueue(interaction.guild.id);
 			return await interaction.reply({ content: 'Nie udało się dołączyć na twój kanał', ephemeral: true });
 		}
@@ -38,11 +42,11 @@ module.exports = {
 		if (!track) return await interaction.editReply({ content: `Piosenka **${query}** nie znaleziona` });
 
 		queue.addTrack(track);
-		interaction.followUp(String(queue.tracks));
+		// interaction.followUp(String(queue.tracks));
 
 		if (!queue.playing || queue.playing == false) {
 			await queue.play();
 		}
-		return await interaction.followUp({ content: `Ładowanie **${track.title}**` });
+		return await interaction.followUp({ content: `Pobieranie **${track.title}**` });
 	},
 };

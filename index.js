@@ -29,12 +29,13 @@ if (process.env.NODE_ENV !== 'production') {
 // + Other
 const mysql = require('mysql');
 const { Player } = require('discord-player');
+// eslint-disable-next-line no-unused-vars
 const monitor = new cronitor.Monitor('Discord Heartbeat');
 
 // + Other non-packages
 let currently_playing = false;
 const { registerPlayerEvents } = require('./events/player/events');
-monitor.ping({ message: 'Alive' });
+client.player = new Player(client);
 
 const connection = mysql.createConnection({
 	host: process.env.DB_HOST,
@@ -233,5 +234,4 @@ server.listen(process.env.PORT, () => {
 });
 
 // Discord Player
-client.player = new Player(client);
 registerPlayerEvents(client.player);
