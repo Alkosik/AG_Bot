@@ -28,7 +28,12 @@ if (process.env.NODE_ENV !== 'production') {
 
 // + Other
 const mysql = require('mysql');
-const { Player } = require('discord-player');
+const { Player } = require('discord-player', {
+	ytdlOptions: {
+		quality: 'highestaudio',
+		highWaterMark: 1 << 25,
+	},
+});
 // eslint-disable-next-line no-unused-vars
 const monitor = new cronitor.Monitor('Discord Heartbeat');
 
