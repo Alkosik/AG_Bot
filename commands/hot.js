@@ -11,7 +11,6 @@ module.exports = {
 		const hotEmbed = new MessageEmbed()
 			.setTitle('Ale hotuwa')
 			.setColor('#ff005d')
-			// .setImage('https://i.imgur.com/qs17Hey.jpg');
 			.setImage('https://i.imgur.com/97TNrHe.jpg');
 		await interaction.deferReply();
 		snooze(1000);

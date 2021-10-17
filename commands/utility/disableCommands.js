@@ -25,7 +25,6 @@ module.exports = {
 
 		fs.writeFile(configName, JSON.stringify(configFile), function writeJSON(err) {
 			if (err) return console.log(err);
-			// console.log(JSON.stringify(configFile));
 			console.log(chalk.yellow('CRITICAL INFO'), 'Writing to ' + configName);
 			console.log(chalk.yellow('CRITICAL INFO'), 'Changing commands state');
 		});

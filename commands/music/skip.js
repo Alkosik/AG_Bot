@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-// const { Player } = require('discord-player');
 
 module.exports = {
 	data: new SlashCommandBuilder()

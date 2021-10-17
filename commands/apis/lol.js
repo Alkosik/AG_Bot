@@ -2,7 +2,6 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { RiotAPI, PlatformId } = require('@fightmegg/riot-api');
 const { MessageEmbed } = require('discord.js');
 const _ = require('lodash');
-// const wait = require('util').promisify(setTimeout);
 
 if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();
@@ -56,9 +55,7 @@ module.exports = {
 			summonerId: summoner.id,
 		});
 
-		// console.log(ranked);
 		const filtered = _.filter(ranked, { queueType: 'RANKED_SOLO_5x5' });
-		// console.log(filtered[0].tier);
 		const currentRank = `${filtered[0].tier} ${filtered[0].rank} ${filtered[0].leaguePoints}LP`;
 
 		const winratio = filtered[0].wins / (filtered[0].wins + filtered[0].losses);
@@ -82,7 +79,6 @@ module.exports = {
 				{ name: 'Winratio', value: roundedWr.toLocaleString() + '%', inline: true },
 			);
 
-		// await interaction.reply(`Nick: ${summoner.name}, Poziom: ${summoner.summonerLevel}, Gry w sezonie: ${match.totalGames}, Region: ${regionChoice}, Ranga: ${filtered[0].tier} ${filtered[0].rank}`);
 		await interaction.editReply({ embeds: [statsEmbed] });
 	},
 };

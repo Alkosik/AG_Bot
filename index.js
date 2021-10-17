@@ -70,43 +70,31 @@ const musicCommandFiles = fs.readdirSync('./commands/music').filter(file => file
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
-	// Set a new item in the Collection
-	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);
 }
 
 for (const file of modCommandFiles) {
 	const command = require(`./commands/mod/${file}`);
-	// Set a new item in the Collection
-	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);
 }
 
 for (const file of utilCommandFiles) {
 	const command = require(`./commands/utility/${file}`);
-	// Set a new item in the Collection
-	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);
 }
 
 for (const file of funCommandFiles) {
 	const command = require(`./commands/fun/${file}`);
-	// Set a new item in the Collection
-	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);
 }
 
 for (const file of apiCommandFiles) {
 	const command = require(`./commands/apis/${file}`);
-	// Set a new item in the Collection
-	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);
 }
 
 for (const file of musicCommandFiles) {
 	const command = require(`./commands/music/${file}`);
-	// Set a new item in the Collection
-	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);
 }
 

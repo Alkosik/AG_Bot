@@ -45,9 +45,6 @@ module.exports = {
 
 		await interaction.reply({ content: `${duoPlayer}, Zostałeś zaproszony do zagrania w ruletkę z ${player.user.username}`, components: [inviteRow] });
 
-		// const accpetEmbed = new MessageEmbed()
-		// 	.setTitle('Zaproszenie zaakceptowane.')
-		// 	.setColor('GREEN');
 		await collector.on('collect', async i => {
 			if (i.customId === 'rraccept') {
 				await interaction.editReply({ content: 'Zaproszenie zaakceptowane.', components: [] });
@@ -92,6 +89,5 @@ module.exports = {
 				}
 			}
 		}
-		// await interaction.reply({ content: `Zostałeś zaproszony do zagrania w ruletkę z ${player.user.username}`, components: [inviteRow] });
 	},
 };

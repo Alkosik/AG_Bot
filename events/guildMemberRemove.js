@@ -1,4 +1,3 @@
-// const { MessageEmbed } = require('discord.js');
 const chalk = require('chalk');
 
 module.exports = {

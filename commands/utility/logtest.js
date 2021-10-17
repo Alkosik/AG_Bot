@@ -15,7 +15,6 @@ module.exports = {
 		}
 		const reason = interaction.options.getString('reason');
 
-		// const logChannel = interaction.guild.channels.cache.find(channel => channel.name === 'logs');
 		const logEmbed = new MessageEmbed()
 			.setAuthor('Ban Log', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
 			.setColor('#4d33de')

@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-// const { Player } = require('discord-player');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -13,11 +12,8 @@ module.exports = {
 		if (interaction.channel.id != '510941382454673408' && interaction.channel.id != '879456954232209508') {
 			return await interaction.reply('Ta interakcja moze byc uzywana tylko na kanale od muzyki');
 		}
-		// console.log(interaction.client);
-		const player = interaction.client.player;
 
-		// Events
-		// player.on('trackStart', (queue, track) => queue.metadata.channel.send(`Teraz leci **${track.title}**`));
+		const player = interaction.client.player;
 
 		const queue = await interaction.client.player.createQueue(interaction.guild, {
 			metadata: interaction.channel,
@@ -30,7 +26,6 @@ module.exports = {
 		try {
 			if (!queue.connection) await queue.connect(interaction.member.voice.channel);
 		} catch {
-			// console.log(interaction);
 			void player.deleteQueue(interaction.guild.id);
 			return await interaction.reply({ content: 'Nie udało się dołączyć na twój kanał', ephemeral: true });
 		}
@@ -42,7 +37,6 @@ module.exports = {
 		if (!track) return await interaction.editReply({ content: `Piosenka **${query}** nie znaleziona` });
 
 		queue.addTrack(track);
-		// interaction.followUp(String(queue.tracks));
 
 		if (!queue.playing || queue.playing == false) {
 			await queue.play();
