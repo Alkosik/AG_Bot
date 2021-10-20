@@ -14,7 +14,7 @@ module.exports = (config, client, chalk) => {
 
 			const summoner = await rAPI.summoner.getBySummonerName({
 				region: PlatformId.EUW1,
-				summonerName: 'JhinNoArms',
+				summonerName: 'Gredzy',
 			});
 
 			const match = await rAPI.match.getMatchlistByAccount({
