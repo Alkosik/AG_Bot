@@ -35,6 +35,14 @@ module.exports = {
 				member.roles.add(member.guild.roles.cache.find(r => r.id === '817530671609544706'));
 			}
 
+			// Moderation roles
+			if (rows[0].moderation > 0) {
+				// Mod
+				if (rows[0].moderation == 1) member.roles.add(member.guild.roles.cache.find(r => r.id === '888419873439510578'));
+				// Admin
+				if (rows[0].moderation == 2) member.roles.add(member.guild.roles.cache.find(r => r.id === '888419344432922644'));
+			}
+
 			// Level Roles
 			if (rows[0].level >= 100) {
 				const role = member.guild.roles.cache.find(r => r.id === config.level6RoleId);
