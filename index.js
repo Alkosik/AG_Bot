@@ -3,7 +3,6 @@ const fs = require('fs');
 const chalk = require('chalk');
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 const config = require('./config.json');
-const cronitor = require('cronitor')(process.env.API_CRONITOR);
 // const admin = require('firebase-admin');
 
 // + Discord
@@ -34,8 +33,6 @@ const { Player } = require('discord-player', {
 		highWaterMark: 1 << 25,
 	},
 });
-// eslint-disable-next-line no-unused-vars
-const monitor = new cronitor.Monitor('Discord Heartbeat');
 
 // + Other non-packages
 let currently_playing = false;
