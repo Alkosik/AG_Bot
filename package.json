@@ -25,7 +25,7 @@
     "@discordjs/opus": "^0.6.0",
     "@discordjs/rest": "^0.1.0-canary.0",
     "@discordjs/voice": "^0.6.0",
-    "@fightmegg/riot-api": "^0.0.7",
+    "@fightmegg/riot-api": "^0.0.8",
     "chalk": "^4.1.2",
     "cronitor": "^2.2.3",
     "discord-api-types": "^0.22.0",

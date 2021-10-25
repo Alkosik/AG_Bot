@@ -1,31 +1,38 @@
 const cron = require('node-schedule');
 
-const { RiotAPI, PlatformId } = require('@fightmegg/riot-api');
+const { RiotAPI, RiotAPITypes, PlatformId } = require('@fightmegg/riot-api');
 const { MessageEmbed } = require('discord.js');
 const _ = require('lodash');
 
+const Rconfig = RiotAPITypes.Config = {
+	debug: false,
+};
+
 module.exports = (config, client, chalk) => {
-	const channelId = config.mainChannelId;
+	const channelId = config.testChannelId;
 	cron.scheduleJob('0 0 * * *', function() {
 		(async () => {
 			console.log(chalk.green('CRON INFO'), 'Initiating Grigori\'s Stats.');
 
-			const rAPI = new RiotAPI(process.env.API_RIOT);
+			const rAPI = new RiotAPI(process.env.API_RIOT, Rconfig);
 
 			const summoner = await rAPI.summoner.getBySummonerName({
 				region: PlatformId.EUW1,
 				summonerName: 'Gredzy',
 			});
+			console.log(summoner);
 
-			const match = await rAPI.match.getMatchlistByAccount({
-				region: PlatformId.EUW1,
-				accountId: summoner.accountId,
+			const match = await rAPI.matchV5.getIdsbyPuuid({
+				platformId: PlatformId.EUROPE,
+				accountId: summoner.puuid,
 			});
+			console.log(match);
 
 			const ranked = await rAPI.league.getEntriesBySummonerId({
 				region: PlatformId.EUW1,
 				summonerId: summoner.id,
 			});
+			console.log(ranked);
 
 			const filtered = _.filter(ranked, { queueType: 'RANKED_SOLO_5x5' });
 			const currentRank = `${filtered[0].tier} ${filtered[0].rank} ${filtered[0].leaguePoints}LP`;
