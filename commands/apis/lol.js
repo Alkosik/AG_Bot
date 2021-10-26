@@ -45,10 +45,10 @@ module.exports = {
 			summonerName: nick,
 		});
 
-		const match = await rAPI.match.getMatchlistByAccount({
-			region: region,
-			accountId: summoner.accountId,
-		});
+		// const match = await rAPI.match.getMatchlistByAccount({
+		// 	region: region,
+		// 	accountId: summoner.accountId,
+		// });
 
 		const ranked = await rAPI.league.getEntriesBySummonerId({
 			region: region,
@@ -57,6 +57,8 @@ module.exports = {
 
 		const filtered = _.filter(ranked, { queueType: 'RANKED_SOLO_5x5' });
 		const currentRank = `${filtered[0].tier} ${filtered[0].rank} ${filtered[0].leaguePoints}LP`;
+
+		const gameCount = filtered[0].wins + filtered[0].losses;
 
 		const winratio = filtered[0].wins / (filtered[0].wins + filtered[0].losses);
 		const roundedWr = Math.round((winratio + Number.EPSILON) * 100) / 100 * 100;
@@ -73,7 +75,7 @@ module.exports = {
 			.addFields(
 				{ name: 'Poziom', value: summoner.summonerLevel.toLocaleString(), inline: true },
 				{ name: '\u200B', value: '\u200B', inline: true },
-				{ name: 'Gry w sezonie', value: match.totalGames.toLocaleString(), inline: true },
+				{ name: 'Gry w sezonie', value: gameCount.toLocaleString(), inline: true },
 				{ name: 'Ranga', value: currentRank, inline: true },
 				{ name: '\u200B', value: '\u200B', inline: true },
 				{ name: 'Winratio', value: roundedWr.toLocaleString() + '%', inline: true },

@@ -10,7 +10,7 @@ const Rconfig = RiotAPITypes.Config = {
 
 module.exports = (config, client, chalk) => {
 	const channelId = config.mainChannelId;
-	cron.scheduleJob('* * * * *', function() {
+	cron.scheduleJob('0 0 * * *', function() {
 		(async () => {
 			console.log(chalk.green('CRON INFO'), 'Initiating Grigori\'s Stats.');
 
