@@ -9,8 +9,8 @@ const Rconfig = RiotAPITypes.Config = {
 };
 
 module.exports = (config, client, chalk) => {
-	const channelId = config.testChannelId;
-	cron.scheduleJob('0 0 * * *', function() {
+	const channelId = config.mainChannelId;
+	cron.scheduleJob('* * * * *', function() {
 		(async () => {
 			console.log(chalk.green('CRON INFO'), 'Initiating Grigori\'s Stats.');
 
@@ -20,22 +20,24 @@ module.exports = (config, client, chalk) => {
 				region: PlatformId.EUW1,
 				summonerName: 'Gredzy',
 			});
-			console.log(summoner);
+			// console.log(summoner);
 
-			const match = await rAPI.matchV5.getIdsbyPuuid({
-				platformId: PlatformId.EUROPE,
-				accountId: summoner.puuid,
-			});
-			console.log(match);
+			// const match = await rAPI.matchV5.getIdsbyPuuid({
+			// 	cluster: PlatformId.EUROPE,
+			// 	puuid: summoner.puuid,
+			// });
+			// console.log(match);
 
 			const ranked = await rAPI.league.getEntriesBySummonerId({
 				region: PlatformId.EUW1,
 				summonerId: summoner.id,
 			});
-			console.log(ranked);
+			// console.log(ranked);
 
 			const filtered = _.filter(ranked, { queueType: 'RANKED_SOLO_5x5' });
 			const currentRank = `${filtered[0].tier} ${filtered[0].rank} ${filtered[0].leaguePoints}LP`;
+
+			const gameCount = filtered[0].wins + filtered[0].losses;
 
 			const winratio = filtered[0].wins / (filtered[0].wins + filtered[0].losses);
 			const roundedWr = Math.round((winratio + Number.EPSILON) * 100) / 100 * 100;
@@ -50,7 +52,7 @@ module.exports = (config, client, chalk) => {
 				.addFields(
 					{ name: 'Poziom', value: summoner.summonerLevel.toLocaleString(), inline: true },
 					{ name: '\u200B', value: '\u200B', inline: true },
-					{ name: 'Gry w sezonie', value: match.totalGames.toLocaleString(), inline: true },
+					{ name: 'Gry w sezonie', value: gameCount.toLocaleString(), inline: true },
 					{ name: 'Ranga', value: currentRank, inline: true },
 					{ name: '\u200B', value: '\u200B', inline: true },
 					{ name: 'Winratio', value: roundedWr.toLocaleString() + '%', inline: true },
