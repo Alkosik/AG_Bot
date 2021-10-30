@@ -244,7 +244,7 @@ app.post('/webhook', async (req, res) => {
 		},
 		// Format JSON DATA
 		body: JSON.stringify({
-			content: `Webhook test ${Payload.data.app.name} was just triggered`,
+			content: `A new build/release for **${Payload.data.app.name}** detected`,
 		}),
 	};
 	request(options, function(error, response) {
