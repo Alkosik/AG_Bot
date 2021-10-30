@@ -3,8 +3,8 @@ module.exports = {
 		script: 'index.js',
 		watch: '.',
 	}, {
-		script: './service-worker/',
-		watch: ['./service-worker'],
+		script: './modules/webhookHandler.js',
+		watch: ['./modules/webhookHandler.js'],
 	}],
 
 	deploy : {
