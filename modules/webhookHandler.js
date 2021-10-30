@@ -1,7 +1,8 @@
-const index = require('../index.js');
+// const index = require('../index.js');
 
-// const express = require('express');
-const app = index.app;
+const express = require('express');
+const app = express();
+// const app = index.app;
 const request = require('request');
 const bodyParser = require('body-parser');
 
