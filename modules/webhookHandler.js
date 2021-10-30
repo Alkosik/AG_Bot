@@ -1,5 +1,7 @@
-const express = require('express');
-const app = express();
+const index = require('../index.js');
+
+// const express = require('express');
+const app = index.app;
 const request = require('request');
 const bodyParser = require('body-parser');
 
@@ -29,4 +31,3 @@ app.post('/webhook', async (req, res) => {
 		console.log(response);
 	});
 });
-app.listen(process.env.PORT, () => console.log('Webhook Handler is running on port 3000'));

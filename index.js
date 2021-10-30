@@ -13,8 +13,11 @@ const client = new Client({ intents: myIntents });
 const { joinVoiceChannel, VoiceConnectionStatus, createAudioPlayer, createAudioResource, getVoiceConnection } = require('@discordjs/voice');
 
 // + Webserver
+const express = require('express');
+const app = express();
 const http = require('http');
-const server = http.createServer();
+const server = http.createServer(app);
+exports.app = app;
 
 // + Firebase
 // const serviceAccount = require('./gang-sloni-app-firebase-adminsdk-obr28-0c7efef094.json');
