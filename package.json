@@ -4,6 +4,7 @@
   "description": "A sequel to the Discord Bot Piesek.",
   "main": "index.js",
   "scripts": {
+    "start": "pm2-runtime start ecosystem.config.js --env production",
     "test": "nodemon index.js"
   },
   "repository": {
@@ -32,6 +33,7 @@
     "discord-player": "^5.1.0",
     "discord.js": "^13.1.0",
     "dotenv": "^10.0.0",
+    "express": "^4.17.1",
     "ffmpeg-static": "^4.4.0",
     "firebase-admin": "^9.12.0",
     "genius-lyrics-api": "^3.2.0",
@@ -39,7 +41,8 @@
     "lodash": "^4.17.21",
     "mysql": "^2.18.1",
     "node-schedule": "^2.0.0",
-    "nodemon": "^2.0.13"
+    "nodemon": "^2.0.13",
+    "pm2": "^5.1.2"
   },
   "devDependencies": {
     "eslint": "^7.32.0"
