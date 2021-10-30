@@ -2,9 +2,6 @@ module.exports = {
 	apps : [{
 		script: 'index.js',
 		watch: '.',
-	}, {
-		script: './modules/webhookHandler.js',
-		watch: ['./modules/webhookHandler.js'],
 	}],
 
 	deploy : {

@@ -17,7 +17,11 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-exports.app = app;
+const request = require('request');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // + Firebase
 // const serviceAccount = require('./gang-sloni-app-firebase-adminsdk-obr28-0c7efef094.json');
@@ -224,6 +228,29 @@ client.on('messageCreate', async message => {
 // Webserver
 server.listen(process.env.PORT, () => {
 	console.log(chalk.greenBright('WEB INFO'), 'Server listening on port: ' + process.env.PORT);
+});
+
+app.post('/webhook', async (req, res) => {
+	const Payload = req.body;
+	// Respond To Heroku Webhook
+	res.sendStatus(200);
+
+	const options = {
+		method: 'POST',
+		url:
+       `https://discord.com/api/webhooks/${process.env.WEBHOOK_URL}`,
+		headers: {
+			'Content-type': 'application/json',
+		},
+		// Format JSON DATA
+		body: JSON.stringify({
+			content: `Webhook test ${Payload.data.app.name} was just triggered`,
+		}),
+	};
+	request(options, function(error, response) {
+		if (error) throw new Error(error);
+		console.log(response);
+	});
 });
 
 // Discord Player
