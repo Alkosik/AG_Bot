@@ -29,4 +29,4 @@ app.post('/webhook', async (req, res) => {
 		console.log(response);
 	});
 });
-app.listen(3000, () => console.log('Webhook Handler is running on port 3000'));
+app.listen(process.env.PORT, () => console.log('Webhook Handler is running on port 3000'));
