@@ -12,8 +12,24 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-server.listen(process.env.PORT, () => {
-	console.log(chalk.greenBright('WEBSERVER INFO'), 'Server listening on port: ' + process.env.PORT);
+server.listen(process.env.PORT || 3000, () => {
+	console.log(chalk.greenBright('WEBSERVER INFO'), 'Server listening on port: ' + process.env.PORT || 3000);
+});
+
+app.get('/', (req, res) => {
+	return res.send('You have reached the Gang Słoni API. This is probably an error, please return to the main site: http://gangsloni.pl');
+});
+
+app.post('/', (req, res) => {
+	return res.send('POST HTTP method registered');
+});
+
+app.put('/', (req, res) => {
+	return res.send('PUT HTTP method registered');
+});
+
+app.delete('/', (req, res) => {
+	return res.send('DELETE HTTP method registered');
 });
 
 app.post('/webhook', async (req, res) => {
@@ -49,7 +65,7 @@ app.post('/webhook', async (req, res) => {
 	});
 });
 
-// API
+// API or sum idk
 app.get('/memCount', (req, res) => {
 	console.log(chalk.greenBright('WEBSERVER INFO'), 'Connection detected');
 	const guild = index.client.guilds.cache.get('510941195267080214');
