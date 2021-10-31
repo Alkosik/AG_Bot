@@ -12,8 +12,8 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-server.listen(3000, () => {
-	console.log(chalk.greenBright('WEBSERVER INFO'), 'Server listening on port: ' + 3000);
+server.listen(process.env.PORT, () => {
+	console.log(chalk.greenBright('WEBSERVER INFO'), 'Server listening on port: ' + process.env.PORT);
 });
 
 app.post('/webhook', async (req, res) => {
