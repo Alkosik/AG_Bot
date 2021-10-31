@@ -244,7 +244,8 @@ app.post('/webhook', async (req, res) => {
 		},
 		// Format JSON DATA
 		body: JSON.stringify({
-			content: `A new build/release for **${Payload.data.app.name}** detected`,
+			// content: `A new build/release for **${Payload.data.app.name}** detected`,
+			content: Payload.action == 'create' ? `A new buld was created for **${Payload.data.app.name}** on behalf of **${Payload.data.user.email}** with the ID **${Payload.data.id}**` : 'You fucked something up B)',
 		}),
 	};
 	request(options, function(error, response) {
