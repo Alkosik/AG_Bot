@@ -240,6 +240,8 @@ app.post('/webhook', async (req, res) => {
 		webhook_response = `A new buld was created for **${Payload.data.app.name}** on behalf of **${Payload.data.user.email}** with the ID **${Payload.data.id}**`;
 	} else if (Payload.action == 'update' && Payload.data.status == 'succeeded') {
 		webhook_response = `Last build of ${Payload.data.app.name} finished with status **${Payload.data.status}**, creating release version **${Payload.data.release.version}**`;
+	} else {
+		webhook_response = 'You fucked something up B) - The build probably failed or something idk im not handling this cya bltch';
 	}
 
 	const options = {
