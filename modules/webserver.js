@@ -67,6 +67,11 @@ app.post('/webhook', async (req, res) => {
 
 // API or sum idk
 app.get('/memCount', (req, res) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+	);
 	console.log(chalk.greenBright('WEBSERVER INFO'), 'Connection detected');
 	const guild = index.client.guilds.cache.get('510941195267080214');
 	const memCount = guild.memberCount;
