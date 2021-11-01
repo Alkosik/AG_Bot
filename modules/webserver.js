@@ -1,6 +1,14 @@
 const chalk = require('chalk');
 
+if (process.env.NODE_ENV !== 'production') {
+	require('dotenv').config();
+	console.log(chalk.greenBright('WEBSERVER INIT INFO'), `Current environment: ${process.env.NODE_ENV}`);
+}
+
 const index = require('../index.js');
+
+const config = index.config;
+const client = index.client;
 
 const express = require('express');
 const app = express();
@@ -12,8 +20,16 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const mysql = require('mysql');
+const connection = mysql.createConnection({
+	host: process.env.DB_HOST,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASS,
+	database: 'www5056_gsmaindb',
+});
+
 server.listen(process.env.PORT || 3000, () => {
-	console.log(chalk.greenBright('WEBSERVER INFO'), 'Server listening on port: ' + process.env.PORT || 3000);
+	console.log(chalk.greenBright('WEBSERVER INIT INFO'), 'Server listening on port: ' + process.env.PORT || 3000);
 });
 
 app.get('/', (req, res) => {
@@ -59,7 +75,6 @@ app.post('/webhook', async (req, res) => {
 		},
 		// Format JSON DATA
 		body: JSON.stringify({
-			// content: `A new build/release for **${Payload.data.app.name}** detected`,
 			content: webhook_response,
 		}),
 	};
@@ -77,7 +92,7 @@ app.get('/memCount', (req, res) => {
 		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
 	);
 	console.log(chalk.greenBright('WEBSERVER INFO'), 'Connection detected - memCount');
-	const guild = index.client.guilds.cache.get('510941195267080214');
+	const guild = client.guilds.cache.get('510941195267080214');
 	const memCount = guild.memberCount;
 	res.json(memCount);
 });
@@ -89,8 +104,26 @@ app.get('/onlineMemCount', (req, res) => {
 		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
 	);
 	console.log(chalk.greenBright('WEBSERVER INFO'), 'Connection detected - onlineMemCount');
-	const guild = index.client.guilds.cache.get('510941195267080214');
-	const onlineMembers = guild.members.cache.filter(member => !member.user.bot && member.presence.status !== 'offline');
-	console.log(onlineMembers);
+	const guild = client.guilds.cache.get('510941195267080214');
+	const onlineMembers = guild.members.cache.filter(member => !member.user.bot);
+	// console.log(onlineMembers);
 	res.json(onlineMembers);
+});
+
+app.get('/messageCount', (req, res) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+	);
+	console.log(chalk.greenBright('WEBSERVER INFO'), 'Connection detected - messageCount');
+
+	connection.query('SELECT * FROM stats', function(err, rows) {
+		if (err) {
+			client.channels.cache.get(config.testChannelId).send('**A database error detected**');
+			throw err;
+		}
+
+		res.json(rows[0].messages);
+	});
 });

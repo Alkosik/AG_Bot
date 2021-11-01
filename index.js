@@ -3,12 +3,13 @@ const fs = require('fs');
 const chalk = require('chalk');
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 const config = require('./config.json');
+exports.config = config;
 // const admin = require('firebase-admin');
 
 // + Discord
 const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
 const myIntents = new Intents();
-myIntents.add([Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_BANS, Intents.FLAGS.GUILD_PRESENCES]);
+myIntents.add([Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_BANS]);
 const client = new Client({ intents: myIntents });
 exports.client = client;
 const { joinVoiceChannel, VoiceConnectionStatus, createAudioPlayer, createAudioResource, getVoiceConnection } = require('@discordjs/voice');

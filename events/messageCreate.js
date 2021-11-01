@@ -5,9 +5,25 @@ const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const talkedRecently = new Set();
 
+
 module.exports = {
 	name: 'messageCreate',
 	execute(message, client, connection) {
+		connection.query('SELECT * FROM stats', function(err, rows) {
+			if (err) {
+				client.channels.cache.get(config.testChannelId).send('**A database error detected**');
+				throw err;
+			}
+
+			console.log(rows[0].messages);
+
+			const msgCount = rows[0].messages;
+			// const sqlQuery = `UPDATE stats SET messages = ${msgCount++}`;
+			connection.query(`UPDATE stats SET messages = ${msgCount + 1}`, function(err) {
+				if (err) throw err;
+			});
+		});
+
 		function generateXp() {
 			return Math.floor(Math.random() * (10 - 5 + 1)) + 5;
 		}
