@@ -38,12 +38,16 @@ app.post('/webhook', async (req, res) => {
 	// Respond To Heroku Webhook
 	res.sendStatus(200);
 
-	if (Payload.action == 'create') {
-		webhook_response = `A new buld was created for **${Payload.data.app.name}** on behalf of **${Payload.data.user.email}** with the ID **${Payload.data.id}**`;
-	} else if (Payload.action == 'update' && Payload.data.status == 'succeeded') {
-		webhook_response = `Last build of **${Payload.data.app.name}** finished with status **${Payload.data.status}**, creating release version **${Payload.data.release.version}**`;
-	} else {
-		webhook_response = 'You fucked something up B) - The build probably failed or something idk im not handling this cya bltch';
+	if (req.get('heroku-webhook-hmac-sha256')) {
+		if (Payload.action == 'create') {
+			webhook_response = `A new buld was created for **${Payload.data.app.name}** on behalf of **${Payload.data.user.email}** with the ID **${Payload.data.id}**`;
+		} else if (Payload.action == 'update' && Payload.data.status == 'succeeded') {
+			webhook_response = `Last build of **${Payload.data.app.name}** finished with status **${Payload.data.status}**, creating release version **${Payload.data.release.version}**`;
+		} else {
+			webhook_response = 'Heroku - You fucked something up B) - The build probably failed or something idk im not handling this cya bltch';
+		}
+	} else if (!req.get('heroku-webhook-hmac-sha256')) {
+		webhook_response = `A monitor with the ID **${Payload.id}** and name **${Payload.monitor}** sent **${Payload.type}**. Description: ${Payload.description}`;
 	}
 
 	const options = {
@@ -72,8 +76,21 @@ app.get('/memCount', (req, res) => {
 		'Access-Control-Allow-Headers',
 		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
 	);
-	console.log(chalk.greenBright('WEBSERVER INFO'), 'Connection detected');
+	console.log(chalk.greenBright('WEBSERVER INFO'), 'Connection detected - memCount');
 	const guild = index.client.guilds.cache.get('510941195267080214');
 	const memCount = guild.memberCount;
 	res.json(memCount);
+});
+
+app.get('/onlineMemCount', (req, res) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+	);
+	console.log(chalk.greenBright('WEBSERVER INFO'), 'Connection detected - onlineMemCount');
+	const guild = index.client.guilds.cache.get('510941195267080214');
+	const onlineMembers = guild.members.cache.filter(member => !member.user.bot && member.presence.status !== 'offline');
+	console.log(onlineMembers);
+	res.json(onlineMembers);
 });
