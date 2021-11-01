@@ -127,3 +127,11 @@ app.get('/messageCount', (req, res) => {
 		res.json(rows[0].messages);
 	});
 });
+
+app.post('/sendMessage', (req, res) => {
+	const data = req.body;
+
+	client.channels.cache.get(data.id).send(data.message);
+
+	res.send(`Message registered. Content: ${data.message} | Channel ID: ${data.id}`);
+});

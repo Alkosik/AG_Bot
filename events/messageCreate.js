@@ -15,8 +15,6 @@ module.exports = {
 				throw err;
 			}
 
-			console.log(rows[0].messages);
-
 			const msgCount = rows[0].messages;
 			// const sqlQuery = `UPDATE stats SET messages = ${msgCount++}`;
 			connection.query(`UPDATE stats SET messages = ${msgCount + 1}`, function(err) {
