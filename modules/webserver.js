@@ -144,3 +144,16 @@ app.post('/sendDM', (req, res) => {
 
 	res.send(`Direct Message registered. Content: ${data.message} | User ID: ${data.id} | Username: ${user.username}`);
 });
+
+app.post('/modByID', (req, res) => {
+	const data = req.body;
+
+	connection.query(`SELECT * FROM account WHERE id = ${data.id}`, function(err, rows) {
+		if (err) {
+			client.channels.cache.get(config.testChannelId).send('**A database error detected**');
+			throw err;
+		}
+
+		res.json(rows[0].moderation);
+	});
+});
