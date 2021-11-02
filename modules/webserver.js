@@ -146,6 +146,11 @@ app.post('/sendDM', (req, res) => {
 });
 
 app.post('/modByID', (req, res) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+	);
 	const data = req.body;
 
 	connection.query(`SELECT * FROM account WHERE id = ${data.id}`, function(err, rows) {
