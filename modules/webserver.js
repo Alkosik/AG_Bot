@@ -135,3 +135,12 @@ app.post('/sendMessage', (req, res) => {
 
 	res.send(`Message registered. Content: ${data.message} | Channel ID: ${data.id}`);
 });
+
+app.post('/sendDM', (req, res) => {
+	const data = req.body;
+
+	const user = client.users.cache.get(data.id);
+	user.send(data.message);
+
+	res.send(`Direct Message registered. Content: ${data.message} | User ID: ${data.id} | Username: ${user.username}`);
+});
