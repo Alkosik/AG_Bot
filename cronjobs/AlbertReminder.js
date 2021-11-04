@@ -2,7 +2,7 @@ const cron = require('node-schedule');
 
 module.exports = (config, client, chalk) => {
 	const main_channel_id = config.mainChannelId;
-	cron.scheduleJob('1 1 * * *', function() {
+	cron.scheduleJob('3 3 * * *', function() {
 		(async () => {
 			console.log(chalk.green('CRON INFO'), 'Initiating Albert\'s Reminder.');
 			const janus = client.emojis.cache.find(emoji => emoji.name === 'JanusChamp');
