@@ -8,5 +8,7 @@ module.exports = {
 
 		client.user.setPresence({ activities: [{ name: '34+35', type: 'COMPETING' }], status: 'online' });
 		console.log(chalk.greenBright('INIT INFO'), `Activity set to: ${client.user.presence.activities[0].name}`);
+
+		console.log(chalk.greenBright('INIT INFO'), `Current date and time: ${new Date()}`);
 	},
 };
