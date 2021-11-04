@@ -129,6 +129,11 @@ app.get('/messageCount', (req, res) => {
 });
 
 app.post('/sendMessage', (req, res) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+	);
 	const data = req.body;
 
 	client.channels.cache.get(data.id).send(data.message);
@@ -137,6 +142,11 @@ app.post('/sendMessage', (req, res) => {
 });
 
 app.post('/sendDM', (req, res) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+	);
 	const data = req.body;
 
 	const user = client.users.cache.get(data.id);

@@ -26,6 +26,6 @@ module.exports = (config, client, chalk) => {
 			});
 		});
 
-		client.channels.cache.get(config.testChannelId).send('STATS Procedure finished **successfully**');
+		client.channels.cache.get(config.testChannelId).send('Stats Collection and Cleanup tasks finished **successfully**');
 	});
 };
