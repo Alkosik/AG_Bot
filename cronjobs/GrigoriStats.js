@@ -9,8 +9,8 @@ const Rconfig = RiotAPITypes.Config = {
 };
 
 module.exports = (config, client, chalk) => {
-	const channelId = config.mainChannelId;
-	cron.scheduleJob('0 0 * * *', function() {
+	const channelId = config.testChannelId;
+	cron.scheduleJob('* * * * *', function() {
 		(async () => {
 			console.log(chalk.green('CRON INFO'), 'Initiating Grigori\'s Stats.');
 
@@ -42,8 +42,9 @@ module.exports = (config, client, chalk) => {
 			const winratio = filtered[0].wins / (filtered[0].wins + filtered[0].losses);
 			const roundedWr = Math.round((winratio + Number.EPSILON) * 100) / 100 * 100;
 
-			const iconLink = `http://ddragon.leagueoflegends.com/cdn/11.18.1/img/profileicon/${summoner.profileIconId}.png`;
+			const iconLink = `http://ddragon.leagueoflegends.com/cdn/11.22.1/img/profileicon/${summoner.profileIconId}.png`;
 
+			console.log(iconLink);
 			const statsEmbed = new MessageEmbed()
 				.setAuthor('Staty Grzegorza na dziś')
 				.setColor('#ffffff')
