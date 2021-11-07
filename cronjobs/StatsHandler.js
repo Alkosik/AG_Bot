@@ -1,6 +1,7 @@
 const cron = require('node-schedule');
 const cronitor = require('cronitor')(process.env.API_CRONITOR);
 const monitor = new cronitor.Monitor('Stats Collector');
+const { MessageEmbed } = require('discord.js');
 
 const mysql = require('mysql');
 const connection = mysql.createConnection({
@@ -11,21 +12,47 @@ const connection = mysql.createConnection({
 });
 
 module.exports = (config, client, chalk) => {
-	cron.scheduleJob('0 0 * * *', function() {
-		console.log(chalk.green('CRON INFO'), 'Initiated handling of stats');
-		monitor.ping({ message: 'Stats Collected' });
+	cron.scheduleJob('0 0 * * *', async function() {
+		console.log(chalk.green('CRON INFO'), 'Initiated Stats Collection and Cleanup');
 		client.channels.cache.get(config.testChannelId).send('Initated Stats Collection and Cleanup');
-		// Reset messages count
-		connection.query('SELECT * FROM stats', function(err) {
+
+		const date = new Date();
+		const formattedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+
+		const guild = client.guilds.cache.get('510941195267080214');
+
+		let messages;
+
+		console.log(chalk.green('STATS CRON INFO'), `Reseting msgCount, Saving date: ${formattedDate}, memCount: ${guild.memberCount}`);
+
+		connection.query('SELECT * FROM stats', function(err, rows) {
+
+			messages = rows[0].messages;
+
 			if (err) {
 				client.channels.cache.get(config.testChannelId).send('**A database error detected**');
 				throw err;
 			}
-			connection.query('UPDATE stats SET messages = 0', function(err) {
+			connection.query(`UPDATE stats SET date = '${formattedDate}', members = ${guild.memberCount}`, function(err) {
 				if (err) throw err;
 			});
-		});
 
-		client.channels.cache.get(config.testChannelId).send('Stats Collection and Cleanup tasks finished **successfully**');
+			const statsEmbed = new MessageEmbed()
+				.setAuthor('Overview')
+				.setColor('#ffffff')
+				.setFooter('Gang Słoni 2.0', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
+				.addFields(
+					{ name: 'Message Count', value: `${messages} (0)`, inline: true },
+					{ name: '\u200B', value: '\u200B', inline: true },
+					{ name: 'Members', value: `${guild.memberCount}`, inline: true },
+					{ name: 'Date', value: `${formattedDate}`, inline: true },
+					{ name: '\u200B', value: '\u200B', inline: true },
+				// { name: 'Winratio', value: roundedWr.toLocaleString() + '%', inline: true },
+				);
+
+			client.channels.cache.get(config.testChannelId).send('Stats Collection and Cleanup tasks finished **successfully**');
+			client.channels.cache.get(config.testChannelId).send({ embeds: [statsEmbed] });
+		});
+		monitor.ping({ message: 'Stats Collected' });
 	});
 };
