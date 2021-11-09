@@ -33,7 +33,7 @@ module.exports = (config, client, chalk) => {
 				client.channels.cache.get(config.testChannelId).send('**A database error detected**');
 				throw err;
 			}
-			connection.query(`UPDATE stats SET date = '${formattedDate}', members = ${guild.memberCount}`, function(err) {
+			connection.query(`UPDATE stats SET date = '${formattedDate}', members = ${guild.memberCount}, messages = 0`, function(err) {
 				if (err) throw err;
 			});
 
@@ -42,7 +42,7 @@ module.exports = (config, client, chalk) => {
 				.setColor('#ffffff')
 				.setFooter('Gang Słoni 2.0', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
 				.addFields(
-					{ name: 'Message Count', value: `${messages} (0)`, inline: true },
+					{ name: 'Message Count', value: `${messages} -> (0)`, inline: true },
 					{ name: '\u200B', value: '\u200B', inline: true },
 					{ name: 'Members', value: `${guild.memberCount}`, inline: true },
 					{ name: 'Date', value: `${formattedDate}`, inline: true },
