@@ -35,10 +35,10 @@ module.exports = {
 
 		const promise = new Promise(function(resolve, reject) {
 			if (!interaction.member.roles.cache.find(r => r.id === config.adminRoleId) && !interaction.member.roles.cache.find(r => r.id === config.modRoleId)) {
-				reject(reply = '**Nie masz permisji do odmutowywania - [Admin/Mod]**');
+				return reject(reply = '**Nie masz permisji do odmutowywania - [Admin/Mod]**');
 			}
 			if (!mute_member.roles.cache.some(r => r.name === 'Muted')) {
-				reject(reply = '**Ta osoba nie jest zmutowana**');
+				return reject(reply = '**Ta osoba nie jest zmutowana**');
 			}
 			resolve(mute_member);
 		}).catch(() => {
