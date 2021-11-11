@@ -43,11 +43,11 @@ module.exports = {
 				if (rows.length < 1) {
 					updatedXp = generateXp();
 					console.log(chalk.green('DB INFO'), `Registering new user: ${message.author.username} - ${message.author.id}`);
-					sqlQuery = `INSERT INTO account (username, id, xp) VALUES ('${message.author.username}', ${message.author.id}, ${updatedXp})`;
+					sqlQuery = `INSERT INTO account (username, nickname, id, xp) VALUES ('${message.author.username}', '${message.member.displayName}', ${message.author.id}, ${updatedXp})`;
 				} else {
 					originalXp = rows[0].xp;
 					updatedXp = originalXp + generateXp();
-					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = '${message.author.username}' WHERE id = '${message.author.id}'`;
+					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = '${message.author.username}, nickname = ${message.member.displayName}' WHERE id = '${message.author.id}'`;
 
 					// Leveling up
 
