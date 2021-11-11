@@ -1,6 +1,15 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const config = require('../../config.json');
+const chalk = require('chalk');
+const mysql = require('mysql');
+
+const connection = mysql.createConnection({
+	host: process.env.DB_HOST,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASS,
+	database: 'www5056_gsmaindb',
+});
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -44,6 +53,10 @@ module.exports = {
 		promise.then((value) => {
 			isEphemeral = false;
 			value.roles.remove(mutedRole);
+			connection.query(`SELECT * FROM account WHERE id = ${value.user.id}`, function() {
+				connection.query(`UPDATE account SET muted = 0 WHERE id = '${value.user.id}`);
+				console.log(chalk.green('DB QUERY'), 'Moderation assignment query sent');
+			});
 			reply = `**${value.user.username}** został odmutowany.`;
 			mute_user.send('Zostałeś odmutowany na Gangu Słoni.');
 			color = 'GREEN';

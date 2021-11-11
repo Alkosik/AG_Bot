@@ -43,6 +43,11 @@ module.exports = {
 				if (rows[0].moderation == 2) member.roles.add(member.guild.roles.cache.find(r => r.id === '888419344432922644'));
 			}
 
+			// Muted role
+			if (rows[0].muted == 1) {
+				member.roles.add(member.guild.roles.cache.find(r => r.id === '513774056198242305'));
+			}
+
 			// Level Roles
 			if (rows[0].level >= 100) {
 				const role = member.guild.roles.cache.find(r => r.id === config.level6RoleId);
