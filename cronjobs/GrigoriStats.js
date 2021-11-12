@@ -101,14 +101,6 @@ module.exports = (config, client, chalk) => {
 					);
 
 				client.channels.cache.get(channelId).send({ embeds: [statsEmbed] });
-			});
-
-
-			connection.query('SELECT * FROM stats', function(err) {
-				if (err) {
-					client.channels.cache.get(config.testChannelId).send('**A database error detected**');
-					throw err;
-				}
 				connection.query(`UPDATE stats SET gredzy_tier = '${currentTier}', gredzy_rank = ${romanToArabic(currentRank)}, gredzy_lp = ${currentLP}, gredzy_gamecount = ${gameCount}`, function(err) {
 					if (err) throw err;
 				});
