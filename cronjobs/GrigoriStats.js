@@ -81,29 +81,35 @@ module.exports = (config, client, chalk) => {
 
 			const iconLink = `http://ddragon.leagueoflegends.com/cdn/11.22.1/img/profileicon/${summoner.profileIconId}.png`;
 
-			console.log(iconLink);
-			const statsEmbed = new MessageEmbed()
-				.setAuthor('Staty Grzegorza na dziś')
-				.setColor('#ffffff')
-				.setThumbnail(iconLink)
-				.setFooter('Gang Słoni 2.0', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
-				.addFields(
-					{ name: 'Poziom', value: summoner.summonerLevel.toLocaleString(), inline: true },
-					{ name: '\u200B', value: '\u200B', inline: true },
-					{ name: 'Gry w sezonie', value: gameCount.toLocaleString(), inline: true },
-					{ name: 'Ranga', value: `${currentTier} ${currentRank} ${currentLP}LP`, inline: true },
-					{ name: '\u200B', value: '\u200B', inline: true },
-					{ name: 'Winratio', value: roundedWr.toLocaleString() + '%', inline: true },
-				);
+			connection.query('SELECT * FROM stats', function(err, rows) {
+				if (err) throw err;
+				const oldGameCount = rows[0].gredzy_gamecount;
 
-			client.channels.cache.get(channelId).send({ embeds: [statsEmbed] });
+				console.log(iconLink);
+				const statsEmbed = new MessageEmbed()
+					.setAuthor('Staty Grzegorza na dziś')
+					.setColor('#ffffff')
+					.setThumbnail(iconLink)
+					.setFooter('Gang Słoni 2.0', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
+					.addFields(
+						{ name: 'Poziom', value: summoner.summonerLevel.toLocaleString(), inline: true },
+						{ name: '\u200B', value: '\u200B', inline: true },
+						{ name: 'Gry w sezonie/dzis', value: `${gameCount.toLocaleString()} / ${gameCount - oldGameCount}`, inline: true },
+						{ name: 'Ranga', value: `${currentTier} ${currentRank} ${currentLP}LP`, inline: true },
+						{ name: '\u200B', value: '\u200B', inline: true },
+						{ name: 'Winratio', value: roundedWr.toLocaleString() + '%', inline: true },
+					);
+
+				client.channels.cache.get(channelId).send({ embeds: [statsEmbed] });
+			});
+
 
 			connection.query('SELECT * FROM stats', function(err) {
 				if (err) {
 					client.channels.cache.get(config.testChannelId).send('**A database error detected**');
 					throw err;
 				}
-				connection.query(`UPDATE stats SET gredzy_tier = '${currentTier}', gredzy_rank = ${romanToArabic(currentRank)}, gredzy_lp = ${currentLP}`, function(err) {
+				connection.query(`UPDATE stats SET gredzy_tier = '${currentTier}', gredzy_rank = ${romanToArabic(currentRank)}, gredzy_lp = ${currentLP}, gredzy_gamecount = ${gameCount}`, function(err) {
 					if (err) throw err;
 				});
 			});
