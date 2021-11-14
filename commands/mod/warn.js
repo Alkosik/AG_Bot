@@ -65,6 +65,7 @@ module.exports = {
 				connection.query(`UPDATE account SET warns = ${warnCount + 1} WHERE id = '${value.user.id}`);
 				console.log(chalk.green('DB QUERY'), 'Warn increase query sent');
 			});
+			LogEvent();
 			if (!reason) {
 				reply = `**${value.user.username}** otrzymał ostrzeżenie.`;
 				warn_user.send('Otrzymałeś ostrzeżenie na Gangu Słoni.');
@@ -87,6 +88,30 @@ module.exports = {
 		if (warnCount >= 3) {
 			warn_member.kick().catch(() => null);
 			await interaction.editReply({ content: `${warn_member.user.username} został wyrzucony za posiadanie 3 ostrzeżeń.` });
+		}
+
+		function LogEvent() {
+			const logChannel = interaction.guild.channels.cache.find(channel => channel.name === 'logs');
+			const logEmbed = new MessageEmbed()
+				.setAuthor('Warn Log', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
+				.setColor('#4d33de')
+				.setThumbnail(interaction.user.displayAvatarURL({
+					dynamic: true,
+				}))
+				.setFooter(interaction.guild.name, 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
+				.addFields(
+					{ name: '**Warned**', value: warn_member.user.username, inline: true },
+					{ name: 'Warned By', value: interaction.user.username, inline: true },
+					{ name: 'Date', value: interaction.createdAt.toLocaleString(), inline: false },
+				)
+				.addField('**ID**', warn_member.id)
+				.addField('**Reason**', `${reason || '**No Reason**'}`)
+				.setTimestamp();
+			if (!logChannel) {
+				console.log('log channel not found');
+				return;
+			}
+			logChannel.send({ embeds: [logEmbed] });
 		}
 	},
 };
