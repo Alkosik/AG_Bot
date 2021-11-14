@@ -1,6 +1,15 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const config = require('../../config.json');
+const chalk = require('chalk');
+const mysql = require('mysql');
+
+const connection = mysql.createConnection({
+	host: process.env.DB_HOST,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASS,
+	database: 'www5056_gsmaindb',
+});
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -20,6 +29,7 @@ module.exports = {
 		let reply;
 		let color;
 		let isEphemeral;
+		let warnCount;
 
 		const warn_member = interaction.options.getMember('osoba');
 		const warn_user = interaction.options.getUser('osoba');
@@ -49,6 +59,12 @@ module.exports = {
 
 		promise.then((value) => {
 			isEphemeral = false;
+			connection.query(`SELECT * FROM account WHERE id = ${value.user.id}`, function(rows, err) {
+				if (err) throw err;
+				warnCount = rows[0].warns;
+				connection.query(`UPDATE account SET warns = ${warnCount + 1} WHERE id = '${value.user.id}`);
+				console.log(chalk.green('DB QUERY'), 'Warn increase query sent');
+			});
 			if (!reason) {
 				reply = `**${value.user.username}** otrzymał ostrzeżenie.`;
 				warn_user.send('Otrzymałeś ostrzeżenie na Gangu Słoni.');
@@ -57,7 +73,6 @@ module.exports = {
 				warn_user.send(`Otrzymałeś ostrzeżenie na Gangu Słoni za ${reason}`);
 			}
 			color = 'GREEN';
-			value.kick().catch(() => null);
 		});
 
 		await snooze(1000);
@@ -66,5 +81,12 @@ module.exports = {
 			.setDescription(reply)
 			.setColor(color);
 		await interaction.reply({ embeds: [replyEmbed], ephemeral: isEphemeral });
+
+		await snooze(5000);
+
+		if (warnCount >= 3) {
+			warn_member.kick().catch(() => null);
+			await interaction.editReply({ content: `${warn_member.user.username} został wyrzucony za posiadanie 3 ostrzeżeń.` });
+		}
 	},
 };
