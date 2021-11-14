@@ -47,7 +47,7 @@ module.exports = {
 				} else {
 					originalXp = rows[0].xp;
 					updatedXp = originalXp + generateXp();
-					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = '${message.author.username}, nickname = ${message.member.displayName}' WHERE id = '${message.author.id}'`;
+					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = '${message.author.username}', nickname = '${message.member.displayName}' WHERE id = '${message.author.id}'`;
 
 					// Leveling up
 

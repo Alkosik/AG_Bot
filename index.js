@@ -204,7 +204,7 @@ client.on('messageCreate', async message => {
 			sentwarnmsg.delete().catch(error => {
 			// Only log the error if it is not an Unknown Message error
 				if (error.code !== 10008) {
-					console.error(chalk.red('ERROR'), 'Failed to delete the warn message during link removal:', error);
+					console.error(chalk.red('ERROR'), 'Failed to delete the warn message during link removal: ', error);
 				}
 			});
 		}
