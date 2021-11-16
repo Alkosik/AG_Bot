@@ -10,7 +10,9 @@ A sequel to the private Discord Bot Piesek.
 	* Kick,
 	* Mute,
 	* Unban,
-	* Unmute
+	* Unmute,
+	* Warn,
+	* /assign - Saves user moderation status to db
 
 * #### Fun
 	* Roulette
@@ -20,8 +22,15 @@ A sequel to the private Discord Bot Piesek.
 	* Emit,
 	* Logtest
 
-* #### APIs (depracted)
+* #### APIs
 	* League of Legeds
+	* Lyrics
+
+* #### Music
+	* Play
+	* Skip
+	* Stop
+	* /np - Now Playing
 
 * #### Other
 	* Cipa,
@@ -37,4 +46,5 @@ A sequel to the private Discord Bot Piesek.
 	* Cronjob Handler
 	* Error Handler
 * Automatic invite removal
+* Webserver with API
 * Sheesh and Yuh
