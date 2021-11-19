@@ -8,7 +8,8 @@ module.exports = {
 		console.log(chalk.red('ERROR'), `An error has been encountered: ${error}`);
 		const errEmbed = new MessageEmbed()
 			.setTitle('Error Detected')
-			.setColor('RED');
+			.setColor('RED')
+			.setFooter('Gang Słoni');
 		client.channels.cache.get(testChannelId).send({ embeds: [errEmbed] });
 	},
 };
