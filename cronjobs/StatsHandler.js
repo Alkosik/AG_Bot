@@ -53,6 +53,7 @@ module.exports = (config, client, chalk) => {
 
 			client.channels.cache.get(config.testChannelId).send('Stats Collection and Cleanup tasks finished **successfully**');
 			client.channels.cache.get(config.testChannelId).send({ embeds: [statsEmbed] });
+			console.log(chalk.green('CRON INFO'), 'Stats Collection and Cleanup finished successfully.');
 		});
 		monitor.ping({ message: 'Stats Collected' });
 	});

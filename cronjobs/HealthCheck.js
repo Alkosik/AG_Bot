@@ -28,6 +28,7 @@ module.exports = (config, client, chalk) => {
 				);
 
 			client.channels.cache.get(channelId).send({ embeds: [statusEmbed] });
+			console.log(chalk.green('CRON INFO'), 'Health Check finished successfully.');
 		})();
 	});
 };

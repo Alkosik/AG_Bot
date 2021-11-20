@@ -18,6 +18,7 @@ module.exports = (config, client, chalk) => {
 			} else {
 				client.channels.cache.get(main_channel_id).send(`<@430140838345965595>, nienawidze cie ${janus}`);
 			}
+			console.log(chalk.green('CRON INFO'), 'Albert\'s Reminder finished successfully.');
 		})();
 	});
 };
