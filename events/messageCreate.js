@@ -5,14 +5,17 @@ const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const talkedRecently = new Set();
 
-const date = new Date();
-const formattedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+// Yesterday's date
+const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+// const date = new Date();
+const formattedDate = yesterday.getFullYear() + '/' + (yesterday.getMonth() + 1) + '/' + yesterday.getDate();
 
 
 module.exports = {
 	name: 'messageCreate',
 	execute(message, client, connection) {
-		connection.query(`SELECT * FROM stats`, function(err, rows) {
+		connection.query(`SELECT * FROM stats WHERE date = ${formattedDate}`, function(err, rows) {
 			if (err) {
 				client.channels.cache.get(config.testChannelId).send('**A database error detected**');
 				throw err;
