@@ -16,8 +16,11 @@ module.exports = {
 			}
 
 			const msgCount = rows[0].messages;
+
+			const date = new Date();
+			const formattedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 			// const sqlQuery = `UPDATE stats SET messages = ${msgCount++}`;
-			connection.query(`UPDATE stats SET messages = ${msgCount + 1}`, function(err) {
+			connection.query(`UPDATE stats SET messages = ${msgCount + 1} WHERE date = ${formattedDate}`, function(err) {
 				if (err) throw err;
 			});
 		});
