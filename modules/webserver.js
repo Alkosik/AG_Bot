@@ -172,3 +172,9 @@ app.post('/modByID', (req, res) => {
 		res.json(rows[0].moderation);
 	});
 });
+
+process.on('uncaughtException', (err) => {
+	console.log('uncaughtException');
+	console.log(err);
+	client.channels.cache.get(config.testChannelId).send('**Uncaught exception detected. System restarting**');
+});
