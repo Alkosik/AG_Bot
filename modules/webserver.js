@@ -176,5 +176,6 @@ app.post('/modByID', (req, res) => {
 process.on('uncaughtException', (err) => {
 	console.log('uncaughtException');
 	console.log(err);
-	client.channels.cache.get(config.testChannelId).send('**Uncaught exception detected. System restarting**');
+	client.channels.cache.get(config.testChannelId).send('**Uncaught exception detected:**');
+	client.channels.cache.get(config.testChannelId).send('```' + err + '```');
 });
