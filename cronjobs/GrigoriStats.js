@@ -8,14 +8,6 @@ const Rconfig = RiotAPITypes.Config = {
 	debug: false,
 };
 
-const mysql = require('mysql');
-const connection = mysql.createConnection({
-	host: process.env.DB_HOST,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASS,
-	database: 'www5056_gsmaindb',
-});
-
 function romanToArabic(roman) {
 	if (roman == null) {return -1;}
 	let totalValue = 0,
@@ -51,7 +43,7 @@ function char_to_int(character) {
 	}
 }
 
-module.exports = (config, client, chalk) => {
+module.exports = (config, client, chalk, connection) => {
 	const channelId = config.mainChannelId;
 	cron.scheduleJob('0 0 * * *', function() {
 		(async () => {

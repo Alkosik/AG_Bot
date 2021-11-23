@@ -41,12 +41,21 @@ let currently_playing = false;
 const { registerPlayerEvents } = require('./events/player/events');
 client.player = new Player(client);
 
-const connection = mysql.createConnection({
+let connection = mysql.createConnection({
 	host: process.env.DB_HOST,
 	user: process.env.DB_USER,
 	password: process.env.DB_PASS,
 	database: 'www5056_gsmaindb',
 });
+
+function handleDisconnect() {
+	connection = mysql.createConnection({
+		host: process.env.DB_HOST,
+		user: process.env.DB_USER,
+		password: process.env.DB_PASS,
+		database: 'www5056_gsmaindb',
+	});
+}
 
 // * Collections
 client.commands = new Collection();
@@ -55,6 +64,16 @@ connection.connect(function(err) {
 	console.log(chalk.green('DB INFO'), 'index: Connecting to database...');
 	if (err) throw err;
 	console.log(chalk.green('DB INFO'), 'index: Database connection established');
+});
+
+connection.on('error', function(err) {
+	console.log(chalk.red('DB ERROR'), err);
+	if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+		client.channels.cache.get(config.testChannelId).send('**Fatal database error** - Server closed the connection');
+		handleDisconnect();
+	} else {
+		throw err;
+	}
 });
 
 
@@ -138,7 +157,7 @@ const cronFiles = fs.readdirSync('./cronjobs').filter(file => file.endsWith('.js
 for (const file of cronFiles) {
 	const cron = `./cronjobs/${file}`;
 	const newCron = cron.slice(0, -3);
-	require(String(newCron))(config, client, chalk);
+	require(String(newCron))(config, client, chalk, connection);
 	console.log(chalk.green('CRON INFO'), 'Loaded ' + file.slice(0, -3));
 }
 // #endregion

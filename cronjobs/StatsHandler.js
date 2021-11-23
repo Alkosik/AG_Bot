@@ -3,15 +3,7 @@ const cronitor = require('cronitor')(process.env.API_CRONITOR);
 const monitor = new cronitor.Monitor('Stats Collector');
 const { MessageEmbed } = require('discord.js');
 
-const mysql = require('mysql');
-const connection = mysql.createConnection({
-	host: process.env.DB_HOST,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASS,
-	database: 'www5056_gsmaindb',
-});
-
-module.exports = (config, client, chalk) => {
+module.exports = (config, client, chalk, connection) => {
 	cron.scheduleJob('0 0 * * *', async function() {
 		console.log(chalk.green('CRON INFO'), 'Initiated Stats Collection and Cleanup');
 		client.channels.cache.get(config.testChannelId).send('Initated Stats Collection and Cleanup');
