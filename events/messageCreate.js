@@ -9,8 +9,6 @@ const talkedRecently = new Set();
 const date = new Date();
 const formattedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
-console.log(formattedDate);
-
 module.exports = {
 	name: 'messageCreate',
 	execute(message, client, connection) {

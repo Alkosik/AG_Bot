@@ -2,14 +2,6 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const config = require('../../config.json');
 const chalk = require('chalk');
-const mysql = require('mysql');
-
-const connection = mysql.createConnection({
-	host: process.env.DB_HOST,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASS,
-	database: 'www5056_gsmaindb',
-});
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -23,7 +15,7 @@ module.exports = {
 			option.setName('powód')
 				.setDescription('Powód muta')
 				.setRequired(false)),
-	async execute(interaction) {
+	async execute(interaction, connection) {
 		const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 		let reply;

@@ -1,20 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageSelectMenu } = require('discord.js');
 const chalk = require('chalk');
-const mysql = require('mysql');
-
-const connection = mysql.createConnection({
-	host: process.env.DB_HOST,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASS,
-	database: 'www5056_gsmaindb',
-});
-
-connection.connect(function(err) {
-	console.log(chalk.green('DB INFO'), 'assign: Connecting to database...');
-	if (err) throw err;
-	console.log(chalk.green('DB INFO'), 'assign: Database connection established');
-});
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -24,7 +10,7 @@ module.exports = {
 			option.setName('osoba')
 				.setDescription('Osoba do dodania/usunięcia')
 				.setRequired(true)),
-	async execute(interaction) {
+	async execute(interaction, connection) {
 		if (!interaction.member.roles.cache.some(r => r.name === '♚Słonie♚')) {
 			return interaction.reply('Co ty kurwa chcesz zrobic powiedz ty mi');
 		}

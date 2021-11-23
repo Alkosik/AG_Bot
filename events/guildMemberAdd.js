@@ -2,24 +2,9 @@
 const chalk = require('chalk');
 const config = require('../config.json');
 
-const mysql = require('mysql');
-
-const connection = mysql.createConnection({
-	host: process.env.DB_HOST,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASS,
-	database: 'www5056_gsmaindb',
-});
-
-connection.connect(function(err) {
-	console.log(chalk.green('DB INFO'), 'guildMemAdd: Connecting to database...');
-	if (err) throw err;
-	console.log(chalk.green('DB INFO'), 'guildMemAdd: Database connection established');
-});
-
 module.exports = {
 	name: 'guildMemberAdd',
-	execute(member, client) {
+	execute(member, client, connection) {
 		console.log(chalk.green('INFO'), 'A new member has joined the server.');
 
 		const guild = client.guilds.cache.get('510941195267080214');

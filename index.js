@@ -61,9 +61,9 @@ function handleDisconnect() {
 client.commands = new Collection();
 
 connection.connect(function(err) {
-	console.log(chalk.green('DB INFO'), 'index: Connecting to database...');
+	console.log(chalk.green('DB INFO'), 'Estabilishing database connection...');
 	if (err) throw err;
-	console.log(chalk.green('DB INFO'), 'index: Database connection established');
+	console.log(chalk.green('DB INFO'), 'Database connection established');
 });
 
 connection.on('error', function(err) {
@@ -125,7 +125,7 @@ client.on('interactionCreate', async interaction => {
 	if (!command) return;
 
 	try {
-		await command.execute(interaction);
+		await command.execute(interaction, connection);
 	} catch (error) {
 		console.error(error);
 		const errEmbed = new MessageEmbed()
