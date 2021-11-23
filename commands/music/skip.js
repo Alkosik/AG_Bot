@@ -5,7 +5,7 @@ module.exports = {
 		.setName('skip')
 		.setDescription('Skips a song.'),
 	async execute(interaction) {
-		await interaction.defer();
+		await interaction.deferReply();
 		if (interaction.channel.id != '510941382454673408' && interaction.channel.id != '879456954232209508') {
 			return await interaction.reply('Ta interakcja moze byc uzywana tylko na kanale od muzyki');
 		}
