@@ -72,6 +72,7 @@ connection.on('error', function(err) {
 		client.channels.cache.get(config.testChannelId).send('**Fatal database error** - Server closed the connection');
 		handleDisconnect();
 	} else {
+		client.channels.cache.get(config.testChannelId).send('**Database connection error encountered**');
 		throw err;
 	}
 });
