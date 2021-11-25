@@ -42,18 +42,21 @@ module.exports = {
 				let updatedXp;
 
 				const escapedUsername = connection.escape(message.author.username);
-				const escapedNickname = connection.escape(message.member.nickname);
+				let escapedNickname = connection.escape(message.member.nickname);
 
+				if (escapedNickname === null) {
+					escapedNickname = escapedUsername;
+				}
 
 				// New user
 				if (rows.length < 1) {
 					updatedXp = generateXp();
 					console.log(chalk.green('DB INFO'), `Registering new user: ${message.author.username} - ${message.author.id}`);
-					sqlQuery = `INSERT INTO account (username, nickname, id, xp) VALUES (${escapedUsername}, ${escapedNickname ? escapedNickname : escapedUsername}, ${message.author.id}, ${updatedXp})`;
+					sqlQuery = `INSERT INTO account (username, nickname, id, xp) VALUES (${escapedUsername}, ${escapedNickname}, ${message.author.id}, ${updatedXp})`;
 				} else {
 					originalXp = rows[0].xp;
 					updatedXp = originalXp + generateXp();
-					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = ${escapedUsername}, nickname = ${escapedNickname ? escapedNickname : escapedUsername} WHERE id = '${message.author.id}'`;
+					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = ${escapedUsername}, nickname = ${escapedNickname} WHERE id = '${message.author.id}'`;
 
 					// Leveling up
 
