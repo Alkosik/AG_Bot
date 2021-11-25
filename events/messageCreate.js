@@ -44,7 +44,7 @@ module.exports = {
 				const escapedUsername = connection.escape(message.author.username);
 				let escapedNickname = connection.escape(message.member.nickname);
 
-				if (escapedNickname === null) {
+				if (escapedNickname == null) {
 					escapedNickname = escapedUsername;
 				}
 
