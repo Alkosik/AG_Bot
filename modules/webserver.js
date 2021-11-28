@@ -33,7 +33,7 @@ server.listen(process.env.PORT || 3000, () => {
 });
 
 app.get('/', (req, res) => {
-	return res.send('You have reached the Gang Słoni API. This is probably an error, please return to the main site: http://gangsloni.pl');
+	return res.send('You have reached the Gang Słoni API. This is probably an error, please return to the main site: http://gangsloni.com');
 });
 
 app.post('/', (req, res) => {
@@ -170,6 +170,23 @@ app.post('/modByID', (req, res) => {
 		}
 
 		res.json(rows[0].moderation);
+	});
+});
+
+app.get('/adminList', (req, res) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+	);
+
+	connection.query('SELECT * FROM account WHERE moderation != 0', function(err, rows) {
+		if (err) {
+			client.channels.cache.get(config.testChannelId).send('**A database error detected**');
+			throw err;
+		}
+		console.log(rows);
+		res.json(rows);
 	});
 });
 

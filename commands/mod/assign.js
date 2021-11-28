@@ -27,7 +27,7 @@ module.exports = {
 			if (interaction.customId === 'role') {
 				// await interaction.update({ content: 'jebac alberta kurwe', components: [] });
 				if (interaction.values == 'admin') {
-					await interaction.update({ content: 'Wybranles: Admin', components: [], ephemeral: true });
+					await interaction.update({ content: 'Wybrales: Admin', components: [], ephemeral: true });
 					sqlQuery = `UPDATE account SET moderation = 2 WHERE id = '${person.user.id}'`;
 				} else if (interaction.values == 'mod') {
 					await interaction.update({ content: 'Wybrales: Mod', components: [], ephemeral: true });

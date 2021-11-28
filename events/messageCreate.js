@@ -43,6 +43,7 @@ module.exports = {
 
 				const escapedUsername = connection.escape(message.author.username);
 				let escapedNickname = connection.escape(message.member.nickname);
+				const escapedAvatarURL = connection.escape(message.author.avatarURL());
 
 				if (escapedNickname == null) {
 					escapedNickname = escapedUsername;
@@ -52,11 +53,11 @@ module.exports = {
 				if (rows.length < 1) {
 					updatedXp = generateXp();
 					console.log(chalk.green('DB INFO'), `Registering new user: ${message.author.username} - ${message.author.id}`);
-					sqlQuery = `INSERT INTO account (username, nickname, id, xp) VALUES (${escapedUsername}, ${escapedNickname}, ${message.author.id}, ${updatedXp})`;
+					sqlQuery = `INSERT INTO account (username, nickname, id, xp, avatarURL) VALUES (${escapedUsername}, ${escapedNickname}, ${message.author.id}, ${updatedXp}, ${escapedAvatarURL})`;
 				} else {
 					originalXp = rows[0].xp;
 					updatedXp = originalXp + generateXp();
-					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = ${escapedUsername}, nickname = ${escapedNickname} WHERE id = '${message.author.id}'`;
+					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = ${escapedUsername}, nickname = ${escapedNickname}, avatarURL = ${escapedAvatarURL} WHERE id = '${message.author.id}'`;
 
 					// Leveling up
 
