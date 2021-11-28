@@ -4,7 +4,7 @@ const config = require('../config.json');
 
 module.exports = {
 	name: 'guildMemberAdd',
-	execute(member, client, connection) {
+	async execute(member, client, connection) {
 		console.log(chalk.green('INFO'), 'A new member has joined the server.');
 
 		const guild = client.guilds.cache.get('510941195267080214');

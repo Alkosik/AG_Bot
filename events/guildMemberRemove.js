@@ -2,7 +2,7 @@ const chalk = require('chalk');
 
 module.exports = {
 	name: 'guildMemberRemove',
-	execute(member, client) {
+	async execute(member, client) {
 		console.log(chalk.green('INFO'), 'A member has left the server.');
 
 		const guild = client.guilds.cache.get('510941195267080214');
