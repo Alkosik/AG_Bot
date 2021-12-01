@@ -80,7 +80,7 @@ app.post('/webhook', async (req, res) => {
 	};
 	request(options, function(error, response) {
 		if (error) throw new Error(error);
-		console.log(response);
+		if (response) console.log(chalk.greenBright('WEBSERVER INFO'), 'Webhook response: ' + response.body);
 	});
 });
 
