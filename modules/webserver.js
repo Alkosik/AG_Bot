@@ -57,7 +57,7 @@ app.post('/webhook', async (req, res) => {
 	if (req.get('heroku-webhook-hmac-sha256')) {
 		if (Payload.action == 'create') {
 			webhook_response = `A new buld was created for **${Payload.data.app.name}** on behalf of **${Payload.data.user.email}** with the ID **${Payload.data.id}**`;
-		} else if (Payload.action == 'update' && Payload.data.status == 'succeeded') {
+		} else if (Payload.action == 'update' && Payload.data.status == 'succeeded' && Payload.data.release.version != undefined) {
 			webhook_response = `Last build of **${Payload.data.app.name}** finished with status **${Payload.data.status}**, creating release version **${Payload.data.release.version}**`;
 		} else {
 			webhook_response = 'The build **failed**, just like you.';
