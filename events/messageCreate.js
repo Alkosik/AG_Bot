@@ -18,7 +18,13 @@ module.exports = {
 				throw err;
 			}
 
-			const msgCount = rows[0].messages;
+			let msgCount;
+
+			if (rows.length < 1) {
+				msgCount = 1;
+			} else {
+				msgCount = rows[0].messages;
+			}
 			// const sqlQuery = `UPDATE stats SET messages = ${msgCount++}`;
 			connection.query(`UPDATE stats SET messages = ${msgCount + 1} WHERE date = '${formattedDate}'`, function(err) {
 				if (err) throw err;
