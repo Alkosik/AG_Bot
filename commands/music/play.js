@@ -20,11 +20,8 @@ module.exports = {
 		const queue = await interaction.client.player.createQueue(interaction.guild, {
 			metadata: interaction.channel,
 			async onBeforeCreateStream(track, source) {
-				// only trap youtube source
 				if (source === 'youtube') {
-					// track here would be youtube track
 					return (await playdl.stream(track.url)).stream;
-					// we must return readable stream or void (returning void means telling discord-player to look for default extractor)
 				}
 			},
 		});
