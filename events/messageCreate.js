@@ -18,7 +18,13 @@ module.exports = {
 				throw err;
 			}
 
-			const msgCount = rows[0].messages;
+			let msgCount;
+
+			if (rows.length < 1) {
+				msgCount = 1;
+			} else {
+				msgCount = rows[0].messages;
+			}
 			// const sqlQuery = `UPDATE stats SET messages = ${msgCount++}`;
 			connection.query(`UPDATE stats SET messages = ${msgCount + 1} WHERE date = '${formattedDate}'`, function(err) {
 				if (err) throw err;
@@ -41,13 +47,13 @@ module.exports = {
 				let originalXp;
 				let updatedXp;
 
-				let escapedUsername = connection.escape(message.author.username);
-				let escapedNickname = connection.escape(message.member.nickname);
+				const escapedUsername = connection.escape(message.author.username);
+				let escapedNickname;
 				const escapedAvatarURL = connection.escape(message.author.displayAvatarURL({ dynamic: true }));
 
-				if (escapedUsername === 'NULL') {
-					escapedUsername = 'DB_ERROR';
-				} else if (escapedNickname == null) {
+				if (message.author.nickname != undefined) {
+					escapedNickname = connection.escape(message.member.nickname);
+				} else {
 					escapedNickname = escapedUsername;
 				}
 
@@ -55,11 +61,11 @@ module.exports = {
 				if (rows.length < 1) {
 					updatedXp = generateXp();
 					console.log(chalk.green('DB INFO'), `Registering new user: ${message.author.username} - ${message.author.id}`);
-					sqlQuery = `INSERT INTO account (username, nickname, id, xp, avatarURL) VALUES (${escapedUsername}, ${escapedNickname}, ${message.author.id}, ${updatedXp}, ${escapedAvatarURL})`;
+					sqlQuery = `INSERT INTO account (username, nickname, id, xp, avatarURL) VALUES (${escapedUsername}, ${escapedNickname || 'N/A'}, ${message.author.id}, ${updatedXp}, ${escapedAvatarURL})`;
 				} else {
 					originalXp = rows[0].xp;
 					updatedXp = originalXp + generateXp();
-					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = ${escapedUsername}, nickname = ${escapedNickname}, avatarURL = ${escapedAvatarURL} WHERE id = '${message.author.id}'`;
+					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = ${escapedUsername}, nickname = ${escapedNickname || 'N/A'}, avatarURL = ${escapedAvatarURL} WHERE id = '${message.author.id}'`;
 
 					// Leveling up
 

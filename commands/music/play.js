@@ -1,5 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
+const playdl = require('play-dl');
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('play')
@@ -17,6 +19,11 @@ module.exports = {
 
 		const queue = await interaction.client.player.createQueue(interaction.guild, {
 			metadata: interaction.channel,
+			async onBeforeCreateStream(track, source) {
+				if (source === 'youtube') {
+					return (await playdl.stream(track.url)).stream;
+				}
+			},
 		});
 
 		if (!interaction.member.voice.channelId) return await interaction.reply({ content: 'Nie znajdujesz się na kanale głosowym', ephemeral: true });
