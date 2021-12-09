@@ -47,13 +47,13 @@ module.exports = {
 				let originalXp;
 				let updatedXp;
 
-				let escapedUsername = connection.escape(message.author.username);
-				let escapedNickname = connection.escape(message.member.nickname);
+				const escapedUsername = connection.escape(message.author.username);
+				let escapedNickname;
 				const escapedAvatarURL = connection.escape(message.author.displayAvatarURL({ dynamic: true }));
 
-				if (escapedUsername === 'NULL') {
-					escapedUsername = 'DB_ERROR';
-				} else if (escapedNickname == null) {
+				if (message.author.nickname != undefined) {
+					escapedNickname = connection.escape(message.member.nickname);
+				} else {
 					escapedNickname = escapedUsername;
 				}
 
