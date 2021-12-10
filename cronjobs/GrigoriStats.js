@@ -49,8 +49,8 @@ module.exports = (config, client, chalk, connection) => {
 		(async () => {
 			console.log(chalk.green('CRON INFO'), 'Initiating Grigori\'s Stats.');
 
-			const date = new Date();
-			const formattedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+			// const date = new Date();
+			// const formattedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
 			const rAPI = new RiotAPI(process.env.API_RIOT, Rconfig);
 
@@ -96,7 +96,8 @@ module.exports = (config, client, chalk, connection) => {
 					);
 
 				client.channels.cache.get(channelId).send({ embeds: [statsEmbed] });
-				connection.query(`UPDATE stats SET gredzy_tier = '${currentTier}', gredzy_rank = ${romanToArabic(currentRank)}, gredzy_lp = ${currentLP}, gredzy_gamecount = ${gameCount} WHERE date = ${formattedDate}`, function(err) {
+				//  WHERE date = ${formattedDate}
+				connection.query(`UPDATE stats SET gredzy_tier = '${currentTier}', gredzy_rank = ${romanToArabic(currentRank)}, gredzy_lp = ${currentLP}, gredzy_gamecount = ${gameCount}`, function(err) {
 					if (err) throw err;
 				});
 				console.log(chalk.green('CRON INFO'), 'Grigori\'s stats finished successfully.');
