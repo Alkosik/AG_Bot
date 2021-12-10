@@ -13,7 +13,7 @@ module.exports = (config, client, chalk) => {
 
 			if (moodFloored >= 10) {
 				client.channels.cache.get(main_channel_id).send(`<@430140838345965595>, kocham cie ${pepo_love}`);
-			} else if (moodFloored < 4) {
+			} else if (moodFloored < 9) {
 				client.channels.cache.get(main_channel_id).send(`<@430140838345965595>, kocham cie ${pepo_love} ~ Kacperek`);
 			} else {
 				client.channels.cache.get(main_channel_id).send(`<@430140838345965595>, nienawidze cie ${janus}`);
