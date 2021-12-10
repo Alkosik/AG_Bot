@@ -34,7 +34,7 @@ server.listen(process.env.PORT || 3000, () => {
 
 app.get('/', (req, res) => {
 	// return res.send('You have reached the Gang Słoni API. This is probably an error, please return to the main site: http://gangsloni.com');
-	return res.sendFile('./api.html', { root: __dirname });
+	return res.status(200).sendFile('./api.html', { root: __dirname });
 });
 
 app.post('/', (req, res) => {
