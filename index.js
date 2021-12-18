@@ -49,6 +49,7 @@ let connection = mysql.createConnection({
 });
 
 function handleDisconnect() {
+	console.log(chalk.green('DB INFO'), 'Reconnecting to database...');
 	client.channels.cache.get(config.testChannelId).send('Reconnecting to database...');
 	connection = mysql.createConnection({
 		host: process.env.DB_HOST,
@@ -56,6 +57,7 @@ function handleDisconnect() {
 		password: process.env.DB_PASS,
 		database: 'www5056_gsmaindb',
 	});
+	console.log(chalk.green('DB INFO'), 'Reconnected to database.');
 	client.channels.cache.get(config.testChannelId).send('Reconnected to database.');
 }
 
