@@ -199,7 +199,7 @@ app.get('/modByID', (req, res) => {
 	const data = req.body;
 
 	if (data.id == undefined) {
-		res.status(400).send('No ID provided');
+		return res.status(400).send('No ID provided');
 	}
 
 	connection.query(`SELECT * FROM account WHERE id = ${data.id}`, function(err, rows) {
@@ -209,9 +209,9 @@ app.get('/modByID', (req, res) => {
 		}
 
 		if (rows.length == 0) {
-			res.status(404).send('No user found');
+			return res.status(404).send('No user found');
 		} else {
-			res.json(rows[0].moderation);
+			return res.json(rows[0].moderation);
 		}
 	});
 });
