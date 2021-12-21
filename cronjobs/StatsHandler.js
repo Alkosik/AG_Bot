@@ -2,8 +2,21 @@ const cron = require('node-schedule');
 const cronitor = require('cronitor')(process.env.API_CRONITOR);
 const monitor = new cronitor.Monitor('Stats Collector');
 const { MessageEmbed } = require('discord.js');
+const wait = require('util').promisify(setTimeout);
 
 module.exports = (config, client, chalk, connection) => {
+	async function takePerms() {
+		console.log(chalk.green('CRON INFO'), 'Role cd initiated');
+		const guild = client.guilds.cache.get('510941195267080214');
+		const member = guild.members.cache.get('430140838345965595');
+		const role = guild.roles.cache.get('511228419951034388');
+		await member.roles.remove(role);
+		console.log(chalk.green('CRON INFO'), 'Role taken');
+		wait(15000);
+		await member.roles.add(role);
+		console.log(chalk.green('CRON INFO'), 'Role given back');
+	}
+
 	cron.scheduleJob('0 0 * * *', async function() {
 		console.log(chalk.green('CRON INFO'), 'Initiated Stats Collection and Cleanup');
 		client.channels.cache.get(config.testChannelId).send('Initated Stats Collection and Cleanup');
@@ -52,5 +65,6 @@ module.exports = (config, client, chalk, connection) => {
 			console.log(chalk.green('CRON INFO'), 'Stats Collection and Cleanup finished successfully.');
 		});
 		monitor.ping({ message: 'Stats Collected' });
+		takePerms();
 	});
 };
