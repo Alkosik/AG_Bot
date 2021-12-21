@@ -190,7 +190,7 @@ app.post('/sendDM', (req, res) => {
 	res.send(`Direct Message registered. Content: ${data.message} | User ID: ${data.id} | Username: ${user.username}`);
 });
 
-app.get('/modByID', (req, res) => {
+app.post('/modByID', (req, res) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header(
 		'Access-Control-Allow-Headers',
