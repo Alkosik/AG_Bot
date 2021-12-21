@@ -17,8 +17,11 @@ const server = http.createServer(app);
 const request = require('request');
 const bodyParser = require('body-parser');
 
+const cors = require('cors');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors);
 
 const mysql = require('mysql');
 let connection = mysql.createConnection({
@@ -187,7 +190,7 @@ app.post('/sendDM', (req, res) => {
 	res.send(`Direct Message registered. Content: ${data.message} | User ID: ${data.id} | Username: ${user.username}`);
 });
 
-app.post('/modByID', (req, res) => {
+app.get('/modByID', (req, res) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header(
 		'Access-Control-Allow-Headers',
