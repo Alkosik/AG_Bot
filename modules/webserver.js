@@ -198,7 +198,7 @@ app.post('/modByID', (req, res) => {
 	);
 	const data = req.body;
 
-	if (data.data.id == undefined) {
+	if (data.id == undefined) {
 		return res.status(400).send('No ID provided');
 	}
 
