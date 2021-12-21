@@ -198,13 +198,21 @@ app.get('/modByID', (req, res) => {
 	);
 	const data = req.body;
 
+	if (data.id == undefined) {
+		res.status(400).send('No ID provided');
+	}
+
 	connection.query(`SELECT * FROM account WHERE id = ${data.id}`, function(err, rows) {
 		if (err) {
 			client.channels.cache.get(config.testChannelId).send('**A database error detected**');
 			throw err;
 		}
 
-		res.json(rows[0].moderation);
+		if (rows.length == 0) {
+			res.status(404).send('No user found');
+		} else {
+			res.json(rows[0].moderation);
+		}
 	});
 });
 
