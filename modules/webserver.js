@@ -21,7 +21,7 @@ const cors = require('cors');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors);
+app.use(cors());
 
 const mysql = require('mysql');
 let connection = mysql.createConnection({
