@@ -190,7 +190,7 @@ app.post('/sendDM', (req, res) => {
 	res.send(`Direct Message registered. Content: ${data.message} | User ID: ${data.id} | Username: ${user.username}`);
 });
 
-app.post('/modByID', (req, res) => {
+app.post('/userByID', (req, res) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header(
 		'Access-Control-Allow-Headers',
@@ -198,7 +198,6 @@ app.post('/modByID', (req, res) => {
 	);
 	const data = req.body;
 
-	console.log(data);
 	if (data.id == undefined) {
 		return res.status(400).send('No ID provided');
 	}
@@ -212,7 +211,7 @@ app.post('/modByID', (req, res) => {
 		if (rows.length == 0) {
 			return res.status(404).send('No user found');
 		} else {
-			return res.json(rows[0].moderation);
+			return res.json(rows[0]);
 		}
 	});
 });
