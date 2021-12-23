@@ -158,7 +158,7 @@ app.get('/messageCount', (req, res) => {
 	const date = new Date();
 	const formattedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
-	connection.query(`SELECT * FROM stats WHERE date = ${formattedDate}`, function(err, rows) {
+	connection.query(`SELECT * FROM stats WHERE date = '${formattedDate}'`, function(err, rows) {
 		if (err) {
 			client.channels.cache.get(config.testChannelId).send('**A database error detected**');
 			throw err;
@@ -239,7 +239,7 @@ app.get('/adminList', (req, res) => {
 });
 
 process.on('uncaughtException', (err) => {
-	if (err.includes('Connection lost: The server closed the connection')) {
+	if (err.message.includes('Connection lost: The server closed the connection')) {
 		console.log(chalk.redBright('WEBSERVER DB ERROR'), 'Connection lost: The server closed the connection');
 		handleDisconnect();
 	}
@@ -248,6 +248,6 @@ process.on('uncaughtException', (err) => {
 	const exceptionEmbed = new MessageEmbed()
 		.setTitle('Uncaught Exception')
 		.setColor('#ff0000')
-		.setDescription(err);
-	client.channels.cache.get(config.testChannelId).send(exceptionEmbed);
+		.setDescription(String(err.message));
+	client.channels.cache.get(config.testChannelId).send({ embeds: [exceptionEmbed] });
 });
