@@ -1,5 +1,7 @@
 const chalk = require('chalk');
 
+const { MessageEmbed } = require('discord.js');
+
 if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();
 	console.log(chalk.greenBright('WEBSERVER INIT INFO'), `Current environment: ${process.env.NODE_ENV}`);
@@ -234,8 +236,15 @@ app.get('/adminList', (req, res) => {
 });
 
 process.on('uncaughtException', (err) => {
-	console.log('uncaughtException');
-	console.log(err);
-	client.channels.cache.get(config.testChannelId).send('**Uncaught exception detected:**');
-	client.channels.cache.get(config.testChannelId).send('```' + err + '```');
+	if (err.includes('Connection lost: The server closed the connection')) {
+		console.log(chalk.redBright('WEBSERVER DB ERROR'), 'Connection lost: The server closed the connection');
+		handleDisconnect();
+	}
+	console.log(chalk.redBright('UNCAUGHT EXCEPTION'));
+	console.error(err);
+	const exceptionEmbed = new MessageEmbed()
+		.setTitle('Uncaught Exception')
+		.setColor('#ff0000')
+		.setDescription(err);
+	client.channels.cache.get(config.testChannelId).send(exceptionEmbed);
 });
