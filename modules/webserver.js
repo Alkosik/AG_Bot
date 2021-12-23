@@ -86,20 +86,29 @@ app.delete('/', (req, res) => {
 
 app.post('/webhook', async (req, res) => {
 	const Payload = req.body;
+	let embed_name;
 	let webhook_response;
 	// Respond To Heroku Webhook
 	res.sendStatus(200);
 
 	if (req.get('heroku-webhook-hmac-sha256')) {
 		if (Payload.action == 'create') {
+			embed_name = 'Build creation';
 			webhook_response = `A new buld was created for **${Payload.data.app.name}** on behalf of **${Payload.data.user.email}** with the ID **${Payload.data.id}**`;
 		} else if (Payload.action == 'update' && Payload.data.status == 'succeeded' && Payload.data.release.version != undefined) {
+			embed_name = 'Build follow-up';
 			webhook_response = `Last build of **${Payload.data.app.name}** finished with status **${Payload.data.status}**, creating release version **${Payload.data.release.version}**`;
 		} else {
+			embed_name = 'Build failure';
 			webhook_response = 'The build **failed**, just like you.';
 		}
 	} else if (!req.get('heroku-webhook-hmac-sha256')) {
-		webhook_response = `A monitor with the ID **${Payload.id}** and name **${Payload.monitor}** sent **${Payload.type}**. Description: ${Payload.description}`;
+		if (Payload.monitor) {
+			embed_name = 'Monitor notification';
+			webhook_response = `A monitor with the ID **${Payload.id}** and name **${Payload.monitor}** sent **${Payload.type}**. Description: ${Payload.description}`;
+		} else {
+			return;
+		}
 	}
 
 	const options = {
@@ -111,7 +120,15 @@ app.post('/webhook', async (req, res) => {
 		},
 		// Format JSON DATA
 		body: JSON.stringify({
-			content: webhook_response,
+			'embeds': [{
+				'color': '11801317',
+				'title': embed_name,
+				'description': webhook_response,
+				'footer': {
+					'text': 'Gang Słoni 2.0',
+					'icon_url': 'https://i.imgur.com/JRl8WjV.png',
+				},
+			}],
 		}),
 	};
 	request(options, function(error, response) {
