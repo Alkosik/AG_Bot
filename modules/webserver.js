@@ -155,7 +155,10 @@ app.get('/messageCount', (req, res) => {
 	);
 	console.log(chalk.greenBright('WEBSERVER INFO'), 'Connection detected - messageCount');
 
-	connection.query('SELECT * FROM stats', function(err, rows) {
+	const date = new Date();
+	const formattedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+
+	connection.query(`SELECT * FROM stats WHERE date = ${formattedDate}`, function(err, rows) {
 		if (err) {
 			client.channels.cache.get(config.testChannelId).send('**A database error detected**');
 			throw err;
