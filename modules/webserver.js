@@ -265,6 +265,6 @@ process.on('uncaughtException', (err) => {
 	const exceptionEmbed = new MessageEmbed()
 		.setTitle('Uncaught Exception')
 		.setColor('#ff0000')
-		.setDescription(String(err.message));
+		.setDescription('```' + String(err.message) + '```');
 	client.channels.cache.get(config.testChannelId).send({ embeds: [exceptionEmbed] });
 });
