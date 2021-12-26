@@ -10,7 +10,10 @@ exports.config = config;
 const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
 const myIntents = new Intents();
 myIntents.add([Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_BANS]);
-const client = new Client({ intents: myIntents });
+const client = new Client({
+	intents: myIntents,
+	partials: ['MESSAGE', 'CHANNEL'],
+});
 exports.client = client;
 const { joinVoiceChannel, VoiceConnectionStatus, createAudioPlayer, createAudioResource, getVoiceConnection } = require('@discordjs/voice');
 
