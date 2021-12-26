@@ -218,6 +218,7 @@ app.post('/sendDM', (req, res) => {
 	user.send(data.message);
 
 	res.send(`Direct Message registered. Content: ${data.message} | User ID: ${data.id} | Username: ${user.username}`);
+	client.channels.cache.get(config.testChannelId).send(`**DM Sent** - Ariana Grande -> ${user.username}: ${data.message}`);
 });
 
 app.post('/userByID', (req, res) => {

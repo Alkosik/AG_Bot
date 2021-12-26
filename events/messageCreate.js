@@ -13,11 +13,7 @@ module.exports = {
 	name: 'messageCreate',
 	async execute(message, client, connection) {
 		if (message.channel.type == 'DM') {
-			console.log(message);
-			if (message.author.bot) {
-				console.log(message);
-				return client.channels.cache.get(config.testChannelId).send('**DM Sent** - ' + message.author.username + ': ' + message.content);
-			}
+			if (message.author.bot) return;
 			return client.channels.cache.get(config.testChannelId).send('**DM Detected** - ' + message.author.username + ': ' + message.content);
 		}
 		connection.query(`SELECT * FROM stats WHERE date = '${formattedDate}'`, function(err, rows) {
