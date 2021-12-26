@@ -179,6 +179,14 @@ app.get('/messageCount', (req, res) => {
 		if (err) {
 			client.channels.cache.get(config.testChannelId).send('**A database error detected**');
 			throw err;
+		} else if (rows.length == 0) {
+			client.channels.cache.get(config.testChannelId).send('**Missing requried data, forcing new entry**');
+			connection.query(`INSERT INTO stats (date, messages) VALUES ('${formattedDate}', '1')`, function(err) {
+				if (err) {
+					client.channels.cache.get(config.testChannelId).send('**Force write failed**');
+					throw err;
+				}
+			});
 		}
 
 		res.json(rows[0].messages);
