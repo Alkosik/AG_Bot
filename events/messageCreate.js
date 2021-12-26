@@ -22,6 +22,7 @@ module.exports = {
 
 			if (rows.length < 1) {
 				msgCount = 1;
+				return;
 			} else {
 				msgCount = rows[0].messages;
 			}
