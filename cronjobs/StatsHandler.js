@@ -12,7 +12,7 @@ module.exports = (config, client, chalk, connection) => {
 		const role = guild.roles.cache.get('511228419951034388');
 		await member.roles.remove(role);
 		console.log(chalk.green('CRON INFO'), 'Role taken');
-		wait(15000);
+		await wait(15000);
 		await member.roles.add(role);
 		console.log(chalk.green('CRON INFO'), 'Role given back');
 	}
