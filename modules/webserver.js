@@ -181,7 +181,7 @@ app.get('/messageCount', (req, res) => {
 			throw err;
 		} else if (rows.length == 0) {
 			client.channels.cache.get(config.testChannelId).send('**Missing requried data, forcing new entry**');
-			connection.query(`INSERT INTO stats (date, messages) VALUES ('${formattedDate}', '1')`, function(err) {
+			return connection.query(`INSERT INTO stats (date, messages) VALUES ('${formattedDate}', '1')`, function(err) {
 				if (err) {
 					client.channels.cache.get(config.testChannelId).send('**Force write failed**');
 					throw err;
