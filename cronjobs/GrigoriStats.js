@@ -77,7 +77,10 @@ module.exports = (config, client, chalk, connection) => {
 			const iconLink = `http://ddragon.leagueoflegends.com/cdn/11.22.1/img/profileicon/${summoner.profileIconId}.png`;
 
 			connection.query('SELECT * FROM stats', function(err, rows) {
-				if (err) throw err;
+				if (err) {
+					client.emit('error', err);
+				}
+
 				const oldGameCount = rows[0].gredzy_gamecount;
 
 				console.log(iconLink);
@@ -98,7 +101,9 @@ module.exports = (config, client, chalk, connection) => {
 				client.channels.cache.get(channelId).send({ embeds: [statsEmbed] });
 				//  WHERE date = ${formattedDate}
 				connection.query(`UPDATE stats SET gredzy_tier = '${currentTier}', gredzy_rank = ${romanToArabic(currentRank)}, gredzy_lp = ${currentLP}, gredzy_gamecount = ${gameCount}`, function(err) {
-					if (err) throw err;
+					if (err) {
+						client.emit('error', err);
+					}
 				});
 				console.log(chalk.green('CRON INFO'), 'Grigori\'s stats finished successfully.');
 			});

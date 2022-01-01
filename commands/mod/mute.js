@@ -67,7 +67,11 @@ module.exports = {
 			}
 			color = 'GREEN';
 			value.roles.add(mutedRole);
-			connection.query(`SELECT * FROM account WHERE id = ${value.user.id}`, function() {
+			connection.query(`SELECT * FROM account WHERE id = ${value.user.id}`, function(err) {
+				if (err) {
+					interaction.client.emit('error', err);
+				}
+
 				connection.query(`UPDATE account SET muted = 1 WHERE id = '${value.user.id}`);
 				console.log(chalk.green('DB QUERY'), 'Moderation assignment query sent');
 			});

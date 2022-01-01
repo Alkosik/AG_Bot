@@ -177,7 +177,7 @@ app.get('/messageCount', (req, res) => {
 
 	connection.query(`SELECT * FROM stats WHERE date = '${formattedDate}'`, function(err, rows) {
 		if (err) {
-			client.channels.cache.get(config.testChannelId).send('**A database error detected**');
+			client.emit('error', err);
 			throw err;
 		} else if (rows.length == 0) {
 			client.channels.cache.get(config.testChannelId).send('**Missing requried data, forcing new entry**');
@@ -235,7 +235,7 @@ app.post('/userByID', (req, res) => {
 
 	connection.query(`SELECT * FROM account WHERE id = ${data.id}`, function(err, rows) {
 		if (err) {
-			client.channels.cache.get(config.testChannelId).send('**A database error detected**');
+			client.emit('error', err);
 			throw err;
 		}
 
@@ -256,7 +256,7 @@ app.get('/adminList', (req, res) => {
 
 	connection.query('SELECT * FROM account WHERE moderation != 0', function(err, rows) {
 		if (err) {
-			client.channels.cache.get(config.testChannelId).send('**A database error detected**');
+			client.emit('error', err);
 			throw err;
 		}
 		console.log(rows);

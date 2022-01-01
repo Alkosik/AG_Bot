@@ -40,6 +40,10 @@ module.exports = {
 				}
 
 				connection.query(`SELECT * FROM account WHERE id = ${person.user.id}`, function(err, rows) {
+					if (err) {
+						interaction.client.emit('error', err);
+					}
+
 					if (rows[0].length < 1) {
 						return interaction.editReply('404');
 					}

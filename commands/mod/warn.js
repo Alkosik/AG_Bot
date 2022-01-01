@@ -52,7 +52,10 @@ module.exports = {
 		promise.then((value) => {
 			isEphemeral = false;
 			connection.query(`SELECT * FROM account WHERE id = ${value.user.id}`, function(rows, err) {
-				if (err) throw err;
+				if (err) {
+					interaction.client.emit('error', err);
+				}
+
 				warnCount = rows[0].warns;
 				connection.query(`UPDATE account SET warns = ${warnCount + 1} WHERE id = '${value.user.id}`);
 				console.log(chalk.green('DB QUERY'), 'Warn increase query sent');

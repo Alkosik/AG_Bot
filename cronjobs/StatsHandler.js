@@ -35,15 +35,19 @@ module.exports = (config, client, chalk, connection) => {
 			messages = rows[0].messages;
 
 			if (err) {
-				client.channels.cache.get(config.testChannelId).send('**A database error detected**');
+				client.emit('error', err);
 				throw err;
 			}
 			connection.query(`INSERT INTO stats (date, members, messages, vc_participation) VALUES ('${formattedDate}', ${guild.memberCount}, 0, 0)`, function(err) {
-				if (err) throw err;
+				if (err) {
+					client.emit('error', err);
+				}
 			});
 			// Remove entries older than a month
 			connection.query('DELETE FROM stats WHERE date < DATE_SUB(CURDATE(), INTERVAL 1 MONTH)', function(err) {
-				if (err) throw err;
+				if (err) {
+					client.emit('error', err);
+				}
 			});
 
 			const statsEmbed = new MessageEmbed()

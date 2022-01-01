@@ -3,7 +3,7 @@ const chalk = require('chalk');
 
 module.exports = {
 	name: 'shardError',
-	execute(client, error) {
+	execute(error, client) {
 		const testChannelId = '879456954232209508';
 		console.log(chalk.red('SHARD ERROR'), `A shard error has been encountered: ${error}`);
 		const errEmbed = new MessageEmbed()

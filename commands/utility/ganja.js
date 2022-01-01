@@ -17,6 +17,10 @@ module.exports = {
 		const person = interaction.options.getMember('osoba');
 
 		connection.query(`SELECT * FROM account WHERE id = ${person.user.id}`, function(err, rows) {
+			if (err) {
+				interaction.client.emit('error', err);
+			}
+
 			if (rows[0].length < 1) {
 				interaction.editReply('404');
 			} else if (rows[0].ganja == 0) {

@@ -14,11 +14,11 @@ module.exports = {
 	async execute(message, client, connection) {
 		if (message.channel.type == 'DM') {
 			if (message.author.bot) return;
-			return client.channels.cache.get(config.testChannelId).send('**DM Detected** - ' + message.author.username + ': ' + message.content);
+			return client.channels.cache.get(config.testChannelId).send('**DM Recieved** - ' + message.author.username + ': ' + message.content);
 		}
 		connection.query(`SELECT * FROM stats WHERE date = '${formattedDate}'`, function(err, rows) {
 			if (err) {
-				client.channels.cache.get(config.testChannelId).send('**A database error detected**');
+				client.emit('error', err);
 				throw err;
 			}
 
@@ -43,7 +43,7 @@ module.exports = {
 
 			connection.query(`SELECT * FROM account WHERE id = ${message.author.id}`, function(err, rows) {
 				if (err) {
-					client.channels.cache.get(config.testChannelId).send('**A database error detected**');
+					client.emit('error', err);
 					throw err;
 				}
 
