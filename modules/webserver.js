@@ -25,6 +25,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+// #region Database
 const mysql = require('mysql');
 let connection = mysql.createConnection({
 	host: process.env.DB_HOST,
@@ -62,6 +63,7 @@ connection.on('error', function(err) {
 		throw err;
 	}
 });
+// #endregion
 
 server.listen(process.env.PORT || 3000, () => {
 	console.log(chalk.greenBright('WEBSERVER INIT INFO'), 'Server listening on port: ' + process.env.PORT || 3000);
