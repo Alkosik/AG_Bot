@@ -53,15 +53,16 @@ let connection = mysql.createConnection({
 
 function handleDisconnect() {
 	console.log(chalk.green('DB INFO'), 'Reconnecting to database...');
-	client.channels.cache.get(config.testChannelId).send('Reconnecting to database...');
 	connection = mysql.createConnection({
 		host: process.env.DB_HOST,
 		user: process.env.DB_USER,
 		password: process.env.DB_PASS,
 		database: 'www5056_gsmaindb',
+	}).catch(err => {
+		client.emit('error', err);
+		console.log(chalk.redBright('WEBSERVER DB ERROR'), err);
 	});
 	console.log(chalk.green('DB INFO'), 'Reconnected to database.');
-	client.channels.cache.get(config.testChannelId).send('Reconnected to database.');
 }
 
 // * Collections
@@ -76,7 +77,6 @@ connection.connect(function(err) {
 connection.on('error', function(err) {
 	console.log(chalk.red('DB ERROR'), err);
 	if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-		client.channels.cache.get(config.testChannelId).send('**Fatal database error** - Server closed the connection. Disconnect handling initiated.');
 		handleDisconnect();
 	} else {
 		client.channels.cache.get(config.testChannelId).send('**Database connection error encountered**');
