@@ -27,6 +27,7 @@
     "@discordjs/rest": "^0.1.0-canary.0",
     "@discordjs/voice": "^0.7.5",
     "@fightmegg/riot-api": "^0.0.8",
+    "@twurple/api": "^5.0.13",
     "axios": "^0.21.4",
     "chalk": "^4.1.2",
     "cors": "^2.8.5",

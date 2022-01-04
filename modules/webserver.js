@@ -41,16 +41,16 @@ function handleDisconnect() {
 		user: process.env.DB_USER,
 		password: process.env.DB_PASS,
 		database: 'www5056_gsmaindb',
-	}).catch(err => {
-		client.emit('error', err);
-		console.log(chalk.redBright('WEBSERVER DB ERROR'), err);
 	});
 	console.log(chalk.green('WEBSERVER DB INFO'), 'Reconnected to database.');
 }
 
 connection.connect(function(err) {
 	console.log(chalk.green('WEBSERVER DB INFO'), 'Estabilishing database connection...');
-	if (err) throw err;
+	if (err) {
+		console.log(chalk.red('WEBSERVER DB ERROR'), 'Database connection failed.');
+		client.emit('error', err);
+	}
 	console.log(chalk.green('WEBSERVER DB INFO'), 'Database connection established');
 });
 
