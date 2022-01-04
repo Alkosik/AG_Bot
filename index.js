@@ -138,6 +138,7 @@ client.on('interactionCreate', async interaction => {
 		console.error(error);
 		const errEmbed = new MessageEmbed()
 			.setTitle('Error')
+			.setDescription('An error occured while executing the command.')
 			.setColor('RED');
 		await interaction.reply({ embeds: [errEmbed], ephemeral: true });
 	}
