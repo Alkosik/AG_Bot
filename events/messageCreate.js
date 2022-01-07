@@ -65,11 +65,11 @@ module.exports = {
 				if (rows.length < 1) {
 					updatedXp = generateXp();
 					console.log(chalk.green('DB INFO'), `Registering new user: ${message.author.username} - ${message.author.id}`);
-					sqlQuery = `INSERT INTO account (username, nickname, id, xp, avatarURL, discriminator) VALUES (${escapedUsername}, ${escapedNickname || 'N/A'}, ${message.author.id}, ${updatedXp}, ${escapedAvatarURL}, ${message.author.discriminator})`;
+					sqlQuery = `INSERT INTO account (username, nickname, id, xp, avatarURL, discriminator) VALUES (${escapedUsername}, ${escapedNickname || 'N/A'}, ${message.author.id}, ${updatedXp}, ${escapedAvatarURL}, '${message.author.discriminator}')`;
 				} else {
 					originalXp = rows[0].xp;
 					updatedXp = originalXp + generateXp();
-					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = ${escapedUsername}, nickname = ${escapedNickname || 'N/A'}, avatarURL = ${escapedAvatarURL}, discriminator = ${message.author.discriminator} WHERE id = '${message.author.id}'`;
+					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = ${escapedUsername}, nickname = ${escapedNickname || 'N/A'}, avatarURL = ${escapedAvatarURL}, discriminator = '${message.author.discriminator}' WHERE id = '${message.author.id}'`;
 
 					// Leveling up
 
