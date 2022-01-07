@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const { ApolloServer } = require('apollo-server-express');
-const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
+const { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageDisabled } = require('apollo-server-core');
 
 const index = require('../index.js');
 
@@ -19,6 +19,7 @@ const schema = require('./schema');
 const resolvers = {
 	Query: {
 		userByID: (_, { id }) => getUserByID(id),
+		serverByID: (_, { id }) => getServerByID(id),
 	},
 };
 
@@ -29,7 +30,10 @@ const httpServer = http.createServer(app);
 const server = new ApolloServer({
 	typeDefs: schema,
 	resolvers,
-	plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+	plugins: [
+		ApolloServerPluginDrainHttpServer({ httpServer }),
+		ApolloServerPluginLandingPageDisabled(),
+	],
 });
 const request = require('request');
 const bodyParser = require('body-parser');
@@ -106,14 +110,40 @@ function getUserByID(id) {
 	});
 }
 
+function getServerByID(id) {
+	return new Promise((resolve, reject) => {
+		connection.query(`SELECT * FROM server WHERE id = ${id}`, (err, rows) => {
+			if (err) {
+				console.log(err);
+				return reject(err);
+			}
+			const results = rows.map(row => ({
+				server_id: row.id,
+				name: row.name,
+				owner: row.owner,
+				owner_id: row.owner_id,
+				icon_url: row.icon_url,
+				description: row.description,
+				member_count: row.member_count,
+				member_count_human: row.member_count_human,
+				message_count: row.message_count,
+			}));
+			return resolve(results[0]);
+		});
+	});
+}
+
 async function startServer() {
 	await server.start();
 
 	server.applyMiddleware({ app });
 
-	await new Promise(resolve => httpServer.listen({ port: process.env.PORT || 3000 }, resolve));
+	const port = process.env.PORT || 3000;
 
-	console.log(chalk.green('WEBSERVER INIT INFO'), `Server listening at http://localhost:3000${server.graphqlPath}`);
+	await new Promise(resolve => httpServer.listen({ port: port }, resolve));
+
+	console.log(chalk.green('WEBSERVER INIT INFO'), `Server listening at http://localhost:${port}`);
+	console.log(chalk.green('GRAPHQL INIT INFO'), `GraphQL listening at http://localhost:${port}${server.graphqlPath}`);
 }
 
 startServer();

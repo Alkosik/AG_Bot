@@ -7,6 +7,7 @@ schema {
 
 type Query {
 	  userByID(id: String!): User
+	  serverByID(id: String!): Server
 }
 
 type User {
@@ -22,6 +23,18 @@ type User {
 	warns: Int!
 	nickname: String!
 }
+
+type Server {
+	server_id: String!
+	name: String!
+	owner: String!
+	owner_id: String!
+	icon_url: String!
+	description: String!
+	member_count: Int!
+	member_count_human: String!
+	message_count: Int!
+}	
 
 query userByID($id: String!) {
 	User(discord_id: $id) {
