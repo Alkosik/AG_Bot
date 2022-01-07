@@ -230,18 +230,6 @@ app.get('/memCount', (req, res) => {
 	res.json(memCount);
 });
 
-app.get('/onlineMemCount', (req, res) => {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header(
-		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-	);
-	console.log(chalk.greenBright('WEBSERVER INFO'), 'Connection detected - onlineMemCount');
-	const guild = client.guilds.cache.get('510941195267080214');
-	const onlineMembers = guild.members.cache.filter(member => !member.user.bot);
-	res.json(onlineMembers);
-});
-
 app.get('/messageCount', (req, res) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header(
