@@ -111,7 +111,7 @@ async function startServer() {
 
 	server.applyMiddleware({ app });
 
-	await new Promise(resolve => httpServer.listen({ port: 3000 }, resolve));
+	await new Promise(resolve => httpServer.listen({ port: process.env.PORT || 3000 }, resolve));
 
 	console.log(chalk.green('WEBSERVER INIT INFO'), `Server listening at http://localhost:3000${server.graphqlPath}`);
 }
