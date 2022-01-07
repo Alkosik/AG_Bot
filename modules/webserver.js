@@ -7,15 +7,30 @@ if (process.env.NODE_ENV !== 'production') {
 	console.log(chalk.greenBright('WEBSERVER INIT INFO'), `Current environment: ${process.env.NODE_ENV}`);
 }
 
+const { ApolloServer } = require('apollo-server-express');
+const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
+
 const index = require('../index.js');
 
 const config = index.config;
 const client = index.client;
 
+const schema = require('./schema');
+const resolvers = {
+	Query: {
+		userByID: (_, { id }) => getUserByID(id),
+	},
+};
+
 const express = require('express');
 const app = express();
 const http = require('http');
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
+const server = new ApolloServer({
+	typeDefs: schema,
+	resolvers,
+	plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+});
 const request = require('request');
 const bodyParser = require('body-parser');
 
@@ -49,7 +64,7 @@ connection.connect(function(err) {
 	console.log(chalk.green('WEBSERVER DB INFO'), 'Estabilishing database connection...');
 	if (err) {
 		console.log(chalk.red('WEBSERVER DB ERROR'), 'Database connection failed.');
-		client.emit('error', err);
+		return client.emit('error', err);
 	}
 	console.log(chalk.green('WEBSERVER DB INFO'), 'Database connection established');
 });
@@ -66,12 +81,44 @@ connection.on('error', function(err) {
 });
 // #endregion
 
-server.listen(process.env.PORT || 3000, () => {
-	console.log(chalk.greenBright('WEBSERVER INIT INFO'), 'Server listening on port: ' + process.env.PORT || 3000);
-});
+function getUserByID(id) {
+	return new Promise((resolve, reject) => {
+		connection.query(`SELECT * FROM account WHERE id = ${id}`, (err, rows) => {
+			if (err) {
+				console.log(err);
+				return reject(err);
+			}
+			const results = rows.map(row => ({
+				discord_id: row.id,
+				username: row.username,
+				discriminator: row.discriminator,
+				avatar_url: row.avatarURL,
+				moderation: row.moderation,
+				xp: row.xp,
+				level: row.level,
+				ganja: row.ganja,
+				muted: row.muted,
+				warns: row.warns,
+				nickname: row.nickname,
+			}));
+			return resolve(results[0]);
+		});
+	});
+}
+
+async function startServer() {
+	await server.start();
+
+	server.applyMiddleware({ app });
+
+	await new Promise(resolve => httpServer.listen({ port: 3000 }, resolve));
+
+	console.log(chalk.green('WEBSERVER INIT INFO'), `Server listening at http://localhost:3000${server.graphqlPath}`);
+}
+
+startServer();
 
 app.get('/', (req, res) => {
-	// return res.send('You have reached the Gang Słoni API. This is probably an error, please return to the main site: http://gangsloni.com');
 	return res.status(200).sendFile('./api.html', { root: __dirname });
 });
 
@@ -91,7 +138,6 @@ app.post('/webhook', async (req, res) => {
 	const Payload = req.body;
 	let embed_name;
 	let webhook_response;
-	// Respond To Heroku Webhook
 	res.sendStatus(200);
 
 	if (req.get('heroku-webhook-hmac-sha256')) {
@@ -163,7 +209,6 @@ app.get('/onlineMemCount', (req, res) => {
 	console.log(chalk.greenBright('WEBSERVER INFO'), 'Connection detected - onlineMemCount');
 	const guild = client.guilds.cache.get('510941195267080214');
 	const onlineMembers = guild.members.cache.filter(member => !member.user.bot);
-	// console.log(onlineMembers);
 	res.json(onlineMembers);
 });
 
@@ -262,7 +307,6 @@ app.get('/adminList', (req, res) => {
 			client.emit('error', err);
 			throw err;
 		}
-		console.log(rows);
 		res.json(rows);
 	});
 });
