@@ -330,7 +330,7 @@ app.get('/adminList', (req, res) => {
 });
 
 process.on('uncaughtException', (err) => {
-	if (err.message.includes('Connection lost: The server closed the connection')) {
+	if (String(err.message).includes('Connection lost: The server closed the connection')) {
 		console.log(chalk.redBright('WEBSERVER DB ERROR'), 'Connection lost: The server closed the connection');
 		handleDisconnect();
 	}
