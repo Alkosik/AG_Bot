@@ -69,7 +69,7 @@ module.exports = {
 				} else {
 					originalXp = rows[0].xp;
 					updatedXp = originalXp + generateXp();
-					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = ${escapedUsername}, nickname = ${escapedNickname || 'N/A'}, avatarURL = ${escapedAvatarURL}, discriminator = '${message.author.discriminator}', message_count = ${rows[0].message_count + 1} WHERE id = '${message.author.id}'`;
+					sqlQuery = `UPDATE account SET xp = ${updatedXp}, username = ${escapedUsername}, nickname = ${escapedNickname || 'N/A'}, avatarURL = ${escapedAvatarURL}, discriminator = '${message.author.discriminator}' WHERE id = '${message.author.id}'`;
 
 					// Leveling up
 
@@ -126,6 +126,10 @@ module.exports = {
 						if (err) throw err;
 					});
 				}
+
+				connection.query(`UPDATE account SET message_count = ${rows[0].message_count + 1} WHERE id = ${message.author.id}`, function(err) {
+					if (err) throw err;
+				});
 			});
 		}
 	},
