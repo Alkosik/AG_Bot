@@ -1,7 +1,6 @@
 const cron = require('node-schedule');
-// const cronitor = require('cronitor')(process.env.API_CRONITOR);
-// const monitor = new cronitor.Monitor('Discord Heartbeat');
-
+const cronitor = require('cronitor')(process.env.API_CRONITOR);
+const monitor = new cronitor.Monitor('Stream Check', '* * * * *');
 const { ApiClient } = require('@twurple/api');
 const { ClientCredentialsAuthProvider } = require('@twurple/auth');
 
@@ -42,5 +41,6 @@ module.exports = (config, client, chalk) => {
 		} else {
 			return;
 		}
+		monitor.ping({ message: 'Streams Checked' });
 	});
 };

@@ -1,6 +1,6 @@
 const cron = require('node-schedule');
 const cronitor = require('cronitor')(process.env.API_CRONITOR);
-const monitor = new cronitor.Monitor('Discord Server Stats Collector');
+const monitor = new cronitor.Monitor('Discord Server Stats Collector', '0 0 * * *');
 
 module.exports = (config, client, chalk, connection) => {
 	cron.scheduleJob('0 0 * * *', async function() {

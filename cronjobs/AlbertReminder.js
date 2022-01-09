@@ -1,4 +1,6 @@
 const cron = require('node-schedule');
+const cronitor = require('cronitor')(process.env.API_CRONITOR);
+const monitor = new cronitor.Monitor('Albert Reminder', '3 3 * * *');
 
 module.exports = (config, client, chalk) => {
 	const main_channel_id = config.mainChannelId;
@@ -21,4 +23,5 @@ module.exports = (config, client, chalk) => {
 			console.log(chalk.green('CRON INFO'), 'Albert\'s Reminder finished successfully.');
 		})();
 	});
+	monitor.ping({ message: 'Reminder message sent' });
 };

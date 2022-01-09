@@ -1,4 +1,6 @@
 const cron = require('node-schedule');
+const cronitor = require('cronitor')(process.env.API_CRONITOR);
+const monitor = new cronitor.Monitor('Grigori Stats Collector', '0 0 * * *');
 
 const { RiotAPI, RiotAPITypes, PlatformId } = require('@fightmegg/riot-api');
 const { MessageEmbed } = require('discord.js');
@@ -108,5 +110,6 @@ module.exports = (config, client, chalk, connection) => {
 				console.log(chalk.green('CRON INFO'), 'Grigori\'s stats finished successfully.');
 			});
 		})();
+		monitor.ping({ message: 'Grigori Stats Collected' });
 	});
 };
