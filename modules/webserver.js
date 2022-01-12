@@ -86,6 +86,7 @@ connection.on('error', function(err) {
 // #endregion
 
 function getUserByID(id) {
+	if (id === 'undefined') return null;
 	return new Promise((resolve, reject) => {
 		connection.query(`SELECT * FROM account WHERE id = ${id}`, (err, rows) => {
 			if (err) {
@@ -111,6 +112,7 @@ function getUserByID(id) {
 }
 
 function getServerByID(id) {
+	if (id === 'undefined') return null;
 	return new Promise((resolve, reject) => {
 		connection.query(`SELECT * FROM server WHERE id = ${id}`, (err, rows) => {
 			if (err) {
