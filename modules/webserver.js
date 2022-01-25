@@ -176,7 +176,7 @@ app.post('/webhook', async (req, res) => {
 		if (Payload.action == 'create') {
 			embed_name = `Build creation - ${Payload.data.app.name}`;
 			webhook_response = `A new buld was created for **${Payload.data.app.name}** on behalf of **${Payload.data.user.email}** with the ID **${Payload.data.id}**`;
-		} else if (Payload.action == 'update' && Payload.data.status == 'succeeded' && Payload.data.release.version) {
+		} else if (Payload.action == 'update' && Payload.data.status == 'succeeded') {
 			embed_name = `Build success - ${Payload.data.app.name}`;
 			webhook_response = `Last build of **${Payload.data.app.name}** finished with status **${Payload.data.status}**, creating release version **${Payload.data.release.version}**`;
 		} else {
