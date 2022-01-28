@@ -1,6 +1,4 @@
 const cron = require('node-schedule');
-const cronitor = require('cronitor')(process.env.API_CRONITOR);
-const monitor = new cronitor.Monitor('Discord Server Stats Collector', '0 0 * * *');
 
 module.exports = (config, client, chalk, connection) => {
 	cron.scheduleJob('0 0 * * *', async function() {
@@ -46,6 +44,5 @@ module.exports = (config, client, chalk, connection) => {
 			console.log(chalk.green('CRON INFO'), `Stats collected for ${guild}`);
 			client.channels.cache.get(config.testChannelId).send(`Stats collected for ${guild}`);
 		}
-		monitor.ping({ message: 'Stats Collected' });
 	});
 };

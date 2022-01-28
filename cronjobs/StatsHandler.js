@@ -1,6 +1,4 @@
 const cron = require('node-schedule');
-const cronitor = require('cronitor')(process.env.API_CRONITOR);
-const monitor = new cronitor.Monitor('Stats Collector');
 const { MessageEmbed } = require('discord.js');
 const wait = require('util').promisify(setTimeout);
 
@@ -68,7 +66,6 @@ module.exports = (config, client, chalk, connection) => {
 			client.channels.cache.get(config.testChannelId).send({ embeds: [statsEmbed] });
 			console.log(chalk.green('CRON INFO'), 'Stats Collection and Cleanup finished successfully.');
 		});
-		monitor.ping({ message: 'Stats Collected' });
 		takePerms();
 	});
 };
