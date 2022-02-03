@@ -8,7 +8,7 @@ module.exports = {
 		const testChannelId = '879456954232209508';
 		console.log(chalk.red('ERROR'), `An error has been encountered: ${error}`);
 		console.log(error);
-		if (error.includes('Database')) {
+		if (String(error.message).includes('Database')) {
 			title = 'Database Error';
 		} else { title = 'Error'; }
 		const errEmbed = new MessageEmbed()
