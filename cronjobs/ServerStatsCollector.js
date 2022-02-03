@@ -18,7 +18,6 @@ module.exports = (config, client, chalk, connection) => {
 			const guild_owner_id = guildObj.ownerId;
 			const guild_member_count = guildObj.memberCount;
 			const guild_member_count_human = guildObj.memberCount.toLocaleString();
-			const guild_message_count = guildObj.channels.cache.filter(channel => channel.type === 'text').map(channel => channel.messages.cache.size).reduce((a, b) => a + b, 0);
 			const guild_description = guildObj.description || '"No description provided."';
 			connection.query(`SELECT * FROM server WHERE id = ${guild}`, function(err, rows) {
 				if (err) {
@@ -26,14 +25,14 @@ module.exports = (config, client, chalk, connection) => {
 					throw err;
 				}
 				if (rows.length === 0) {
-					connection.query(`INSERT INTO server (id, name, icon_url, owner, owner_id, member_count, member_count_human, message_count, description) VALUES (${guild_id}, '${guild_name}', '${guild_icon}', '${guild_owner}', ${guild_owner_id}, ${guild_member_count}, ${guild_member_count_human}, ${guild_message_count}, ${guild_description})`, function(err) {
+					connection.query(`INSERT INTO server (id, name, icon_url, owner, owner_id, member_count, member_count_human, description) VALUES (${guild_id}, '${guild_name}', '${guild_icon}', '${guild_owner}', ${guild_owner_id}, ${guild_member_count}, ${guild_member_count_human}, ${guild_description})`, function(err) {
 						if (err) {
 							client.emit('error', err);
 							throw err;
 						}
 					});
 				} else {
-					connection.query(`UPDATE server SET name = "${guild_name}", icon_url = "${guild_icon}", owner = "${guild_owner}", owner_id = ${guild_owner_id}, member_count = ${guild_member_count}, member_count_human = ${guild_member_count_human}, message_count = ${guild_message_count}, description = ${guild_description} WHERE id = ${guild}`, function(err) {
+					connection.query(`UPDATE server SET name = "${guild_name}", icon_url = "${guild_icon}", owner = "${guild_owner}", owner_id = ${guild_owner_id}, member_count = ${guild_member_count}, member_count_human = ${guild_member_count_human}, description = ${guild_description} WHERE id = ${guild}`, function(err) {
 						if (err) {
 							client.emit('error', err);
 							throw err;

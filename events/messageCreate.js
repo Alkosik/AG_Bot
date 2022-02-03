@@ -130,6 +130,14 @@ module.exports = {
 				connection.query(`UPDATE account SET message_count = ${rows[0].message_count + 1} WHERE id = ${message.author.id}`, function(err) {
 					if (err) throw err;
 				});
+
+				connection.query(`SELECT * FROM server WHERE id = ${message.guildId}`, function(err, server_rows) {
+					if (err) throw err;
+					if (server_rows.length < 1) return;
+					connection.query(`UPDATE server SET message_count = ${server_rows[0].message_count + 1} WHERE id = ${message.guildId}`, function(err) {
+						if (err) throw err;
+					});
+				});
 			});
 		}
 	},
