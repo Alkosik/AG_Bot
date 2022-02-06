@@ -15,6 +15,10 @@ module.exports = {
 		connection.query(`SELECT * FROM account WHERE id = ${member.user.id}`, function(err, rows) {
 			if (err) throw err;
 
+			if (rows.length < 1) {
+				return client.channels.cache.get(config.testChannelId).send(`**New user** - ${member.user.username}. zrob kurwo idioto ta auto rejestracje debilu`);
+			}
+
 			// Ganja role
 			if (rows[0].ganja == 1) {
 				member.roles.add(member.guild.roles.cache.find(r => r.id === '817530671609544706'));

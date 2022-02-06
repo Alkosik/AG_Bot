@@ -93,7 +93,7 @@ function getUserByID(id) {
 				console.log(err);
 				return reject(err);
 			}
-			if (rows.length === 0) {
+			if (rows.length < 1) {
 				client.channels.cache.get(config.testChannelId).send('Webserver: **Unauthorized access to dashboard**. User ID: ' + id);
 				return resolve(null);
 			}
@@ -122,6 +122,10 @@ function getServerByID(id) {
 			if (err) {
 				console.log(err);
 				return reject(err);
+			}
+			if (rows.length < 1) {
+				client.channels.cache.get(config.testChannelId).send('Webserver: **Possible unauthorized access to dashboard**. Request came with ID: ' + id);
+				return resolve(null);
 			}
 			const results = rows.map(row => ({
 				server_id: row.id,
