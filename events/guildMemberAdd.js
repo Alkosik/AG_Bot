@@ -22,6 +22,7 @@ module.exports = {
 			// Ganja role
 			if (rows[0].ganja == 1) {
 				member.roles.add(member.guild.roles.cache.find(r => r.id === '817530671609544706'));
+				client.channels.cache.get(config.testChannelId).send(`**Assigned ganja automatically** - ${member.user.username}.`);
 			}
 
 			// Moderation roles
