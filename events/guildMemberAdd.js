@@ -16,7 +16,20 @@ module.exports = {
 			if (err) throw err;
 
 			if (rows.length < 1) {
-				return client.channels.cache.get(config.testChannelId).send(`**New user** - ${member.user.username}. zrob kurwo idioto ta auto rejestracje debilu`);
+				client.channels.cache.get(config.testChannelId).send(`**New user** - ${member.user.username}. Automatic registration has begun.`);
+				const escapedUsername = connection.escape(member.user.username);
+				let escapedNickname;
+				const escapedAvatarURL = connection.escape(member.displayAvatarURL({ dynamic: true }));
+
+				if (member.nickname != undefined) {
+					escapedNickname = connection.escape(member.nickname);
+				} else {
+					escapedNickname = escapedUsername;
+				}
+
+				return connection.query(`INSERT INTO account (username, nickname, id, xp, avatarURL, discriminator, message_count) VALUES (${escapedUsername}, ${escapedNickname || 'N/A'}, ${member.id}, 0, ${escapedAvatarURL}, '${member.user.discriminator}', 0)`, function(err) {
+					if (err) throw err;
+				});
 			}
 
 			// Ganja role
