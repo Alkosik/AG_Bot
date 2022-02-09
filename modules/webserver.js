@@ -191,6 +191,13 @@ app.post('/webhook', async (req, res) => {
 			embed_name = 'Build failure';
 			webhook_response = 'The build **failed**, just like you.';
 		}
+	} else if (req.get('X-Snipcart-RequestToken')) {
+		if (Payload.eventName == 'order.completed') {
+			embed_name = 'Order received';
+			webhook_response = `Order received from **${Payload.content.user.billingAddressName}** with email **${Payload.content.user.email}** \nPayment: **${Payload.content.paymentStatus}**`;
+		} else {
+			return;
+		}
 	} else if (!req.get('heroku-webhook-hmac-sha256')) {
 		if (Payload.monitor) {
 			embed_name = 'Monitor notification';
