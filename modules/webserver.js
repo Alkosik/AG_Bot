@@ -327,7 +327,7 @@ app.post('/userByID', (req, res) => {
 		}
 
 		if (rows.length == 0) {
-			return res.status(404).send('No user found');
+			return res.status(404).send('User not found');
 		} else {
 			return res.json(rows[0]);
 		}
