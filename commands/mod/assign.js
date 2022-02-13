@@ -39,9 +39,9 @@ module.exports = {
 					return;
 				}
 
-				connection.query(`SELECT * FROM account WHERE id = ${person.user.id}`, function(err, rows) {
+				return connection.query(`SELECT * FROM account WHERE id = ${person.user.id}`, function(err, rows) {
 					if (err) {
-						interaction.client.emit('error', err);
+						return interaction.client.emit('error', err);
 					}
 
 					if (rows[0].length < 1) {
@@ -49,7 +49,7 @@ module.exports = {
 					}
 
 					connection.query(sqlQuery);
-					console.log(chalk.green('DB QUERY'), 'Moderation assignment query sent');
+					return console.log(chalk.green('DB QUERY'), 'Moderation assignment query sent');
 				});
 			}
 
