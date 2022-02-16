@@ -16,7 +16,7 @@ module.exports = {
 			if (message.author.bot) return;
 			return client.channels.cache.get(config.testChannelId).send('**DM Recieved** - ' + message.author.username + ': ' + message.content);
 		}
-		if (message.channel.id == config.testChannelId) return;
+		if (message.channel.id == config.testChannelId || message.guildId != config.mainGuildId) return;
 		connection.query(`SELECT * FROM stats WHERE date = '${formattedDate}'`, function(err, rows) {
 			if (err) {
 				client.emit('error', err);

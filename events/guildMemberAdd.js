@@ -5,7 +5,9 @@ const config = require('../config.json');
 module.exports = {
 	name: 'guildMemberAdd',
 	async execute(member, client, connection) {
-		console.log(chalk.green('INFO'), 'A new member has joined the server.');
+		console.log(chalk.green('INFO'), 'A new member has joined a server.');
+
+		if (member.guild.id != config.mainGuildId) return;
 
 		const guild = client.guilds.cache.get('510941195267080214');
 		const memberCountChannel = client.channels.cache.get('726734001347231784');
