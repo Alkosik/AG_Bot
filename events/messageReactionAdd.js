@@ -18,12 +18,20 @@ module.exports = {
 			const guild = client.guilds.cache.get(config.vstGuildId);
 			const member = guild.members.cache.get(user.id);
 
-			if (reaction.emoji.name === '🎙️') {
+			if (reaction.emoji.name === 'gs_microphone') {
 				member.roles.add(guild.roles.cache.find(r => r.id === '943787009250586634'));
 				console.log(chalk.green('EVENT'), `Added role rapper to ${user.username}#${user.discriminator}`);
-			} else if (reaction.emoji.name === '🎹') {
+			} else if (reaction.emoji.name === 'gs_keyboard') {
 				member.roles.add(guild.roles.cache.find(r => r.id === '943787088610996244'));
 				console.log(chalk.green('EVENT'), `Added role producer to ${user.username}#${user.discriminator}`);
+			} else if (reaction.emoji.name === 'gs_microphone_notes') {
+				member.roles.add(guild.roles.cache.find(r => r.id === '943839499425820782'));
+				console.log(chalk.green('EVENT'), `Added role singer to ${user.username}#${user.discriminator}`);
+			} else if (reaction.emoji.name === 'gs_level') {
+				member.roles.add(guild.roles.cache.find(r => r.id === '943840586824286239'));
+				console.log(chalk.green('EVENT'), `Added role engineer to ${user.username}#${user.discriminator}`);
+			} else {
+				reaction.remove(user);
 			}
 		}
 	},
