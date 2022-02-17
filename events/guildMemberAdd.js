@@ -7,6 +7,11 @@ module.exports = {
 	async execute(member, client, connection) {
 		console.log(chalk.green('INFO'), 'A new member has joined a server.');
 
+		if (member.guild.id === config.vstGuildId) {
+			const guild = client.guilds.cache.get(config.vstGuildId);
+			return member.roles.add(guild.roles.cache.find(r => r.id === '943630872987467776'));
+		}
+
 		if (member.guild.id != config.mainGuildId) return;
 
 		const guild = client.guilds.cache.get('510941195267080214');
