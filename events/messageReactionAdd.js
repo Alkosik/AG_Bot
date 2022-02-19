@@ -33,6 +33,28 @@ module.exports = {
 			} else {
 				reaction.remove(user);
 			}
+		} else if (reaction.message.channelId === '943621480095313930' && reaction.message.id === '943862977528995850') {
+			const guild = client.guilds.cache.get(config.vstGuildId);
+			const member = guild.members.cache.get(user.id);
+
+			if (reaction.emoji.name === 'Ableton') {
+				member.roles.add(guild.roles.cache.find(r => r.id === '943860812592869447'));
+				console.log(chalk.green('EVENT'), `Added role Ableton to ${user.username}#${user.discriminator}`);
+			} else if (reaction.emoji.name === 'FLStudio') {
+				member.roles.add(guild.roles.cache.find(r => r.id === '943861083851092039'));
+				console.log(chalk.green('EVENT'), `Added role FL Studio to ${user.username}#${user.discriminator}`);
+			} else if (reaction.emoji.name === 'Cubase') {
+				member.roles.add(guild.roles.cache.find(r => r.id === '943861188553490452'));
+				console.log(chalk.green('EVENT'), `Added role Cubase to ${user.username}#${user.discriminator}`);
+			} else if (reaction.emoji.name === 'Reaper') {
+				member.roles.add(guild.roles.cache.find(r => r.id === '943861583459790858'));
+				console.log(chalk.green('EVENT'), `Added role Reaper to ${user.username}#${user.discriminator}`);
+			} else if (reaction.emoji.name === 'ProTools') {
+				member.roles.add(guild.roles.cache.find(r => r.id === '943862202505527346'));
+				console.log(chalk.green('EVENT'), `Added role Pro Tools to ${user.username}#${user.discriminator}`);
+			} else {
+				reaction.remove(user);
+			}
 		}
 	},
 };
