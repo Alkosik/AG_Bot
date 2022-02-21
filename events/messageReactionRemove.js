@@ -51,6 +51,17 @@ module.exports = {
 				member.roles.remove(guild.roles.cache.find(r => r.id === '943862202505527346'));
 				console.log(chalk.green('EVENT'), `Removed role Pro Tools from ${user.username}#${user.discriminator}`);
 			}
+		} else if (reaction.message.channelId === '943621480095313930' && reaction.message.id === '945438888254668811') {
+			const guild = client.guilds.cache.get(config.vstGuildId);
+			const member = guild.members.cache.get(user.id);
+
+			if (reaction.emoji.name === 'gs_bell') {
+				member.roles.remove(guild.roles.cache.find(r => r.id === '945438334983999488'));
+				console.log(chalk.green('EVENT'), `Removed role Updates from ${user.username}#${user.discriminator}`);
+			} else if (reaction.emoji.name === 'gs_bell_i') {
+				member.roles.remove(guild.roles.cache.find(r => r.id === '945444182661685278'));
+				console.log(chalk.green('EVENT'), `Removed role Notifications from ${user.username}#${user.discriminator}`);
+			}
 		}
 	},
 };
