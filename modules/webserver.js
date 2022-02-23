@@ -94,7 +94,8 @@ function getUserByID(id) {
 				return reject(err);
 			}
 			if (rows.length < 1) {
-				client.channels.cache.get(config.testChannelId).send('Webserver: **Unauthorized access to dashboard**. User ID: ' + id);
+				// client.channels.cache.get(config.testChannelId).send('Webserver: **Unauthorized access to dashboard**. User ID: ' + id);
+				console.log(chalk.redBright('WEBSERVER DB ERROR'), 'Possible unauthorized access to dashboard. Request came with ID: ' + id);
 				return resolve(null);
 			}
 			const results = rows.map(row => ({
