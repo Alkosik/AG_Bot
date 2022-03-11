@@ -44,6 +44,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+const { RiotAPI, PlatformId } = require('@fightmegg/riot-api');
+const rAPI = new RiotAPI(process.env.API_RIOT);
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const mongoClient = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+mongoClient.connect(err => {
+	if (err) return console.log(chalk.redBright('WEBSERVER DB ERROR'), err);
+	console.log(chalk.greenBright('WEBSERVER INIT INFO'), 'MongoDB connection estabilished.');
+});
 // #region Database
 const mysql = require('mysql');
 let connection = mysql.createConnection({
@@ -158,6 +166,7 @@ async function startServer() {
 }
 
 startServer();
+
 
 app.get('/', (req, res) => {
 	return res.status(200).sendFile('./api.html', { root: __dirname });
@@ -363,4 +372,94 @@ process.on('uncaughtException', (err) => {
 		.setColor('#ff0000')
 		.setDescription('```' + String(err.message) + '```');
 	client.channels.cache.get(config.testChannelId).send({ embeds: [exceptionEmbed] });
+});
+
+// LOL
+
+app.post('/search', async (req, res) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+	);
+	let region;
+
+	const data = req.body;
+
+	if (data.name == undefined) {
+		return res.status(400).send('No name provided');
+	}
+
+	if (data.region == undefined) {
+		return res.status(400).send('No region provided');
+	} else if (data.region == 'eune') {
+		region = PlatformId.EUNE1;
+	} else if (data.region == 'euw') {
+		region = PlatformId.EUW1;
+	} else if (data.region == 'na') {
+		region = PlatformId.NA1;
+	}
+
+	const db = mongoClient.db('summoners').collection(data.region);
+
+	function updateSummoner() {
+		return new Promise((resolve, reject) => {
+			const summoner = rAPI.summoner.getBySummonerName({
+				region: region,
+				summonerName: data.name,
+			});
+
+			const summonerObj = {
+				name: summoner.name,
+				id: summoner.id,
+				accountId: summoner.accountId,
+				puuid: summoner.puuid,
+				profileIconId: summoner.profileIconId,
+				summonerLevel: summoner.summonerLevel,
+				revisionDate: summoner.revisionDate,
+				refreshDate: Date.now(),
+			};
+
+			db.insertOne(summonerObj, function(err) {
+				if (err) {
+					console.log(chalk.redBright('WEBSERVER DB ERROR'), err);
+					return reject(err);
+				}
+				console.log(chalk.greenBright('WEBSERVER DB SUCCESS'), 'Inserted summoner into database');
+			}).then(resolve());
+		});
+	}
+
+	db.findOne({ name: data.name }, async function(err, result) {
+		if (err) return console.log(chalk.redBright('MONGO ERROR'), err);
+		if (result == null) {
+			client.channels.cache.get(config.testChannelId).send('MongoDB 404: Summoner not found, fetching from API');
+			const summoner = await rAPI.summoner.getBySummonerName({
+				region: region,
+				summonerName: data.name,
+			});
+
+			const summonerObj = {
+				name: summoner.name,
+				id: summoner.id,
+				accountId: summoner.accountId,
+				puuid: summoner.puuid,
+				profileIconId: summoner.profileIconId,
+				summonerLevel: summoner.summonerLevel,
+				revisionDate: summoner.revisionDate,
+				refreshDate: Date.now(),
+			};
+
+			db.insertOne(summonerObj, function(err) {
+				if (err) return console.log(chalk.redBright('WEBSERVER DB ERROR'), err);
+				console.log(chalk.greenBright('WEBSERVER DB SUCCESS'), 'Inserted summoner into database');
+			});
+			return res.json(summonerObj);
+		} else {
+			if (result.refreshDate + 3600000 < Date.now()) {
+				updateSummoner();
+			}
+			return res.json(result);
+		}
+	});
 });
