@@ -383,7 +383,6 @@ app.post('/search', async (req, res) => {
 		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
 	);
 	let region;
-
 	const data = req.body;
 
 	if (data.name == undefined) {
@@ -461,5 +460,45 @@ app.post('/search', async (req, res) => {
 			}
 			return res.json(result);
 		}
+	});
+});
+
+app.post('/addRating', (req, res) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+	);
+	const data = req.body;
+
+	if (data.puuid == undefined) {
+		return res.status(400).send('No name provided');
+	}
+	if (data.region == undefined) {
+		return res.status(400).send('No region provided');
+	}
+
+	const db = mongoClient.db('rating').collection(data.region);
+
+	db.findOne({ puuid: data.puuid, author_puuid: data.author_puuid }, async function(err, result) {
+		if (err) return console.log(chalk.redBright('MONGO ERROR'), err);
+		if (result != null) {
+			return res.status(400).send('Rating already exists');
+		}
+	});
+
+	const ratingObj = {
+		puuid: data.puuid,
+		author_puuid: data.author_puuid,
+		rating: data.rating,
+		comment: data.comment ? data.comment : '',
+		attachments: data.attachments ? data.attachments : [],
+		submitDate: Date.now(),
+	};
+
+	db.insertOne(ratingObj, function(err) {
+		if (err) return console.log(chalk.redBright('WEBSERVER DB ERROR'), err);
+		console.log(chalk.greenBright('WEBSERVER DB SUCCESS'), 'Inserted rating into database');
+		return res.status(200).send('Rating added');
 	});
 });
