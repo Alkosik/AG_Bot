@@ -401,31 +401,32 @@ app.post('/search', async (req, res) => {
 
 	const db = mongoClient.db('summoners').collection(data.region);
 
-	function updateSummoner() {
-		return new Promise((resolve, reject) => {
-			const summoner = rAPI.summoner.getBySummonerName({
-				region: region,
-				summonerName: data.name,
-			});
+	async function updateSummoner() {
+		const summoner = await rAPI.summoner.getBySummonerName({
+			region: region,
+			summonerName: data.name,
+		});
 
-			const summonerObj = {
-				name: summoner.name,
-				id: summoner.id,
-				accountId: summoner.accountId,
-				puuid: summoner.puuid,
-				profileIconId: summoner.profileIconId,
-				summonerLevel: summoner.summonerLevel,
-				revisionDate: summoner.revisionDate,
-				refreshDate: Date.now(),
-			};
+		console.log(chalk.greenBright('UPDATING SUMMONER'), summoner.name);
 
-			db.insertOne(summonerObj, function(err) {
-				if (err) {
-					console.log(chalk.redBright('WEBSERVER DB ERROR'), err);
-					return reject(err);
-				}
-				console.log(chalk.greenBright('WEBSERVER DB SUCCESS'), 'Inserted summoner into database');
-			}).then(resolve());
+		const summonerObj = {
+			name: summoner.name,
+			id: summoner.id,
+			accountId: summoner.accountId,
+			puuid: summoner.puuid,
+			profileIconId: summoner.profileIconId,
+			summonerLevel: summoner.summonerLevel,
+			revisionDate: summoner.revisionDate,
+			refreshDate: Date.now(),
+		};
+
+		db.updateOne({ id: summoner.id }, { $set: summonerObj }, { upsert: true }, (err, result) => {
+			if (err) {
+				console.log(chalk.redBright('DB ERROR'), err);
+				throw err;
+			}
+			console.log(chalk.greenBright('WEBSERVER DB SUCCESS'), 'Summoner data updated');
+			console.log(chalk.greenBright('WEBSERVER DB SUCCESS'), result);
 		});
 	}
 
@@ -456,6 +457,11 @@ app.post('/search', async (req, res) => {
 			return res.json(summonerObj);
 		} else {
 			if (result.refreshDate + 3600000 < Date.now()) {
+				console.log(chalk.yellowBright('WEBSERVER DB WARNING'), 'Summoner found in database, but is outdated, fetching from API');
+				console.log(chalk.bgGray('OLD REFRESH DATE'), result.refreshDate);
+				console.log(chalk.bgGray('CURRENT REFRESH DATE'), Date.now());
+				console.log(chalk.bgGray('CALCULATED REFRESH DATE'), result.refreshDate + 3600000 < Date.now());
+
 				updateSummoner();
 			}
 			return res.json(result);
