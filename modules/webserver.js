@@ -212,6 +212,9 @@ app.post('/webhook', async (req, res) => {
 		} else {
 			return;
 		}
+	} else if (req.get('x-amz-sns-topic-arn')) {
+		embed_name = 'SNS Alert';
+		webhook_response = 'SNS Alert received - One of the alarms has been triggered';
 	} else if (!req.get('heroku-webhook-hmac-sha256')) {
 		if (Payload.monitor) {
 			embed_name = 'Monitor notification';
