@@ -459,7 +459,7 @@ app.post('/search', async (req, res) => {
 			});
 			return res.json(summonerObj);
 		} else {
-			if (result.refreshDate + 3600000 < Date.now()) {
+			if (result.refreshDate + 259200 < Date.now()) {
 				console.log(chalk.yellowBright('WEBSERVER DB WARNING'), 'Summoner found in database, but is outdated, fetching from API');
 				console.log(chalk.bgGray('OLD REFRESH DATE'), result.refreshDate);
 				console.log(chalk.bgGray('CURRENT REFRESH DATE'), Date.now());
