@@ -16,7 +16,7 @@ module.exports = {
 		for (const guild of guilds) {
 			const guild_obj = await interaction.client.guilds.cache.get(guild);
 
-			guilds_string += `${guild_obj.name} (${guild_obj.id})\n`;
+			guilds_string += `\n${guild_obj.name} (${guild_obj.id})`;
 		}
 		await interaction.reply(guilds_string);
 	},
