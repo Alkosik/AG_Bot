@@ -62,6 +62,8 @@ function handleDisconnect() {
 	console.log(chalk.green('DB INFO'), 'Reconnected to database.');
 }
 
+exports.handleDisconnect = handleDisconnect();
+
 // * Collections
 client.commands = new Collection();
 
