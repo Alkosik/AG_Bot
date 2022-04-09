@@ -548,6 +548,6 @@ app.post('/verifyIcon', async (req, res) => {
 	if (summoner.profileIconId == data.desiredIconId) {
 		return res.status(200).send('Icon verified');
 	} else {
-		return res.status(400).send('Icon not verified');
+		return res.status(400).send('Icon not verified. Got ' + summoner.profileIconId + ', expected ' + data.desiredIconId);
 	}
 });
