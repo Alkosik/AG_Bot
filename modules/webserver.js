@@ -377,7 +377,9 @@ process.on('uncaughtException', (err) => {
 	client.channels.cache.get(config.testChannelId).send({ embeds: [exceptionEmbed] });
 });
 
-// LOL
+// ---------------
+//	 LEAGUE RATE
+// ---------------
 
 app.post('/search', async (req, res) => {
 	res.header('Access-Control-Allow-Origin', '*');
@@ -510,4 +512,42 @@ app.post('/addRating', (req, res) => {
 		console.log(chalk.greenBright('WEBSERVER DB SUCCESS'), 'Inserted rating into database');
 		return res.status(200).send('Rating added');
 	});
+});
+
+app.post('/verifyIcon', async (req, res) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+	);
+	let region;
+	const data = req.body;
+
+	if (data.summonerName == undefined) {
+		return res.status(400).send('No name provided');
+	}
+
+	if (data.summonerRegion == undefined) {
+		return res.status(400).send('No region provided');
+	} else if (data.summonerRegion == 'eune') {
+		region = PlatformId.EUNE1;
+	} else if (data.summonerRegion == 'euw') {
+		region = PlatformId.EUW1;
+	} else if (data.summonerRegion == 'na') {
+		region = PlatformId.NA1;
+	}
+
+	if (data.desiredIconId == undefined) {
+		return res.status(400).send('No desired icon ID provided');
+	}
+
+	const summoner = await rAPI.summoner.getBySummonerName({
+		region: region,
+		summonerName: data.summonerName,
+	});
+	if (summoner.profileIconId == data.desiredIconId) {
+		return res.status(200).send('Icon verified');
+	} else {
+		return res.status(400).send('Icon not verified');
+	}
 });
