@@ -404,6 +404,10 @@ app.post('/search', async (req, res) => {
 		region = PlatformId.NA1;
 	}
 
+	if (data.fresh === true) {
+		updateSummoner();
+	}
+
 	const db = mongoClient.db('summoners').collection(data.region);
 
 	async function updateSummoner() {

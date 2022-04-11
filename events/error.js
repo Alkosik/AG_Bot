@@ -14,7 +14,7 @@ module.exports = {
 			title = 'Database Error';
 		} else if (String(error.message).includes('Cannot enqueue Query after fatal error')) {
 			title = 'Fatal error detected... Reconnection attempt in progress';
-			handleDisconnect();
+			handleDisconnect;
 		} else { title = 'Error'; }
 		const errEmbed = new MessageEmbed()
 			.setTitle(title)
