@@ -10,7 +10,7 @@
 <p align="center">A sequel to the private Discord Bot Piesek.</p>
 <p align="center">
 <a href="https://discord.gg/7XcYkDU">
-    <img src="https://discordapp.com/api/guilds/510941195267080214/widget.png?style=shield" alt="Discord Server">
+    <img src="https://discordapp.com/api/guilds/943590896820162591/widget.png?style=shield" alt="Discord Server">
 </a>
 </p>
 
@@ -19,8 +19,6 @@
 - [ ] Rewrite in TypeScript 😳
 
 <br/>
-
-## Features
 
 ### Commands
 
