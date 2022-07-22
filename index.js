@@ -48,10 +48,7 @@ const mysql = require('mysql');
 
 // start();
 
-// + Other non-packages
 let currently_playing = false;
-const { registerPlayerEvents } = require('./events/player/events');
-// client.player = new Player(client);
 
 let connection = mysql.createConnection({
 	host: process.env.DB_HOST,
@@ -238,6 +235,3 @@ client.on('messageCreate', async message => {
 		message.reply('Yuh');
 	}
 });
-
-// Discord Player
-registerPlayerEvents(client.player);

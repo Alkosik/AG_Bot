@@ -19,9 +19,11 @@ module.exports = {
 			option.setName('region')
 				.setDescription('Region')
 				.setRequired(true)
-				.addChoice('EUNE', 'EUNE1')
-				.addChoice('EUW', 'EUW1')
-				.addChoice('NA', 'NA1')),
+				.addChoices(
+					{ name: 'EUNE', value: 'EUNE1' },
+					{ name: 'EUW', value: 'EUW1' },
+					{ name: 'NA', value: 'NA1' },
+				)),
 	async execute(interaction) {
 		await interaction.deferReply();
 
