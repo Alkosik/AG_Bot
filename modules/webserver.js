@@ -1,6 +1,6 @@
 const chalk = require('chalk');
 
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();
@@ -370,7 +370,7 @@ process.on('uncaughtException', (err) => {
 	}
 	console.log(chalk.redBright('UNCAUGHT EXCEPTION'));
 	console.error(err);
-	const exceptionEmbed = new MessageEmbed()
+	const exceptionEmbed = new EmbedBuilder()
 		.setTitle('Uncaught Exception')
 		.setColor('#ff0000')
 		.setDescription('```' + String(err.message) + '```');

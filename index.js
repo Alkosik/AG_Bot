@@ -7,12 +7,10 @@ exports.config = config;
 // const admin = require('firebase-admin');
 
 // + Discord
-const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
-const myIntents = new Intents();
-myIntents.add([Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_BANS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]);
+const { Client, Collection, GatewayIntentBits, Partials, MessageEmbed } = require('discord.js');
 const client = new Client({
-	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-	intents: myIntents,
+	partials: [Partials.Message, Partials.Channel, Partials.Reaction],
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildBans, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMessageReactions],
 });
 exports.client = client;
 const { joinVoiceChannel, VoiceConnectionStatus, createAudioPlayer, createAudioResource, getVoiceConnection } = require('@discordjs/voice');
@@ -32,17 +30,28 @@ if (process.env.NODE_ENV !== 'production') {
 
 // + Other
 const mysql = require('mysql');
-const { Player } = require('discord-player', {
-	ytdlOptions: {
-		quality: 'highestaudio',
-		highWaterMark: 1 << 25,
-	},
-});
+// const { Player } = require('discord-player', {
+// 	ytdlOptions: {
+// 		quality: 'highestaudio',
+// 		highWaterMark: 1 << 25,
+// 	},
+// });
+
+// + Database (MongoDB)
+// const { MongoClient } = require('mongodb');
+// const db_client = new MongoClient(process.env.MONGODB_URI);
+
+// async function start() {
+// 	await db_client.connect();
+// 	console.log('Connected');
+// }
+
+// start();
 
 // + Other non-packages
 let currently_playing = false;
 const { registerPlayerEvents } = require('./events/player/events');
-client.player = new Player(client);
+// client.player = new Player(client);
 
 let connection = mysql.createConnection({
 	host: process.env.DB_HOST,
@@ -125,26 +134,6 @@ for (const file of musicCommandFiles) {
 	const command = require(`./commands/music/${file}`);
 	client.commands.set(command.data.name, command);
 }
-
-client.on('interactionCreate', async interaction => {
-	if (!interaction.isCommand()) return;
-
-	const command = client.commands.get(interaction.commandName);
-
-	if (config.commandsDisabled == true && interaction.commandName != 'disablecommands') return interaction.reply('Interakcje zostały wyłączone na czas testów.');
-	if (!command) return;
-
-	try {
-		await command.execute(interaction, connection);
-	} catch (error) {
-		console.error(error);
-		const errEmbed = new MessageEmbed()
-			.setTitle('Error')
-			.setDescription('An error occured while executing the command.')
-			.setColor('RED');
-		await interaction.reply({ embeds: [errEmbed], ephemeral: true });
-	}
-});
 // #endregion
 
 // #region Event Handler
