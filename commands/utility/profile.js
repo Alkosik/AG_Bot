@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -31,7 +30,7 @@ module.exports = {
 				if (rows[0].length < 1) {
 					interaction.editReply('404');
 				} else {
-					const ProfileEmbed = new MessageEmbed()
+					const ProfileEmbed = new EmbedBuilder()
 						.setColor('#B412E5')
 						.setTitle(`${person.user.username}#${person.user.discriminator}`)
 						.addFields(

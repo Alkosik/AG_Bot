@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const chalk = require('chalk');
 const fs = require('fs');
 const configName = '../../config.json';

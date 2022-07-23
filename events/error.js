@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const chalk = require('chalk');
 
 const { handleDisconnect } = require('../index.js');
@@ -16,7 +16,7 @@ module.exports = {
 			title = 'Fatal error detected... Reconnection attempt in progress';
 			handleDisconnect;
 		} else { title = 'Error'; }
-		const errEmbed = new MessageEmbed()
+		const errEmbed = new EmbedBuilder()
 			.setTitle(title)
 			.setDescription('```' + error + '```')
 			.setColor('RED')

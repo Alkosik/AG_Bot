@@ -1,6 +1,5 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
 const { RiotAPI, PlatformId } = require('@fightmegg/riot-api');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const _ = require('lodash');
 
 if (process.env.NODE_ENV !== 'production') {
@@ -69,11 +68,11 @@ module.exports = {
 
 		const iconLink = `http://ddragon.leagueoflegends.com/cdn/10.18.1/img/profileicon/${summoner.profileIconId}.png`;
 
-		const statsEmbed = new MessageEmbed()
-			.setAuthor(summoner.name)
+		const statsEmbed = new EmbedBuilder()
+			.setAuthor({ name: summoner.name })
 			.setColor('#ff0099')
 			.setThumbnail(iconLink)
-			.setFooter(`Region: ${regionChoice}`)
+			.setFooter({ text: `Region: ${regionChoice}` })
 			.addFields(
 				{ name: 'Poziom', value: summoner.summonerLevel.toLocaleString(), inline: true },
 				{ name: '\u200B', value: '\u200B', inline: true },

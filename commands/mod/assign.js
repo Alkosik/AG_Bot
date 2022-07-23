@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageActionRow, MessageSelectMenu } = require('discord.js');
+const { ActionRowBuilder, SelectMenuBuilder, SlashCommandBuilder } = require('discord.js');
 const chalk = require('chalk');
 
 module.exports = {
@@ -56,9 +55,9 @@ module.exports = {
 
 		});
 
-		const selectMenu = new MessageActionRow()
+		const selectMenu = new ActionRowBuilder()
 			.addComponents(
-				new MessageSelectMenu()
+				new SelectMenuBuilder()
 					.setCustomId('role')
 					.setPlaceholder('Wybierz role')
 					.addOptions([
