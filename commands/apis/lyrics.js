@@ -1,38 +1,37 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
-const { getSong } = require('genius-lyrics-api');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const Genius = require('genius-lyrics');
 
 if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();
 }
 
+const GeniusClient = new Genius.Client(process.env.API_GENIUS);
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('lyrics')
-		.setDescription('Gets the lyrics of a song.')
+		.setDescription('Gets the lyrics of a song. (Genius)')
 		.addStringOption(option =>
-			option.setName('piosenka')
-				.setDescription('Piosenka, ktorej chcesz zobaczyc tekst.')
+			option.setName('song')
+				.setDescription('Name of the song')
 				.setRequired(true)),
 	async execute(interaction) {
 		await interaction.deferReply();
-		const songName = interaction.options.getString('piosenka');
+		const songName = interaction.options.getString('song');
 
-		const options = {
-			apiKey: process.env.API_GENIUS,
-			title: songName,
-			artist: 'Ariana Grande',
-			optimizeQuery: true,
-		};
+		const searches = await GeniusClient.songs.search(songName);
+		const song = searches[0];
+		const lyrics = await song.lyrics();
 
-		getSong(options).then((song) => {
-			const lyricsEmbed = new MessageEmbed()
-				.setAuthor(String(song.title))
-				.setThumbnail(song.albumArt)
-				.setDescription(String(song.lyrics))
-				.setColor('#B612E8');
+		const lyricsEmbed = new EmbedBuilder()
+			.setAuthor({ name: `${song.artist.name}`, iconURL: song.artist.thumbnail, url: song.artist.url })
+			.setTitle(song.title)
+			.setURL(song.url)
+			.setThumbnail(song.thumbnail)
+			.setDescription(lyrics)
+			.setColor('#B612E8')
+			.setFooter({ text: 'Gang Słoni', iconURL: 'https://i.imgur.com/JRl8WjV.png' });
 
-			interaction.editReply({ embeds: [lyricsEmbed] });
-		});
+		interaction.editReply({ embeds: [lyricsEmbed] });
 	},
 };

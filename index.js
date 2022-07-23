@@ -7,7 +7,7 @@ exports.config = config;
 // const admin = require('firebase-admin');
 
 // + Discord
-const { Client, Collection, GatewayIntentBits, Partials, MessageEmbed } = require('discord.js');
+const { Client, Collection, GatewayIntentBits, Partials, EmbedBuilder } = require('discord.js');
 const client = new Client({
 	partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildBans, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMessageReactions],
@@ -48,10 +48,7 @@ const mysql = require('mysql');
 
 // start();
 
-// + Other non-packages
 let currently_playing = false;
-const { registerPlayerEvents } = require('./events/player/events');
-// client.player = new Player(client);
 
 let connection = mysql.createConnection({
 	host: process.env.DB_HOST,
@@ -212,7 +209,7 @@ client.on('messageCreate', async message => {
 	(async () => {
 		if (message.content.toLowerCase().includes('discord.gg/' || 'discordapp.com/invite/')) {
 			let sentwarnmsg;
-			const warnmsg = new MessageEmbed()
+			const warnmsg = new EmbedBuilder()
 				.setThumbnail('https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
 				.setTitle('Link usunięty.')
 				.setDescription('Regulamin Art. 4 §6')
@@ -238,6 +235,3 @@ client.on('messageCreate', async message => {
 		message.reply('Yuh');
 	}
 });
-
-// Discord Player
-registerPlayerEvents(client.player);

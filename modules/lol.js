@@ -1,6 +1,6 @@
 const chalk = require('chalk');
 
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();

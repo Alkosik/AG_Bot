@@ -1,4 +1,4 @@
-// const { MessageEmbed } = require('discord.js');
+// const { EmbedBuilder } = require('discord.js');
 // const chalk = require('chalk');
 const config = require('../config.json');
 // const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -81,7 +81,7 @@ module.exports = {
 
 			// 			// Level up message
 			// 			(async () => {
-			// 				const lvlup = new MessageEmbed()
+			// 				const lvlup = new EmbedBuilder()
 			// 					.setFooter('Gang Słoni 2.0', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
 			// 					.setDescription(`sheeeesh, ${message.author.username} wbiles poziom ${rows[0].level + 1}`)
 			// 					.setColor('#B512E6');

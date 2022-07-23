@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const config = require('../../config.json');
 const chalk = require('chalk');
 
@@ -73,7 +72,7 @@ module.exports = {
 
 		await snooze(1000);
 
-		const replyEmbed = new MessageEmbed()
+		const replyEmbed = new EmbedBuilder()
 			.setDescription(reply)
 			.setColor(color);
 		await interaction.reply({ embeds: [replyEmbed], ephemeral: isEphemeral });
@@ -87,7 +86,7 @@ module.exports = {
 
 		function LogEvent() {
 			const logChannel = interaction.guild.channels.cache.find(channel => channel.name === 'logs');
-			const logEmbed = new MessageEmbed()
+			const logEmbed = new EmbedBuilder()
 				.setAuthor('Warn Log', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
 				.setColor('#4d33de')
 				.setThumbnail(interaction.user.displayAvatarURL({

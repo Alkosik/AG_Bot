@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -15,7 +14,7 @@ module.exports = {
 		}
 		const reason = interaction.options.getString('reason');
 
-		const logEmbed = new MessageEmbed()
+		const logEmbed = new EmbedBuilder()
 			.setAuthor('Ban Log', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
 			.setColor('#4d33de')
 			.setThumbnail(interaction.user.displayAvatarURL({

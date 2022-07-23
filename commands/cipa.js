@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -8,7 +7,7 @@ module.exports = {
 	async execute(interaction) {
 		const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-		const cipaEmbed = new MessageEmbed()
+		const cipaEmbed = new EmbedBuilder()
 			.setTitle('Ale cipa')
 			.setImage('https://i.imgur.com/qs17Hey.jpg');
 		await interaction.deferReply();

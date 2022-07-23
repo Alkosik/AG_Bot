@@ -1,4 +1,4 @@
-// const { MessageEmbed } = require('discord.js');
+// const { EmbedBuilder } = require('discord.js');
 const chalk = require('chalk');
 const config = require('../config.json');
 

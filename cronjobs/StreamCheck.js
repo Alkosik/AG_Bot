@@ -4,7 +4,7 @@ const monitor = new cronitor.Monitor('Stream Check', '* * * * *');
 const { ApiClient } = require('@twurple/api');
 const { ClientCredentialsAuthProvider } = require('@twurple/auth');
 
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = (config, client, chalk) => {
 	cron.scheduleJob('* * * * *', async function() {
@@ -28,7 +28,7 @@ module.exports = (config, client, chalk) => {
 			const user = await apiClient.users.getUserByName('grigori_rzannikov');
 			const stream = await user.getStream();
 
-			const streamEmbed = new MessageEmbed()
+			const streamEmbed = new EmbedBuilder()
 				.setAuthor('Strim jest kurwa - grigori_rzannikov')
 				.setColor('#ffffff')
 				.setFooter('Gang Słoni 2.0', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')

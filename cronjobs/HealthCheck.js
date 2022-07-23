@@ -1,6 +1,6 @@
 const cron = require('node-schedule');
 
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 const errorCount = 0;
 
@@ -18,7 +18,7 @@ module.exports = (config, client, chalk) => {
 				title = 'Needs attention';
 			}
 
-			const statusEmbed = new MessageEmbed()
+			const statusEmbed = new EmbedBuilder()
 				.setAuthor('Runtime Health Check')
 				.setTitle(title)
 				.setColor('#00e031')

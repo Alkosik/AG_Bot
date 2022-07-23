@@ -21,8 +21,7 @@
   },
   "homepage": "https://github.com/Alkosik/Piesek2#readme",
   "dependencies": {
-    "@discord-player/extractor": "^3.0.2",
-    "@discordjs/opus": "^0.7.0",
+    "@discordjs/opus": "^0.8.0",
     "@discordjs/rest": "^0.1.0-canary.0",
     "@discordjs/voice": "^0.7.5",
     "@fightmegg/riot-api": "^0.0.8",
@@ -40,8 +39,7 @@
     "express": "^4.17.2",
     "express-oauth-jwt": "^1.1.0",
     "ffmpeg-static": "^4.4.0",
-    "firebase-admin": "^9.12.0",
-    "genius-lyrics-api": "^3.2.0",
+    "genius-lyrics": "^4.3.8",
     "graphql": "^16.2.0",
     "libsodium-wrappers": "^0.7.9",
     "lodash": "^4.17.21",
@@ -51,6 +49,7 @@
     "nodemon": "^2.0.15",
     "play-dl": "^1.4.8",
     "pm2": "^5.1.2",
+    "request": "^2.88.2",
     "ytdl-core": "^4.9.1"
   },
   "devDependencies": {

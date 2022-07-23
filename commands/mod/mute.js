@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const config = require('../../config.json');
 const chalk = require('chalk');
 
@@ -79,7 +78,7 @@ module.exports = {
 
 		await snooze(1000);
 
-		const replyEmbed = new MessageEmbed()
+		const replyEmbed = new EmbedBuilder()
 			.setDescription(reply)
 			.setColor(color);
 		await interaction.reply({ embeds: [replyEmbed], ephemeral: isEphemeral });
