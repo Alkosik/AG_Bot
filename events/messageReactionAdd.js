@@ -75,7 +75,7 @@ module.exports = {
 			const guild = client.guilds.cache.get(config.vstGuildId);
 			const member = guild.members.cache.get(user.id);
 
-			if (reaction.emoji.name === 'flag_pl') {
+			if (reaction.emoji.name === 'poland') {
 				member.roles.add(guild.roles.cache.find(r => r.id === '1001572752001601676'));
 				console.log(chalk.green('EVENT'), `Added role Polak Rodak to ${user.username}#${user.discriminator}`);
 			} else {
