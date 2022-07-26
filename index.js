@@ -211,9 +211,9 @@ client.on('messageCreate', async message => {
 			let sentwarnmsg;
 			const warnmsg = new EmbedBuilder()
 				.setThumbnail('https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
-				.setTitle('Link usunięty.')
-				.setDescription('Regulamin Art. 4 §6')
-				.setColor('RED');
+				.setTitle('Invite Removed.')
+				.setDescription('Rule §2')
+				.setColor('#ff0000');
 			message.delete()
 				.then(sentwarnmsg = await message.channel.send(warnmsg));
 			await snooze(5000);

@@ -19,7 +19,7 @@ module.exports = {
 		const errEmbed = new EmbedBuilder()
 			.setTitle(title)
 			.setDescription('```' + error + '```')
-			.setColor('RED')
+			.setColor('#ff0000')
 			.setFooter('Gang Słoni 2.0', 'https://i.imgur.com/JRl8WjV.png');
 		client.channels.cache.get(testChannelId).send({ embeds: [errEmbed] });
 	},
