@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Alkosik/Piesek2#readme",
   "dependencies": {
+    "@daangamesdg/youtube-notifications": "^1.0.2",
     "@discordjs/opus": "^0.8.0",
     "@discordjs/rest": "^0.1.0-canary.0",
     "@discordjs/voice": "^0.7.5",

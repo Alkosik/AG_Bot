@@ -555,3 +555,23 @@ app.post('/verifyIcon', async (req, res) => {
 		return res.status(400).send('Icon not verified. Got ' + summoner.profileIconId + ', expected ' + data.desiredIconId);
 	}
 });
+
+// Youtube
+const Notifier = require('@daangamesdg/youtube-notifications');
+
+const notifier = new Notifier({
+	hubCallback: 'https://api.gangsloni.com/youtube/callback',
+	middleware: true,
+	secret: 'gangsloni',
+	path: '/youtube',
+});
+
+notifier.on('notified', (data) => {
+	console.log(chalk.green('YOUTUBE INFO'), 'New video: ' + data.video.title);
+	console.log(chalk.green('YOUTUBE INFO'), 'Channel: ' + data.channel.name);
+	const guild = client.guilds.cache.get('943590896820162591');
+	const channel = guild.channels.cache.get('943604581265461279');
+	channel.send(data.video.link);
+});
+
+notifier.subscribe('mewobeats_');
