@@ -10,7 +10,7 @@ exports.config = config;
 const { Client, Collection, GatewayIntentBits, Partials, EmbedBuilder } = require('discord.js');
 const client = new Client({
 	partials: [Partials.Message, Partials.Channel, Partials.Reaction],
-	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildBans, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMessageReactions],
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildBans, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.MessageContent],
 });
 exports.client = client;
 const { joinVoiceChannel, VoiceConnectionStatus, createAudioPlayer, createAudioResource, getVoiceConnection } = require('@discordjs/voice');
@@ -210,12 +210,12 @@ client.on('messageCreate', async message => {
 		if (message.content.toLowerCase().includes('discord.gg/' || 'discordapp.com/invite/')) {
 			let sentwarnmsg;
 			const warnmsg = new EmbedBuilder()
-				.setThumbnail('https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
+				.setAuthor({ name: 'Gang Słoni', iconURL: 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png' })
 				.setTitle('Invite Removed.')
 				.setDescription('Rule §2')
 				.setColor('#ff0000');
 			message.delete()
-				.then(sentwarnmsg = await message.channel.send(warnmsg));
+				.then(sentwarnmsg = await message.channel.send({ embeds: [warnmsg] }));
 			await snooze(5000);
 			sentwarnmsg.delete().catch(error => {
 			// Only log the error if it is not an Unknown Message error
