@@ -52,6 +52,9 @@ module.exports = {
 			} else if (reaction.emoji.name === 'ProTools') {
 				member.roles.add(guild.roles.cache.find(r => r.id === '943862202505527346'));
 				console.log(chalk.green('EVENT'), `Added role Pro Tools to ${user.username}#${user.discriminator}`);
+			} else if (reaction.emoji.name === 'Logic') {
+				member.roles.add(guild.roles.cache.find(r => r.id === '1001570780599029883'));
+				console.log(chalk.green('EVENT'), `Added role Logic Pro to ${user.username}#${user.discriminator}`);
 			} else {
 				reaction.remove(user);
 			}
