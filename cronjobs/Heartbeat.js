@@ -3,8 +3,8 @@ const cronitor = require('cronitor')(process.env.API_CRONITOR);
 const monitor = new cronitor.Monitor('Discord Heartbeat');
 
 module.exports = (config, client, chalk) => {
+	console.log(chalk.green('CRON INFO'), 'Heartbeat monitor starting');
 	cron.scheduleJob('* * * * *', function() {
-		console.log(chalk.green('CRON INFO'), 'Sending Heartbeat...');
 		monitor.ping({ message: 'Alive' });
 	});
 };

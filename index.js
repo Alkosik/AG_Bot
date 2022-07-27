@@ -38,15 +38,12 @@ const mysql = require('mysql');
 // });
 
 // + Database (MongoDB)
-// const { MongoClient } = require('mongodb');
-// const db_client = new MongoClient(process.env.MONGODB_URI);
-
-// async function start() {
-// 	await db_client.connect();
-// 	console.log('Connected');
-// }
-
-// start();
+// const { MongoClient, ServerApiVersion } = require('mongodb');
+// const mongoClient = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+// mongoClient.connect(err => {
+// 	if (err) return console.log(chalk.redBright('DB ERROR'), err);
+// 	console.log(chalk.greenBright('DB INIT INFO'), 'MongoDB connection estabilished.');
+// });
 
 let currently_playing = false;
 
