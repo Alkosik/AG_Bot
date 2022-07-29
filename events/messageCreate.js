@@ -21,6 +21,9 @@ module.exports = {
 			if (message.author.bot) return;
 			return client.channels.cache.get(config.testChannelId).send('**DM Recieved** - ' + message.author.username + ': ' + message.content);
 		}
+
+		// check what guild the message is from
+		if (message.guild.id !== '943590896820162591') return;
 		// connection.query(`SELECT * FROM stats WHERE date = '${formattedDate}'`, function(err, rows) {
 		// 	if (err) {
 		// 		client.emit('error', err);
