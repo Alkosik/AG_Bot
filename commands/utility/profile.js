@@ -43,7 +43,7 @@ module.exports = {
 						)
 						.setThumbnail(person.user.avatarURL({ dynamic: true }))
 						.setTimestamp()
-						.setFooter('Gang Słoni 2.0', 'https://i.imgur.com/JRl8WjV.png');
+						.setFooter({ text: 'Gang Słoni', iconURL: 'https://i.imgur.com/JRl8WjV.png' });
 
 					interaction.editReply({ embeds: [ProfileEmbed] });
 				}

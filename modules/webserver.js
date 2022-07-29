@@ -238,7 +238,7 @@ app.post('/webhook', async (req, res) => {
 				'title': embed_name,
 				'description': webhook_response,
 				'footer': {
-					'text': 'Gang Słoni 2.0',
+					'text': 'Gang Słoni',
 					'icon_url': 'https://i.imgur.com/JRl8WjV.png',
 				},
 			}],

@@ -22,7 +22,7 @@ module.exports = (config, client, chalk) => {
 				.setAuthor('Runtime Health Check')
 				.setTitle(title)
 				.setColor('#00e031')
-				.setFooter('Gang Słoni 2.0', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
+				.setFooter({ text: 'Gang Słoni', iconURL: 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png' })
 				.addFields(
 					{ name: 'Errors', value: errorCount, inline: true },
 				);

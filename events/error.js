@@ -20,7 +20,7 @@ module.exports = {
 			.setTitle(title)
 			.setDescription('```' + error + '```')
 			.setColor('#ff0000')
-			.setFooter('Gang Słoni 2.0', 'https://i.imgur.com/JRl8WjV.png');
+			.setFooter({ text: 'Gang Słoni', iconURL: 'https://i.imgur.com/JRl8WjV.png' });
 		client.channels.cache.get(testChannelId).send({ embeds: [errEmbed] });
 	},
 };

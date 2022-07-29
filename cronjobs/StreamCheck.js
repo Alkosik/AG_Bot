@@ -31,11 +31,11 @@ module.exports = (config, client, chalk) => {
 			const streamEmbed = new EmbedBuilder()
 				.setAuthor('Strim jest kurwa - grigori_rzannikov')
 				.setColor('#ffffff')
-				.setFooter('Gang Słoni 2.0', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
 				.setTimestamp()
 				.setThumbnail(stream.getThumbnailUrl(128, 128))
 				.setDescription('https://www.twitch.tv/grigori_rzannikov')
-				.setTitle(stream.title);
+				.setTitle(stream.title)
+				.setFooter({ text: 'Gang Słoni', iconURL: 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png' });
 			client.channels.cache.get(config.announceChannelId).send({ embeds: [streamEmbed] });
 			console.log(chalk.green('CRON INFO'), 'Grigori is live!');
 		} else {
