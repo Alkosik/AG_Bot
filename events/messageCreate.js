@@ -23,7 +23,7 @@ module.exports = {
 		}
 
 		// check what guild the message is from
-		if (message.guild.id !== '943590896820162591') return;
+		if (message.guildId != 943590896820162591) return;
 		// connection.query(`SELECT * FROM stats WHERE date = '${formattedDate}'`, function(err, rows) {
 		// 	if (err) {
 		// 		client.emit('error', err);
