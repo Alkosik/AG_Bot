@@ -29,6 +29,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // + Other
+// eslint-disable-next-line prefer-const
+let stream = false;
+exports.stream = stream;
 const mysql = require('mysql');
 // const { Player } = require('discord-player', {
 // 	ytdlOptions: {

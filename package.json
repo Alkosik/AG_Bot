@@ -41,6 +41,7 @@
     "express-oauth-jwt": "^1.1.0",
     "ffmpeg-static": "^4.4.0",
     "genius-lyrics": "^4.3.8",
+    "googleapis": "^105.0.0",
     "graphql": "^16.2.0",
     "libsodium-wrappers": "^0.7.9",
     "lodash": "^4.17.21",

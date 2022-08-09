@@ -264,6 +264,17 @@ app.get('/memCount', (req, res) => {
 	res.json(memCount);
 });
 
+app.get('/stream', (req, res) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+	);
+	console.log(chalk.greenBright('WEBSERVER INFO'), 'Connection detected - stream');
+	const stream = index.stream;
+	res.json(stream);
+});
+
 app.get('/messageCount', (req, res) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header(
