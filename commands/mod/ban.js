@@ -48,13 +48,13 @@ module.exports = {
 
 		promise.then((value) => {
 			isEphemeral = false;
-			if (!reason) {
-				reply = `**${value.user.username}** został zbanowany.`;
-				ban_user.send('Zostałeś zbanowany na Gangu Słoni.');
-			} else {
-				reply = `**${value.user.username}** został zbanowany za ${reason}`;
-				ban_user.send(`Zostałeś zbanowany na Gangu Słoni za ${reason}.`);
-			}
+			// if (!reason) {
+			// 	reply = `**${value.user.username}** został zbanowany.`;
+			// 	ban_user.send('Zostałeś zbanowany na Gangu Słoni.');
+			// } else {
+			// 	reply = `**${value.user.username}** został zbanowany za ${reason}`;
+			// 	ban_user.send(`Zostałeś zbanowany na Gangu Słoni za ${reason}.`);
+			// }
 			LogEvent();
 			color = 'GREEN';
 			value.ban().catch(() => null);
