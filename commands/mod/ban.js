@@ -21,7 +21,7 @@ module.exports = {
 		let isEphemeral;
 
 		const ban_member = interaction.options.getMember('osoba');
-		const ban_user = interaction.options.getUser('osoba');
+		// const ban_user = interaction.options.getUser('osoba');
 		const reason = interaction.options.getString('powód');
 
 		const promise = new Promise(function(resolve, reject) {
@@ -35,6 +35,8 @@ module.exports = {
 				reject(reply = '**Nie możesz zbanować tej osoby**');
 			} else if (ban_member.user.bot) {
 				reject(reply = '**Nie możesz zbanować bota**');
+			} else if (!ban_member) {
+				reject(reply = '**Tej osoby nie ma na tym serwerze, lub nie podałeś żadnej osoby**');
 			}
 			resolve(ban_member);
 		}).catch(() => {
