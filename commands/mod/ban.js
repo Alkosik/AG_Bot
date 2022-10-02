@@ -23,8 +23,8 @@ module.exports = {
 		const ban_member = interaction.options.getMember('osoba');
 		// const ban_user = interaction.options.getUser('osoba');
 		const reason = interaction.options.getString('powód');
-		const member_username = ban_member.user.username;
-		const member_id = ban_member.id;
+		let member_username;
+		let member_id;
 
 		const promise = new Promise(function(resolve, reject) {
 			if (ban_member.roles.cache.find(r => r.id === config.adminRoleId) || ban_member.roles.cache.find(r => r.id === config.modRoleId)) {
@@ -40,6 +40,8 @@ module.exports = {
 			} else if (!ban_member) {
 				reject(reply = '**Tej osoby nie ma na tym serwerze, lub nie podałeś żadnej osoby**');
 			}
+			member_username = ban_member.user.username;
+			member_id = ban_member.id;
 			resolve(ban_member);
 		}).catch(() => {
 			color = 'RED';
