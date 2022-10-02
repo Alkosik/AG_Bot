@@ -69,19 +69,19 @@ module.exports = {
 		function LogEvent() {
 			const logChannel = interaction.guild.channels.cache.find(channel => channel.name === 'logs');
 			const logEmbed = new EmbedBuilder()
-				.setAuthor('Ban Log', 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
+				.setAuthor({ name: 'Ban Log', iconURL: 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png' })
 				.setColor('#4d33de')
 				.setThumbnail(interaction.user.displayAvatarURL({
 					dynamic: true,
 				}))
-				.setFooter(interaction.guild.name, 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png')
+				.setFooter({ text: interaction.guild.name, iconURL: 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png' })
 				.addFields(
 					{ name: '**Banned**', value: ban_member.user.username, inline: true },
 					{ name: 'Banned By', value: interaction.user.username, inline: true },
 					{ name: 'Date', value: interaction.createdAt.toLocaleString(), inline: false },
+					{ name: 'ID', value: ban_member.id },
+					{ name: 'Reason', value: reason || 'No Reason' },
 				)
-				.addField('**ID**', ban_member.id)
-				.addField('**Reason**', `${reason || '**No Reason**'}`)
 				.setTimestamp();
 			if (!logChannel) {
 				console.log('log channel not found');
