@@ -23,7 +23,7 @@ module.exports = {
 		const ban_member = interaction.options.getMember('osoba');
 		// const ban_user = interaction.options.getUser('osoba');
 		const reason = interaction.options.getString('powód');
-		const member_username = ban_member.user.username;\
+		const member_username = ban_member.user.username;
 		const member_id = ban_member.id;
 
 		const promise = new Promise(function(resolve, reject) {
