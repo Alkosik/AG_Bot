@@ -23,6 +23,8 @@ module.exports = {
 		const ban_member = interaction.options.getMember('osoba');
 		// const ban_user = interaction.options.getUser('osoba');
 		const reason = interaction.options.getString('powód');
+		const member_username = ban_member.user.username;\
+		const member_id = ban_member.id;
 
 		const promise = new Promise(function(resolve, reject) {
 			if (ban_member.roles.cache.find(r => r.id === config.adminRoleId) || ban_member.roles.cache.find(r => r.id === config.modRoleId)) {
@@ -78,10 +80,10 @@ module.exports = {
 				}))
 				.setFooter({ text: interaction.guild.name, iconURL: 'https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png' })
 				.addFields(
-					{ name: '**Banned**', value: ban_member.user.username, inline: true },
+					{ name: '**Banned**', value: member_username, inline: true },
 					{ name: 'Banned By', value: interaction.user.username, inline: true },
 					{ name: 'Date', value: interaction.createdAt.toLocaleString(), inline: false },
-					{ name: 'ID', value: ban_member.id },
+					{ name: 'ID', value: member_id },
 					{ name: 'Reason', value: reason || 'No Reason' },
 				)
 				.setTimestamp();
