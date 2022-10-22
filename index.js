@@ -209,7 +209,7 @@ client.on('messageCreate', async message => {
 	(async () => {
 		if (message.content.toLowerCase().includes('discord.gg/' || 'discordapp.com/invite/')) {
 			const member = await message.guild.members.fetch(message.author.id);
-			if (member.bannable) {
+			if (member.bannable && !member.roles.cache.has('Moderator')) {
 				member.ban({ reason: 'Posting invites detected' });
 			} else {
 				console.log(chalk.yellow('WARN'), 'Could not ban user.');
