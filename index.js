@@ -32,7 +32,6 @@ if (process.env.NODE_ENV !== 'production') {
 // eslint-disable-next-line prefer-const
 let stream = false;
 exports.stream = stream;
-const mysql = require('mysql');
 // const { Player } = require('discord-player', {
 // 	ytdlOptions: {
 // 		quality: 'highestaudio',
@@ -50,48 +49,8 @@ const mysql = require('mysql');
 
 let currently_playing = false;
 
-let connection = mysql.createConnection({
-	host: process.env.DB_HOST,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASS,
-	database: 'www5056_gsmaindb',
-});
-
-function handleDisconnect() {
-	console.log(chalk.green('DB INFO'), 'Reconnecting to database...');
-	connection = mysql.createConnection({
-		host: process.env.DB_HOST,
-		user: process.env.DB_USER,
-		password: process.env.DB_PASS,
-		database: 'www5056_gsmaindb',
-	});
-	console.log(chalk.green('DB INFO'), 'Reconnected to database.');
-}
-
-exports.handleDisconnect = handleDisconnect();
-
 // * Collections
 client.commands = new Collection();
-
-connection.connect(function(err) {
-	console.log(chalk.green('DB INFO'), 'Estabilishing database connection...');
-	if (err) {
-		console.log(chalk.red('WEBSERVER DB ERROR'), 'Database connection failed.');
-		client.emit('error', err);
-	}
-	console.log(chalk.green('DB INFO'), 'Database connection established');
-});
-
-connection.on('error', function(err) {
-	console.log(chalk.red('DB ERROR'), err);
-	if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-		handleDisconnect();
-	} else {
-		client.channels.cache.get(config.testChannelId).send('**Database connection error encountered**');
-		throw err;
-	}
-});
-
 
 // #region Command Handler
 console.log(chalk.green('INIT INFO'), 'Started commands initialization');
@@ -142,7 +101,7 @@ for (const file of eventFiles) {
 	if (event.once) {
 		client.once(event.name, (...args) => event.execute(...args));
 	} else {
-		client.on(event.name, (...args) => event.execute(...args, client, connection));
+		client.on(event.name, (...args) => event.execute(...args, client));
 	}
 }
 // #endregion
@@ -154,7 +113,7 @@ const cronFiles = fs.readdirSync('./cronjobs').filter(file => file.endsWith('.js
 for (const file of cronFiles) {
 	const cron = `./cronjobs/${file}`;
 	const newCron = cron.slice(0, -3);
-	require(String(newCron))(config, client, chalk, connection);
+	require(String(newCron))(config, client, chalk);
 	console.log(chalk.green('CRON INFO'), 'Loaded ' + file.slice(0, -3));
 }
 // #endregion

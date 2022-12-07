@@ -1,6 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const config = require('../../config.json');
-const chalk = require('chalk');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -14,7 +13,7 @@ module.exports = {
 			option.setName('powód')
 				.setDescription('Powód muta')
 				.setRequired(false)),
-	async execute(interaction, connection) {
+	async execute(interaction) {
 		const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 		let reply;
@@ -66,14 +65,6 @@ module.exports = {
 			}
 			color = 'GREEN';
 			value.roles.add(mutedRole);
-			connection.query(`SELECT * FROM account WHERE id = ${value.user.id}`, function(err) {
-				if (err) {
-					interaction.client.emit('error', err);
-				}
-
-				connection.query(`UPDATE account SET muted = 1 WHERE id = '${value.user.id}`);
-				console.log(chalk.green('DB QUERY'), 'Moderation assignment query sent');
-			});
 		});
 
 		await snooze(1000);

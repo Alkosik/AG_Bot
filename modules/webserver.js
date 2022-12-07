@@ -1,7 +1,5 @@
 const chalk = require('chalk');
 
-const { EmbedBuilder } = require('discord.js');
-
 if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();
 	console.log(chalk.greenBright('WEBSERVER INIT INFO'), `Current environment: ${process.env.NODE_ENV}`);
@@ -16,12 +14,6 @@ const config = index.config;
 const client = index.client;
 
 const schema = require('./schema');
-const resolvers = {
-	Query: {
-		userByID: (_, { id }) => getUserByID(id),
-		serverByID: (_, { id }) => getServerByID(id),
-	},
-};
 
 const express = require('express');
 const app = express();
@@ -29,7 +21,6 @@ const http = require('http');
 const httpServer = http.createServer(app);
 const server = new ApolloServer({
 	typeDefs: schema,
-	resolvers,
 	plugins: [
 		ApolloServerPluginDrainHttpServer({ httpServer }),
 		ApolloServerPluginLandingPageDisabled(),
@@ -52,105 +43,6 @@ mongoClient.connect(err => {
 	if (err) return console.log(chalk.redBright('WEBSERVER DB ERROR'), err);
 	console.log(chalk.greenBright('WEBSERVER INIT INFO'), 'MongoDB connection estabilished.');
 });
-// #region Database
-const mysql = require('mysql');
-let connection = mysql.createConnection({
-	host: process.env.DB_HOST,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASS,
-	database: 'www5056_gsmaindb',
-});
-
-function handleDisconnect() {
-	console.log(chalk.green('WEBSERVER DB INFO'), 'Reconnecting to database...');
-	connection = mysql.createConnection({
-		host: process.env.DB_HOST,
-		user: process.env.DB_USER,
-		password: process.env.DB_PASS,
-		database: 'www5056_gsmaindb',
-	});
-	console.log(chalk.green('WEBSERVER DB INFO'), 'Reconnected to database.');
-}
-
-connection.connect(function(err) {
-	console.log(chalk.green('WEBSERVER DB INFO'), 'Estabilishing database connection...');
-	if (err) {
-		console.log(chalk.red('WEBSERVER DB ERROR'), 'Database connection failed.');
-		return client.emit('error', err);
-	}
-	console.log(chalk.green('WEBSERVER DB INFO'), 'Database connection established');
-});
-
-connection.on('error', function(err) {
-	console.log(chalk.red('DB ERROR'), err);
-	if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-		console.log(chalk.redBright('WEBSERVER DB ERROR'), 'Fatal database error - Server closed the connection. Disconnect handling initiated.');
-		handleDisconnect();
-	} else {
-		client.channels.cache.get(config.testChannelId).send('Webserver: **Database connection error encountered**');
-		throw err;
-	}
-});
-// #endregion
-
-function getUserByID(id) {
-	if (id === 'undefined') return null;
-	return new Promise((resolve, reject) => {
-		connection.query(`SELECT * FROM account WHERE id = ${id}`, (err, rows) => {
-			if (err) {
-				console.log(err);
-				return reject(err);
-			}
-			if (rows.length < 1) {
-				// client.channels.cache.get(config.testChannelId).send('Webserver: **Unauthorized access to dashboard**. User ID: ' + id);
-				console.log(chalk.redBright('WEBSERVER DB ERROR'), 'Possible unauthorized access to dashboard. Request came with ID: ' + id);
-				return resolve(null);
-			}
-			const results = rows.map(row => ({
-				discord_id: row.id,
-				username: row.username,
-				discriminator: row.discriminator,
-				avatar_url: row.avatarURL,
-				moderation: row.moderation,
-				xp: row.xp,
-				level: row.level,
-				ganja: row.ganja,
-				muted: row.muted,
-				warns: row.warns,
-				nickname: row.nickname,
-			}));
-			return resolve(results[0]);
-		});
-	});
-}
-
-function getServerByID(id) {
-	if (id === 'undefined') return null;
-	return new Promise((resolve, reject) => {
-		connection.query(`SELECT * FROM server WHERE id = ${id}`, (err, rows) => {
-			if (err) {
-				console.log(err);
-				return reject(err);
-			}
-			if (rows.length < 1) {
-				client.channels.cache.get(config.testChannelId).send('Webserver: **Possible unauthorized access to dashboard**. Request came with ID: ' + id);
-				return resolve(null);
-			}
-			const results = rows.map(row => ({
-				server_id: row.id,
-				name: row.name,
-				owner: row.owner,
-				owner_id: row.owner_id,
-				icon_url: row.icon_url,
-				description: row.description,
-				member_count: row.member_count,
-				member_count_human: row.member_count_human,
-				message_count: row.message_count,
-			}));
-			return resolve(results[0]);
-		});
-	});
-}
 
 async function startServer() {
 	await server.start();
@@ -274,35 +166,6 @@ app.get('/stream', (req, res) => {
 	res.json(stream);
 });
 
-app.get('/messageCount', (req, res) => {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header(
-		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-	);
-	console.log(chalk.greenBright('WEBSERVER INFO'), 'Connection detected - messageCount');
-
-	const date = new Date();
-	const formattedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-
-	connection.query(`SELECT * FROM stats WHERE date = '${formattedDate}'`, function(err, rows) {
-		if (err) {
-			client.emit('error', err);
-			throw err;
-		} else if (rows.length == 0) {
-			client.channels.cache.get(config.testChannelId).send('**Missing requried data, forcing new entry**');
-			return connection.query(`INSERT INTO stats (date, messages) VALUES ('${formattedDate}', '1')`, function(err) {
-				if (err) {
-					client.channels.cache.get(config.testChannelId).send('**Force write failed**');
-					throw err;
-				}
-			});
-		}
-
-		res.json(rows[0].messages);
-	});
-});
-
 app.post('/sendMessage', (req, res) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header(
@@ -331,61 +194,6 @@ app.post('/sendDM', (req, res) => {
 	client.channels.cache.get(config.testChannelId).send(`**DM Sent** - Ariana Grande -> ${user.username}: ${data.message}`);
 });
 
-app.post('/userByID', (req, res) => {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header(
-		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-	);
-	const data = req.body;
-
-	if (data.id == undefined) {
-		return res.status(400).send('No ID provided');
-	}
-
-	connection.query(`SELECT * FROM account WHERE id = ${data.id}`, function(err, rows) {
-		if (err) {
-			client.emit('error', err);
-			throw err;
-		}
-
-		if (rows.length == 0) {
-			return res.status(404).send('User not found');
-		} else {
-			return res.json(rows[0]);
-		}
-	});
-});
-
-app.get('/adminList', (req, res) => {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header(
-		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-	);
-
-	connection.query('SELECT * FROM account WHERE moderation != 0', function(err, rows) {
-		if (err) {
-			client.emit('error', err);
-			throw err;
-		}
-		res.json(rows);
-	});
-});
-
-process.on('uncaughtException', (err) => {
-	if (String(err.message).includes('Connection lost: The server closed the connection')) {
-		console.log(chalk.redBright('WEBSERVER DB ERROR'), 'Connection lost: The server closed the connection');
-		handleDisconnect();
-	}
-	console.log(chalk.redBright('UNCAUGHT EXCEPTION'));
-	console.error(err);
-	const exceptionEmbed = new EmbedBuilder()
-		.setTitle('Uncaught Exception')
-		.setColor('#ff0000')
-		.setDescription('```' + String(err.message) + '```');
-	client.channels.cache.get(config.testChannelId).send({ embeds: [exceptionEmbed] });
-});
 
 // ---------------
 //	 LEAGUE RATE

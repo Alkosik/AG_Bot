@@ -1,5 +1,4 @@
 const { ActionRowBuilder, SelectMenuBuilder, SlashCommandBuilder } = require('discord.js');
-const chalk = require('chalk');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -9,7 +8,7 @@ module.exports = {
 			option.setName('osoba')
 				.setDescription('Osoba do dodania/usunięcia')
 				.setRequired(true)),
-	async execute(interaction, connection) {
+	async execute(interaction) {
 		if (!interaction.member.roles.cache.some(r => r.name === '♚Słonie♚')) {
 			return interaction.reply('Co ty kurwa chcesz zrobic powiedz ty mi');
 		}
@@ -38,18 +37,7 @@ module.exports = {
 					return;
 				}
 
-				return connection.query(`SELECT * FROM account WHERE id = ${person.user.id}`, function(err, rows) {
-					if (err) {
-						return interaction.client.emit('error', err);
-					}
-
-					if (rows[0].length < 1) {
-						return interaction.editReply('404');
-					}
-
-					connection.query(sqlQuery);
-					return console.log(chalk.green('DB QUERY'), 'Moderation assignment query sent');
-				});
+				return sqlQuery;
 			}
 
 

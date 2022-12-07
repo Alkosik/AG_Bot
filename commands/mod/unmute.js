@@ -10,7 +10,7 @@ module.exports = {
 			option.setName('osoba')
 				.setDescription('Osoba do odmutowania')
 				.setRequired(true)),
-	async execute(interaction, connection) {
+	async execute(interaction) {
 		const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 		let reply;
@@ -44,14 +44,6 @@ module.exports = {
 		promise.then((value) => {
 			isEphemeral = false;
 			value.roles.remove(mutedRole);
-			connection.query(`SELECT * FROM account WHERE id = ${value.user.id}`, function(err) {
-				if (err) {
-					interaction.client.emit('error', err);
-				}
-
-				connection.query(`UPDATE account SET muted = 0 WHERE id = '${value.user.id}`);
-				console.log(chalk.green('DB QUERY'), 'Moderation assignment query sent');
-			});
 			reply = `**${value.user.username}** został odmutowany.`;
 			mute_user.send('Zostałeś odmutowany na Gangu Słoni.');
 			color = 'GREEN';
