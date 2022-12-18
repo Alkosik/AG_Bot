@@ -17,9 +17,9 @@ module.exports = {
 			'945438888254668811',
 		];
 
-		const targetEmojiName = 'gs_bell_i';
-		const targetRoleName = 'Community Updates';
-		const targetRoleId = '945444182661685278';
+		const targetEmojiName = 'gs_bell';
+		const targetRoleName = 'Updates';
+		const targetRoleId = '945438334983999488';
 
 		let assignCount = 0;
 
