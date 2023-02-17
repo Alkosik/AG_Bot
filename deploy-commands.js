@@ -77,6 +77,7 @@ const rest = new REST({ version: '9' }).setToken(token);
 			{ body: commands },
 		);
 
+
 		console.log(chalk.greenBright('CMD_REG INFO'), 'Successfully registered application commands.');
 	} catch (error) {
 		console.error(error);

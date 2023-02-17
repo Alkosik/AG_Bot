@@ -8,6 +8,8 @@ mongoClient.connect(err => {
 	console.log(chalk.greenBright('DB INIT INFO'), 'MongoDB connection estabilished. - /profile');
 });
 
+const { getAverageColor } = require('fast-average-color-node');
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('profile')
@@ -32,23 +34,22 @@ module.exports = {
 		if (!userObj) {
 			interaction.editReply('404');
 		} else {
-			const ProfileEmbed = new EmbedBuilder()
-				.setColor('#B412E5')
-				.setAuthor({ name: 'Profile', iconURL: 'https://i.imgur.com/JRl8WjV.png' })
-				.setTitle(`${person.user.username}#${person.user.discriminator}`)
-				.addFields(
-					{ name: 'Level', value: userObj.level.toLocaleString(), inline: true },
-					{ name: 'Xp', value: userObj.xp.toLocaleString(), inline: true },
-					{ name: 'Rank', value: 'Top - Depracted', inline: true },
-					{ name: '​', value: '​', inline: true },
-					{ name: 'Warns', value: userObj.warns || 'None', inline: true },
-					{ name: 'Multiplier', value: userObj.multiplier ? 'Yes' : 'No', inline: true },
-				)
-				.setThumbnail(person.user.avatarURL({ dynamic: true }))
-				.setTimestamp()
-				.setFooter({ text: 'Gang Słoni', iconURL: 'https://i.imgur.com/JRl8WjV.png' });
+			getAverageColor(person.user.avatarURL({ dynamic: true })).then(color => {
+				const ProfileEmbed = new EmbedBuilder()
+					.setColor(color.hex)
+					.setAuthor({ name: `${person.user.username}#${person.user.discriminator}`, iconURL: person.user.avatarURL({ dynamic: true }) })
+				// .setTitle(`${person.user.username}#${person.user.discriminator}`)
+					.addFields(
+						{ name: 'Level', value: userObj.level.toLocaleString(), inline: true },
+						{ name: 'Xp', value: userObj.xp.toLocaleString(), inline: true },
+						{ name: 'Messages', value: userObj.messages.toLocaleString(), inline: true },
+					)
+				// .setThumbnail(person.user.avatarURL({ dynamic: true }))
+					.setTimestamp()
+					.setFooter({ text: 'Gang Słoni', iconURL: 'https://i.imgur.com/JRl8WjV.png' });
 
-			interaction.editReply({ embeds: [ProfileEmbed] });
+				interaction.editReply({ embeds: [ProfileEmbed] });
+			});
 		}
 	},
 };

@@ -144,6 +144,46 @@ app.post('/webhook', async (req, res) => {
 });
 
 // API or sum idk
+app.get('/fetchMembers', async (req, res) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+	);
+	const options = {
+		method: 'GET',
+		url: 'https://developers.buymeacoffee.com/api/v1/subscriptions?status=active',
+		headers: {
+			'Content-type': 'application/json',
+			'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5MTI5ZDIwMC1kYTdkLTRjY2MtOWQzZC01ODA0MTU0ZTgyMjYiLCJqdGkiOiIwNGE3ZGNlNTkyNWZkZWI4NDg4OGE3Mjg5ZjFkMDMwMTliM2FlNTVjMTA4NmQ1NjY0YjI0YzY0M2U3MjU3NTMwNjI4ZGJiNTRjMmQyZGI2NSIsImlhdCI6MTY3MjQwMjMyMSwibmJmIjoxNjcyNDAyMzIxLCJleHAiOjE2ODgxMjcxMjEsInN1YiI6IjIxODc4MzgiLCJzY29wZXMiOlsicmVhZC1vbmx5Il19.ST91EpUSgKdFvQnDPSWlE9qxRSisk8IKTYqlAmiZValV-UjJ0MI2glpBWxYnZro2nCqfQVW2ndmM_REGwxWFVVoM0RJ5aaBuFMJ1tS9JN2QgR3RKQXBrO9-N4pWXNMwFm6C5cH0t9jJqHu5X73aNO2UwnCUUnSgYHbEeVtGsqP-KiKgsYpBDmtWRhirAv3ulQt4_ZjuN7r1WGEUU5qDKSVfu4AqSMX4vBBPMkEqO4KVAlKzyyNWSNKkmeFCYdnzuwfYxyy8C_qGYZQ06KywUjD5UP9VSswPFegJNku8A-cxVdq5KA8T5-wLtKC2I_Eq_-_0gFfbJw69t5plTNYRNPi5mCgpls-gYV4JDVWfFh-EM8WiauPDOL49FBSrJ_KRzl1elYD5RPfCtJaYbyHVGt_OSSRIPkFKc1cr3ypbkzvtJ0t2QBj-La9xvEzjbSmrdsDD4jOcWPT-J7pipNeUnn7wxzNyUclrHBf7gpvyDxYxARbdQWmaFMcIVpQfcq5gVz87xlxGXtvidSuO8buNvpDpTQm4bbNBgXpw0IFrF34sytCeOfsDjWKJ3MeNPs7Hv9qiSJ0MsX-CBBWM4MP8Fx4xMv86G1EoqRKTiotisEPiZeKSZa62QjaHVw2n6sXJ4VDMyv0YOqTmJIyKzgXG8wINJjm_0Mqxl5t-JYBkKTjs',
+		},
+	};
+	request(options, function(error, r_response) {
+		if (error) throw new Error(error);
+		console.log(r_response);
+		const json = JSON.parse(r_response.body);
+		const page_count = json.last_page;
+		// eslint-disable-next-line prefer-const
+		let data = json.data;
+		for (let i = 0; i < page_count; i++) {
+			const soptions = {
+				method: 'GET',
+				url: `https://developers.buymeacoffee.com/api/v1/subscriptions?status=active?page=${i}`,
+				headers: {
+					'Content-type': 'application/json',
+					'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5MTI5ZDIwMC1kYTdkLTRjY2MtOWQzZC01ODA0MTU0ZTgyMjYiLCJqdGkiOiIwNGE3ZGNlNTkyNWZkZWI4NDg4OGE3Mjg5ZjFkMDMwMTliM2FlNTVjMTA4NmQ1NjY0YjI0YzY0M2U3MjU3NTMwNjI4ZGJiNTRjMmQyZGI2NSIsImlhdCI6MTY3MjQwMjMyMSwibmJmIjoxNjcyNDAyMzIxLCJleHAiOjE2ODgxMjcxMjEsInN1YiI6IjIxODc4MzgiLCJzY29wZXMiOlsicmVhZC1vbmx5Il19.ST91EpUSgKdFvQnDPSWlE9qxRSisk8IKTYqlAmiZValV-UjJ0MI2glpBWxYnZro2nCqfQVW2ndmM_REGwxWFVVoM0RJ5aaBuFMJ1tS9JN2QgR3RKQXBrO9-N4pWXNMwFm6C5cH0t9jJqHu5X73aNO2UwnCUUnSgYHbEeVtGsqP-KiKgsYpBDmtWRhirAv3ulQt4_ZjuN7r1WGEUU5qDKSVfu4AqSMX4vBBPMkEqO4KVAlKzyyNWSNKkmeFCYdnzuwfYxyy8C_qGYZQ06KywUjD5UP9VSswPFegJNku8A-cxVdq5KA8T5-wLtKC2I_Eq_-_0gFfbJw69t5plTNYRNPi5mCgpls-gYV4JDVWfFh-EM8WiauPDOL49FBSrJ_KRzl1elYD5RPfCtJaYbyHVGt_OSSRIPkFKc1cr3ypbkzvtJ0t2QBj-La9xvEzjbSmrdsDD4jOcWPT-J7pipNeUnn7wxzNyUclrHBf7gpvyDxYxARbdQWmaFMcIVpQfcq5gVz87xlxGXtvidSuO8buNvpDpTQm4bbNBgXpw0IFrF34sytCeOfsDjWKJ3MeNPs7Hv9qiSJ0MsX-CBBWM4MP8Fx4xMv86G1EoqRKTiotisEPiZeKSZa62QjaHVw2n6sXJ4VDMyv0YOqTmJIyKzgXG8wINJjm_0Mqxl5t-JYBkKTjs',
+				},
+			};
+			console.log('Fetching page ' + i);
+			request(soptions, function(serror, resp) {
+				if (serror) throw new Error(serror);
+				data.push(resp.body.data);
+			});
+		}
+		return res.json(data);
+	});
+});
+
 app.get('/memCount', (req, res) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header(
