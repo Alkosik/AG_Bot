@@ -9,6 +9,7 @@ mongoClient.connect(err => {
 });
 
 const { getAverageColor } = require('fast-average-color-node');
+const cliProgress = require('cli-progress');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -29,6 +30,15 @@ module.exports = {
 		const query = { _id: person.id };
 		const userObj = await users.findOne(query);
 
+		const nextLvl = userObj.level * 1000;
+		const b1 = new cliProgress.SingleBar({
+			format: '{bar}',
+			barCompleteChar: '\u2588',
+			barIncompleteChar: '\u2591',
+			hideCursor: true,
+		});
+		b1.start(nextLvl, userObj.xp);
+
 		// const top = topRows.findIndex(row => row.id == person.id) + 1;
 
 		if (!userObj) {
@@ -43,6 +53,7 @@ module.exports = {
 						{ name: 'Level', value: userObj.level.toLocaleString(), inline: true },
 						{ name: 'Xp', value: userObj.xp.toLocaleString(), inline: true },
 						{ name: 'Messages', value: userObj.messages.toLocaleString(), inline: true },
+						{ name: 'Progress', value: b1.lastDrawnString },
 					)
 				// .setThumbnail(person.user.avatarURL({ dynamic: true }))
 					.setTimestamp()
