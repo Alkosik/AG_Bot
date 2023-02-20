@@ -53,7 +53,7 @@ module.exports = {
 						{ name: 'Level', value: userObj.level.toLocaleString(), inline: true },
 						{ name: 'Xp', value: userObj.xp.toLocaleString(), inline: true },
 						{ name: 'Messages', value: userObj.messages.toLocaleString(), inline: true },
-						{ name: 'Progress', value: b1.lastDrawnString },
+						{ name: 'Progress', value: b1.lastDrawnString.toLocaleString() },
 					)
 				// .setThumbnail(person.user.avatarURL({ dynamic: true }))
 					.setTimestamp()
