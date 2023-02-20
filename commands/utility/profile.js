@@ -40,6 +40,7 @@ module.exports = {
 			hideCursor: true,
 		});
 		b1.start(nextLvl, userObj.xp);
+		console.log(b1);
 
 		// const top = topRows.findIndex(row => row.id == person.id) + 1;
 		snooze(1500).then(() => {
