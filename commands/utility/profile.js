@@ -1,6 +1,8 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const chalk = require('chalk');
 
+const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const mongoClient = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 mongoClient.connect(err => {
@@ -40,27 +42,28 @@ module.exports = {
 		b1.start(nextLvl, userObj.xp);
 
 		// const top = topRows.findIndex(row => row.id == person.id) + 1;
+		snooze(1500).then(() => {
+			if (!userObj) {
+				interaction.editReply('404');
+			} else {
+				getAverageColor(person.user.avatarURL({ dynamic: true })).then(color => {
+					const ProfileEmbed = new EmbedBuilder()
+						.setColor(color.hex)
+						.setAuthor({ name: `${person.user.username}#${person.user.discriminator}`, iconURL: person.user.avatarURL({ dynamic: true }) })
+					// .setTitle(`${person.user.username}#${person.user.discriminator}`)
+						.addFields(
+							{ name: 'Level', value: userObj.level.toLocaleString(), inline: true },
+							{ name: 'Xp', value: userObj.xp.toLocaleString(), inline: true },
+							{ name: 'Messages', value: userObj.messages.toLocaleString(), inline: true },
+							{ name: 'Progress', value: b1.lastDrawnString.toLocaleString() },
+						)
+					// .setThumbnail(person.user.avatarURL({ dynamic: true }))
+						.setTimestamp()
+						.setFooter({ text: 'Gang Słoni', iconURL: 'https://i.imgur.com/JRl8WjV.png' });
 
-		if (!userObj) {
-			interaction.editReply('404');
-		} else {
-			getAverageColor(person.user.avatarURL({ dynamic: true })).then(color => {
-				const ProfileEmbed = new EmbedBuilder()
-					.setColor(color.hex)
-					.setAuthor({ name: `${person.user.username}#${person.user.discriminator}`, iconURL: person.user.avatarURL({ dynamic: true }) })
-				// .setTitle(`${person.user.username}#${person.user.discriminator}`)
-					.addFields(
-						{ name: 'Level', value: userObj.level.toLocaleString(), inline: true },
-						{ name: 'Xp', value: userObj.xp.toLocaleString(), inline: true },
-						{ name: 'Messages', value: userObj.messages.toLocaleString(), inline: true },
-						{ name: 'Progress', value: b1.lastDrawnString.toLocaleString() },
-					)
-				// .setThumbnail(person.user.avatarURL({ dynamic: true }))
-					.setTimestamp()
-					.setFooter({ text: 'Gang Słoni', iconURL: 'https://i.imgur.com/JRl8WjV.png' });
-
-				interaction.editReply({ embeds: [ProfileEmbed] });
-			});
-		}
+					interaction.editReply({ embeds: [ProfileEmbed] });
+				});
+			}
+		});
 	},
 };
