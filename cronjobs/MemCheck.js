@@ -6,7 +6,7 @@ const request = require('request');
 
 module.exports = (config, client, chalk) => {
 	console.log(chalk.green('CRON INFO'), 'Member Check starting');
-	cron.scheduleJob('* * * * *', function() {
+	cron.scheduleJob('*/5 * * * *', function() {
 		const mongoClient = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 		mongoClient.connect(err => {
 			if (err) return console.log(chalk.redBright('WEBSERVER DB ERROR'), err);
