@@ -33,7 +33,7 @@ module.exports = (config, client, chalk) => {
 			for (const element of json.data) {
 				current_iteration++;
 				console.log(chalk.greenBright('MEMBER UPDATE INFO'), 'Updating flags for ' + element.payer_email);
-				const query = { email: element.payer_email };
+				const query = { email: element.payer_email.toLowerCase() };
 				try {
 					await users.updateOne(query, {
 						$set: {
