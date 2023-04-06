@@ -18,7 +18,17 @@ mongoClient.connect((err) => {
 });
 
 const { getAverageColor } = require("fast-average-color-node");
-const cliProgress = require("cli-progress");
+
+function generateProgressBar(currentValue, maxValue) {
+  const barLength = 40;
+  // const percentage = Math.floor((currentValue / maxValue) * 100);
+  const progress = Math.floor((barLength * currentValue) / maxValue);
+  const progressBar = `${"█".repeat(progress)}${"░".repeat(
+    barLength - progress
+  )}`;
+
+  return `${progressBar}`;
+}
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -42,16 +52,6 @@ module.exports = {
     const userObj = await users.findOne(query);
 
     const nextLvl = userObj.level * 1000;
-    const b1 = new cliProgress.SingleBar({
-      format: "{bar}",
-      barCompleteChar: "\u2588",
-      barIncompleteChar: "\u2591",
-      hideCursor: true,
-      forceRedraw: true,
-    });
-    b1.start(nextLvl, userObj.xp);
-    b1.update(userObj.xp);
-    console.log(b1);
 
     // const top = topRows.findIndex(row => row.id == person.id) + 1;
     snooze(1500).then(() => {
@@ -83,7 +83,10 @@ module.exports = {
                   value: userObj.messages.toLocaleString(),
                   inline: true,
                 },
-                { name: "Progress", value: b1.lastDrawnString.toLocaleString() }
+                {
+                  name: "Progress",
+                  value: generateProgressBar(userObj.xp, nextLvl),
+                }
               )
               // .setThumbnail(person.user.avatarURL({ dynamic: true }))
               .setTimestamp()
