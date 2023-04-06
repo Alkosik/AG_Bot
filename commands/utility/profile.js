@@ -46,7 +46,8 @@ module.exports = {
       format: "{bar}",
       barCompleteChar: "\u2588",
       barIncompleteChar: "\u2591",
-      hideCursor: false,
+      hideCursor: true,
+      forceRedraw: true,
     });
     b1.start(nextLvl, userObj.xp);
     b1.update(userObj.xp);
