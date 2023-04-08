@@ -226,7 +226,7 @@ app.get("/memCount", (req, res) => {
   res.json(memCount);
 });
 
-app.push("/checkBooster", (req, res) => {
+app.post("/checkBooster", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
@@ -236,6 +236,7 @@ app.push("/checkBooster", (req, res) => {
     chalk.greenBright("WEBSERVER INFO"),
     "Connection detected - checkBooster"
   );
+
   const guild = client.guilds.cache.get("943590896820162591");
   const member = guild.members.cache.get(req.body.id);
 
