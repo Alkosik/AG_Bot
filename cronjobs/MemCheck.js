@@ -55,6 +55,10 @@ module.exports = (config, client, chalk) => {
           await users.updateOne(query, {
             $set: {
               flags: "premium",
+              subscription: {
+                id: element.subscription_id,
+                name: element.payer_name,
+              },
             },
           });
         } catch (update_error) {
