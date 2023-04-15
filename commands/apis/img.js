@@ -26,7 +26,7 @@ module.exports = {
     encodedParams.append("model", "epic_diffusion_1_1");
     encodedParams.append(
       "negative_prompt",
-      "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, blurry, bad anatomy, blurred, watermark, grainy, signature, cut off, draft"
+      "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, blurry, bad anatomy, blurred, watermark, grainy, signature, cut off, draft"
     );
     encodedParams.append("upscale", "1");
     encodedParams.append("sampler", "euler_a");
