@@ -109,7 +109,7 @@ app.post("/webhook", async (req, res) => {
       Payload.data.status == "succeeded"
     ) {
       embed_name = `Build success - ${Payload.data.app.name}`;
-      if (Payload.data.release.version) {
+      if (Payload.data.release?.version) {
         webhook_response = `Last build of **${Payload.data.app.name}** finished with status **${Payload.data.status}**, creating release version **${Payload.data.release.version}**`;
       } else {
         webhook_response = `Last build of **${Payload.data.app.name}** finished with status **${Payload.data.status}**`;
