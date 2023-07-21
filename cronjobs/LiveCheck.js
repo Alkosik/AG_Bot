@@ -4,6 +4,11 @@ const index = require("../index");
 
 module.exports = (config, client, chalk) => {
   console.log(chalk.green("CRON INFO"), "Live Check starting");
+  if (true)
+    return console.log(
+      chalk.yellow("CRON PAUSED"),
+      "Manually disabled. (CRON: Live Check)"
+    );
   cron.scheduleJob("*/30 * * * *", function () {
     console.log(chalk.green("CRON INFO"), "Checking for live...");
     // Check if a youtube channel is live
