@@ -168,6 +168,46 @@ app.post("/webhook", async (req, res) => {
   });
 });
 
+app.post("/bmac", async (req, res) => {
+  const Payload = req.body;
+  const data = Payload.data;
+
+  const database = mongoClient.db("main");
+  const users = database.collection("users");
+
+  if (Payload.type == "membership.started") {
+    console.log(
+      chalk.greenBright("MEMBER UPDATE INFO"),
+      "Updating flags for " + data.supporter_email
+    );
+    try {
+      users.updateOne(
+        { email: data.supporter_email },
+        {
+          $set: {
+            flags: "premium",
+            subscription: {
+              id: data.id,
+              psp_id: data.psp_id,
+              name: data.supporter_name,
+              status: data.status,
+              start_date: data.started_at,
+              current_period_end: data.current_period_end,
+              current_period_start: data.current_period_start,
+            },
+          },
+        }
+      );
+    } catch (err) {
+      console.log(
+        chalk.redBright("MEMBER UPDATE FAIL"),
+        "Updating flags for " + element.payer_email + " failed"
+      );
+      console.error(err);
+    }
+  }
+});
+
 // API or sum idk
 app.get("/fetchMembers", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");

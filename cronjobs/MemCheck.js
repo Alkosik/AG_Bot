@@ -7,13 +7,14 @@ const request = require("request");
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
 
 module.exports = (config, client, chalk) => {
-  console.log(chalk.green("CRON INFO"), "Member Check starting");
-  if (process.env.NODE_ENV === "DEVELOPMENT")
-    return console.log(
-      chalk.yellow("CRON PAUSED"),
-      "Not running in dev environment. (CRON: Member Check)"
-    );
+  console.log(chalk.green("CRON INFO"), "Member Check initiating");
+  // if (process.env.NODE_ENV === "DEVELOPMENT")
+  //   return console.log(
+  //     chalk.yellow("CRON PAUSED"),
+  //     "Not running in dev environment. (CRON: Member Check)"
+  //   );
   cron.scheduleJob("*/5 * * * *", function () {
+    console.log(chalk.green("CRON INFO"), "Member Check starting");
     const mongoClient = new MongoClient(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
