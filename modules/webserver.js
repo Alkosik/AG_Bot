@@ -178,7 +178,7 @@ app.post("/bmac", async (req, res) => {
 
   if (Payload.type == "membership.started") {
     console.log(
-      chalk.greenBright("MEMBER UPDATE INFO"),
+      chalk.greenBright("NEW MEMBER UPDATE INFO"),
       "Updating flags for " + data.supporter_email
     );
     try {
@@ -195,6 +195,70 @@ app.post("/bmac", async (req, res) => {
               start_date: data.started_at,
               current_period_end: data.current_period_end,
               current_period_start: data.current_period_start,
+            },
+          },
+        }
+      );
+    } catch (err) {
+      console.log(
+        chalk.redBright("NEW MEMBER UPDATE FAIL"),
+        "Updating flags for " + element.payer_email + " failed"
+      );
+      console.error(err);
+    }
+  } else if (Payload.type == "membership.updated") {
+    console.log(
+      chalk.greenBright("MEMBER UPDATE INFO"),
+      "Updating flags for " + data.supporter_email
+    );
+    try {
+      users.updateOne(
+        { email: data.supporter_email },
+        {
+          $set: {
+            subscription: {
+              id: data.id,
+              psp_id: data.psp_id,
+              name: data.supporter_name,
+              status: data.status,
+              start_date: data.started_at,
+              current_period_end: data.current_period_end,
+              current_period_start: data.current_period_start,
+              canceled_at: data.canceled_at,
+              cancel_at_period_end: data.cancel_at_period_end,
+            },
+          },
+        }
+      );
+    } catch (err) {
+      console.log(
+        chalk.redBright("MEMBER UPDATE FAIL"),
+        "Updating flags for " + element.payer_email + " failed"
+      );
+      console.error(err);
+    }
+  } else if (Payload.type == "membership.cancelled") {
+    console.log(
+      chalk.greenBright("MEMBER UPDATE INFO"),
+      "Updating flags for " + data.supporter_email
+    );
+    try {
+      users.updateOne(
+        { email: data.supporter_email },
+        {
+          $set: {
+            flags: "none",
+            subscription: {
+              id: data.id,
+              psp_id: data.psp_id,
+              name: data.supporter_name,
+              status: data.status,
+              canceled: data.canceled,
+              start_date: data.started_at,
+              current_period_end: data.current_period_end,
+              current_period_start: data.current_period_start,
+              canceled_at: data.canceled_at,
+              cancel_at_period_end: data.cancel_at_period_end,
             },
           },
         }
