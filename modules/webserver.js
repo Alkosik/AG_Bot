@@ -169,6 +169,7 @@ app.post("/webhook", async (req, res) => {
 });
 
 app.post("/bmac", async (req, res) => {
+  res.sendStatus(200);
   const Payload = req.body;
   const data = Payload.data;
 
