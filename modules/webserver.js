@@ -345,6 +345,10 @@ app.post("/checkBooster", (req, res) => {
   const guild = client.guilds.cache.get("943590896820162591");
   const member = guild.members.cache.get(req.body.id);
 
+  if (!member) {
+    res.status(404).send("Member not found");
+  }
+
   if (member.roles.cache.has("988714918041767956")) {
     res.json(true);
   } else {
