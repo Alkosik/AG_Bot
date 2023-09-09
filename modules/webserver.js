@@ -182,23 +182,40 @@ app.post("/bmac", async (req, res) => {
       "Updating flags for " + data.supporter_email
     );
     try {
-      users.updateOne(
-        { email: data.supporter_email },
-        {
-          $set: {
-            flags: "premium",
-            subscription: {
-              id: data.id,
-              psp_id: data.psp_id,
-              name: data.supporter_name,
-              status: data.status,
-              start_date: data.started_at,
-              current_period_end: data.current_period_end,
-              current_period_start: data.current_period_start,
+      const user = await users.findOne({ email: data.supporter_email });
+      if (user) {
+        users.updateOne(
+          { email: data.supporter_email },
+          {
+            $set: {
+              flags: "premium",
+              subscription: {
+                id: data.id,
+                psp_id: data.psp_id,
+                name: data.supporter_name,
+                status: data.status,
+                start_date: data.started_at,
+                current_period_end: data.current_period_end,
+                current_period_start: data.current_period_start,
+              },
             },
+          }
+        );
+      } else {
+        users.insertOne({
+          email: data.supporter_email,
+          flags: "premium",
+          subscription: {
+            id: data.id,
+            psp_id: data.psp_id,
+            name: data.supporter_name,
+            status: data.status,
+            start_date: data.started_at,
+            current_period_end: data.current_period_end,
+            current_period_start: data.current_period_start,
           },
-        }
-      );
+        });
+      }
     } catch (err) {
       console.log(
         chalk.redBright("NEW MEMBER UPDATE FAIL"),
