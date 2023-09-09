@@ -182,10 +182,12 @@ app.post("/bmac", async (req, res) => {
       "Updating flags for " + data.supporter_email
     );
     try {
-      const user = await users.findOne({ email: data.supporter_email });
+      const user = await users.findOne({
+        email: data.supporter_email.toLowerCase(),
+      });
       if (user) {
         users.updateOne(
-          { email: data.supporter_email },
+          { email: data.supporter_email.toLowerCase() },
           {
             $set: {
               flags: "premium",
@@ -203,7 +205,7 @@ app.post("/bmac", async (req, res) => {
         );
       } else {
         users.insertOne({
-          email: data.supporter_email,
+          email: data.supporter_email.toLowerCase(),
           flags: "premium",
           subscription: {
             id: data.id,
