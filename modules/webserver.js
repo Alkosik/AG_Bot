@@ -99,7 +99,7 @@ app.delete("/", (req, res) => {
 
 app.post("/kofi", async (req, res) => {
   console.log(chalk.greenBright("KO-FI INFO"), "New webhook received");
-  const data = await req.body;
+  const data = await req.body.data;
 
   console.log(data);
 
