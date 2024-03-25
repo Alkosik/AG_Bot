@@ -101,7 +101,7 @@ app.post("/kofi", async (req, res) => {
   console.log(chalk.greenBright("KO-FI INFO"), "New webhook received");
   const data = await req.body;
 
-  const parsedData = JSON.parse(decodedData.substring(5));
+  const parsedData = JSON.parse(data.substring(5));
 
   const verification_token = parsedData.verification_token;
   const message_id = parsedData.message_id;
