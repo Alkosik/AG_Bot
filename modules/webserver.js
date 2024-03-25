@@ -99,11 +99,9 @@ app.delete("/", (req, res) => {
 
 app.post("/kofi", async (req, res) => {
   console.log(chalk.greenBright("KO-FI INFO"), "New webhook received");
-  const data = await req.formData();
+  const data = await req.body;
 
-  const decodedData = decodeURIComponent(data.get("data"));
-
-  const parsedData = JSON.parse(decodedData);
+  const parsedData = JSON.parse(decodedData.substring(5));
 
   const verification_token = parsedData.verification_token;
   const message_id = parsedData.message_id;
