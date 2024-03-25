@@ -37,8 +37,8 @@ const bodyParser = require("body-parser");
 
 const cors = require("cors");
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(cors());
 
 const { RiotAPI, PlatformId } = require("@fightmegg/riot-api");
@@ -101,15 +101,15 @@ app.post("/kofi", async (req, res) => {
   console.log(chalk.greenBright("KO-FI INFO"), "New webhook received");
   const data = await req.body;
 
-  const parsedData = JSON.parse(data.substring(5));
+  console.log(data);
 
-  const verification_token = parsedData.verification_token;
-  const message_id = parsedData.message_id;
-  const timestamp = parsedData.timestamp;
-  const type = parsedData.type;
-  const name = parsedData.from_name;
-  const email = parsedData.email;
-  const tier = parsedData.tier_name;
+  const verification_token = data.verification_token;
+  const message_id = data.message_id;
+  const timestamp = data.timestamp;
+  const type = data.type;
+  const name = data.from_name;
+  const email = data.email;
+  const tier = data.tier_name;
 
   if (verification_token !== process.env.KOFI_TOKEN) {
     console.log(chalk.redBright("KO-FI ERROR"), "Unauthorized");
