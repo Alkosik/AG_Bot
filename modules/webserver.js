@@ -111,7 +111,7 @@ app.post("/kofi", async (req, res) => {
   const email = data.email;
   const tier = data.tier_name;
 
-  if (verification_token !== process.env.KOFI_TOKEN) {
+  if (verification_token != process.env.KOFI_TOKEN) {
     console.log(chalk.redBright("KO-FI ERROR"), "Unauthorized");
     return res.status(401).send("Unauthorized");
   }
