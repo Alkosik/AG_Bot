@@ -26,6 +26,7 @@
     "@discordjs/rest": "^0.1.0-canary.0",
     "@discordjs/voice": "^0.7.5",
     "@fightmegg/riot-api": "^0.0.8",
+    "@prisma/client": "^5.11.0",
     "@twurple/api": "^5.0.13",
     "apollo-server": "^3.6.1",
     "apollo-server-core": "^3.6.1",
@@ -54,6 +55,7 @@
     "nodemon": "^2.0.15",
     "play-dl": "^1.4.8",
     "pm2": "^5.1.2",
+    "prisma": "^5.11.0",
     "request": "^2.88.2",
     "ytdl-core": "^4.9.1"
   },

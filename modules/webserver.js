@@ -57,6 +57,9 @@ mongoClient.connect((err) => {
   );
 });
 
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
+
 async function startServer() {
   await server.start();
 
@@ -92,6 +95,73 @@ app.put("/", (req, res) => {
 
 app.delete("/", (req, res) => {
   return res.send("DELETE HTTP method registered");
+});
+
+app.post("/kofi", async (req, res) => {
+  console.log(chalk.greenBright("KO-FI INFO"), "New webhook received");
+  const data = await req.formData();
+
+  const decodedData = decodeURIComponent(data.get("data"));
+
+  const parsedData = JSON.parse(decodedData);
+
+  const verification_token = parsedData.verification_token;
+  const message_id = parsedData.message_id;
+  const timestamp = parsedData.timestamp;
+  const type = parsedData.type;
+  const name = parsedData.from_name;
+  const email = parsedData.email;
+  const tier = parsedData.tier_name;
+
+  if (verification_token !== process.env.KOFI_TOKEN) {
+    console.log(chalk.redBright("KO-FI ERROR"), "Unauthorized");
+    return res.status(401).send("Unauthorized");
+  }
+
+  if (type !== "Subscription") {
+    console.log(chalk.redBright("KO-FI ERROR"), "Not a subscription");
+    return res.status(400).send("Not a subscription");
+  } else {
+    console.log(chalk.greenBright("KO-FI INFO"), "Subscription received");
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!user) {
+      await prisma.user.create({
+        data: {
+          email: email,
+        },
+      });
+    }
+
+    await prisma.subscription.create({
+      data: {
+        message_id: message_id,
+        timestamp: timestamp,
+        tier: tier,
+        name: name,
+        User: {
+          connect: {
+            email: email,
+          },
+        },
+      },
+    });
+
+    await prisma.user.update({
+      where: {
+        email: email,
+      },
+      data: {
+        subscription_active: true,
+      },
+    });
+
+    return res.status(200).send("Subscription registered");
+  }
 });
 
 app.post("/webhook", async (req, res) => {
