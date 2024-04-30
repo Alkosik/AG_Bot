@@ -269,7 +269,8 @@ app.post("/kofi", async (req, res) => {
       });
     }
 
-    if (!is_first_subscription_payment) {
+    if (is_first_subscription_payment) {
+      console.log(chalk.greenBright("KO-FI INFO"), "FIRST PAYMENT");
       await prisma.subscription.create({
         data: {
           message_id: message_id,
