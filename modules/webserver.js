@@ -57,7 +57,12 @@ mongoClient.connect((err) => {
   );
 });
 
-const { PrismaClient } = require("@prisma/client");
+const {
+  PrismaClient,
+  SampleCategory,
+  SampleType,
+  SampleGenres,
+} = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function startServer() {
@@ -95,6 +100,132 @@ app.put("/", (req, res) => {
 
 app.delete("/", (req, res) => {
   return res.send("DELETE HTTP method registered");
+});
+
+app.get("/update-email", async (req, res) => {
+  const users = await prisma.user.findMany();
+
+  const usersWithUppercaseEmails = users.filter(
+    (user) => user.email !== user.email.toLowerCase()
+  );
+
+  console.log(
+    chalk.greenBright("WEBSERVER INFO"),
+    "Updating " + usersWithUppercaseEmails.length + " emails"
+  );
+
+  for (let user of usersWithUppercaseEmails) {
+    console.log(
+      chalk.greenBright("WEBSERVER INFO"),
+      "Updating email for " + user.email
+    );
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { email: user.email.toLowerCase() },
+    });
+  }
+
+  res.status(200).send("Emails updated");
+});
+
+app.get("/add-subscriptions", async (req, res) => {
+  console.log(chalk.greenBright("WEBSERVER INFO"), "Adding subscriptions");
+  const members = "./bmac.json";
+
+  const reqMembers = require(members);
+
+  const data = reqMembers.filter(
+    (member, index, self) =>
+      index === self.findIndex((m) => m.email === member.email)
+  );
+
+  console.log(
+    chalk.greenBright("WEBSERVER INFO"),
+    "Members count: " + data.length
+  );
+
+  for (let i = 0; i < data.length; i++) {
+    console.log(
+      chalk.greenBright("WEBSERVER INFO"),
+      i + ". Adding subscription: " + data[i].email.toLowerCase()
+    );
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: data[i].email.toLowerCase(),
+      },
+    });
+
+    if (user) {
+      console.log(
+        chalk.redBright("WEBSERVER INFO"),
+        "User already exists, updating subscription"
+      );
+    }
+
+    if (!user) {
+      await prisma.user.create({
+        data: {
+          email: data[i].email.toLowerCase(),
+          subscription_active: true,
+        },
+      });
+
+      await prisma.subscription.create({
+        data: {
+          tier: "Supporter",
+          name: data[i].name == "Someone" ? null : data[i].name.toString(),
+          email: data[i].email.toLowerCase(),
+          User: {
+            connect: {
+              email: data[i].email.toLowerCase(),
+            },
+          },
+        },
+      });
+    } else {
+      await prisma.user.update({
+        where: {
+          email: data[i].email.toLowerCase(),
+        },
+        data: {
+          subscription_active: true,
+        },
+      });
+
+      const subscription = await prisma.subscription.findFirst({
+        where: {
+          userId: user.id,
+        },
+      });
+
+      if (!subscription) {
+        await prisma.subscription.create({
+          data: {
+            tier: "Supporter",
+            name: data[i].name == "Someone" ? null : data[i].name.toString(),
+            email: data[i].email.toLowerCase(),
+            User: {
+              connect: {
+                id: user.id,
+              },
+            },
+          },
+        });
+      } else {
+        await prisma.subscription.update({
+          where: {
+            userId: user.id,
+          },
+          data: {
+            tier: "Supporter",
+            name: data[i].name == "Someone" ? null : data[i].name.toString(),
+          },
+        });
+      }
+    }
+  }
+  res.status(200).send("Subscriptions added");
 });
 
 app.post("/kofi", async (req, res) => {
@@ -135,31 +266,125 @@ app.post("/kofi", async (req, res) => {
       });
     }
 
-    await prisma.subscription.create({
+    if (!is_first_subscription_payment) {
+      await prisma.subscription.create({
+        data: {
+          message_id: message_id,
+          timestamp: timestamp,
+          tier: tier,
+          name: name,
+          email: email,
+          User: {
+            connect: {
+              email: email,
+            },
+          },
+        },
+      });
+
+      await prisma.user.update({
+        where: {
+          email: email,
+        },
+        data: {
+          subscription_active: true,
+        },
+      });
+
+      console.log(chalk.greenBright("KO-FI INFO"), "Subscription registered");
+    } else {
+      console.log(chalk.greenBright("KO-FI INFO"), "Updating subscription");
+      await prisma.subscription.update({
+        where: {
+          email: email,
+        },
+        data: {
+          message_id: message_id,
+          timestamp: timestamp,
+          tier: tier,
+          name: name,
+        },
+      });
+
+      return res.status(200).send("Subscription updated");
+    }
+  }
+});
+
+app.get("/upload-samples", async (req, res) => {
+  const samples = "./nexus.json";
+  const data = require(samples);
+  console.log(
+    chalk.greenBright("WEBSERVER INFO"),
+    "Uploading " + data.length + " samples"
+  );
+
+  const categoryMapping = {
+    "Drum Kits": SampleCategory.Drum,
+    Vocals: SampleCategory.Vocals,
+    "VSTs & Presets": SampleCategory.Presets,
+    "Loops & Samples": SampleCategory.Loop,
+    "MIDI Kits": SampleCategory.MIDI,
+    "One Shots": SampleCategory.OneShot,
+  };
+
+  const genreMapping = {
+    "Hip-Hop": SampleGenres.HipHop,
+    Trap: SampleGenres.Trap,
+    EDM: SampleGenres.EDM,
+    Pop: SampleGenres.Pop,
+    "R&B": SampleGenres.RnB,
+    Rock: SampleGenres.Rock,
+    Jazz: SampleGenres.Jazz,
+    Blues: SampleGenres.Blues,
+    Reggae: SampleGenres.Reggae,
+    Country: SampleGenres.Country,
+    Classical: SampleGenres.Classical,
+    Guitar: SampleGenres.Guitar,
+    Other: SampleGenres.Other,
+  };
+
+  for (let i = 0; i < data.length; i++) {
+    console.log(
+      chalk.greenBright("WEBSERVER INFO"),
+      "Uploading sample: " + data[i].key
+    );
+
+    const mappedCategories = data[i].categories?.map(
+      (category) => categoryMapping[category]
+    );
+
+    const mappedGenres =
+      data[i].genres?.map((genre) => genreMapping[genre]) || [];
+
+    // const cutOriginSize = data[i].origin?.split(" | ");
+    // const origin = cutOriginSize[0];
+    // const size = cutOriginSize[1];
+
+    await prisma.sample.create({
       data: {
-        message_id: message_id,
-        timestamp: timestamp,
-        tier: tier,
-        name: name,
-        User: {
+        key: data[i].key,
+        title: data[i].title,
+        image_id: data[i].image_id ? data[i].image_id : "placeholder",
+        author: data[i].author,
+        origin: null,
+        size: data[i].size,
+        categories: mappedCategories || [],
+        type: SampleType.Nexus,
+        download_url: data[i].url,
+        genres: mappedGenres || [],
+        group: data[i].type == "Nexus 3 Expansion" ? "Nexus 3" : "Nexus 4",
+        note: data[i].note || null,
+        description: data[i].type,
+        user: {
           connect: {
-            email: email,
+            email: "alkos.yt@gmail.com",
           },
         },
       },
     });
-
-    await prisma.user.update({
-      where: {
-        email: email,
-      },
-      data: {
-        subscription_active: true,
-      },
-    });
-
-    return res.status(200).send("Subscription registered");
   }
+  res.status(200).send("Samples uploaded");
 });
 
 app.post("/webhook", async (req, res) => {
