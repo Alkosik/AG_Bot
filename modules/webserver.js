@@ -297,15 +297,38 @@ app.post("/kofi", async (req, res) => {
       console.log(chalk.greenBright("KO-FI INFO"), "Subscription registered");
     } else {
       console.log(chalk.greenBright("KO-FI INFO"), "Updating subscription");
-      await prisma.subscription.update({
+
+      const user = await prisma.user.findUnique({
         where: {
           email: email,
+        },
+      });
+
+      await prisma.subscription.update({
+        where: {
+          userId: user.id, // assuming 'userId' is a unique field in your 'subscription' model
         },
         data: {
           message_id: message_id,
           timestamp: timestamp,
+          active: true,
           tier: tier,
           name: name,
+          email: email,
+          User: {
+            connect: {
+              email: email,
+            },
+          },
+        },
+      });
+
+      await prisma.user.update({
+        where: {
+          email: email,
+        },
+        data: {
+          subscription_active: true,
         },
       });
 
