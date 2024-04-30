@@ -280,7 +280,7 @@ app.post("/kofi", async (req, res) => {
           email: email,
           User: {
             connect: {
-              email: email,
+              id: user.id, // connect using the user's ID
             },
           },
         },
@@ -288,7 +288,7 @@ app.post("/kofi", async (req, res) => {
 
       await prisma.user.update({
         where: {
-          email: email,
+          id: user.id, // update using the user's ID
         },
         data: {
           subscription_active: true,
