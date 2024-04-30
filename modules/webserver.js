@@ -255,14 +255,14 @@ app.post("/kofi", async (req, res) => {
     return res.status(400).send("Not a subscription");
   } else {
     console.log(chalk.greenBright("KO-FI INFO"), "Subscription received");
-    const user = await prisma.user.findUnique({
+    let user = await prisma.user.findUnique({
       where: {
         email: email,
       },
     });
 
     if (!user) {
-      await prisma.user.create({
+      user = await prisma.user.create({
         data: {
           email: email,
         },
@@ -299,12 +299,6 @@ app.post("/kofi", async (req, res) => {
     } else {
       console.log(chalk.greenBright("KO-FI INFO"), "Updating subscription");
 
-      const user = await prisma.user.findUnique({
-        where: {
-          email: email,
-        },
-      });
-
       await prisma.subscription.update({
         where: {
           userId: user.id, // assuming 'userId' is a unique field in your 'subscription' model
@@ -318,7 +312,7 @@ app.post("/kofi", async (req, res) => {
           email: email,
           User: {
             connect: {
-              email: email,
+              id: user.id,
             },
           },
         },
