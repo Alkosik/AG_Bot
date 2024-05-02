@@ -255,6 +255,7 @@ app.post("/kofi", async (req, res) => {
     return res.status(400).send("Not a subscription");
   } else {
     console.log(chalk.greenBright("KO-FI INFO"), "Subscription received");
+
     let user = await prisma.user.findUnique({
       where: {
         email: email,
@@ -269,44 +270,18 @@ app.post("/kofi", async (req, res) => {
       });
     }
 
-    if (is_first_subscription_payment) {
-      console.log(chalk.greenBright("KO-FI INFO"), "FIRST PAYMENT");
-      await prisma.subscription.create({
+    let subscription = await prisma.subscription.findFirst({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    if (!subscription) {
+      console.log(chalk.greenBright("KO-FI INFO"), "New subscription");
+      subscription = await prisma.subscription.create({
         data: {
           message_id: message_id,
           timestamp: timestamp,
-          tier: tier,
-          name: name,
-          email: email,
-          User: {
-            connect: {
-              id: user.id, // connect using the user's ID
-            },
-          },
-        },
-      });
-
-      await prisma.user.update({
-        where: {
-          id: user.id, // update using the user's ID
-        },
-        data: {
-          subscription_active: true,
-        },
-      });
-
-      console.log(chalk.greenBright("KO-FI INFO"), "Subscription registered");
-    } else {
-      console.log(chalk.greenBright("KO-FI INFO"), "Updating subscription");
-
-      await prisma.subscription.update({
-        where: {
-          userId: user.id, // assuming 'userId' is a unique field in your 'subscription' model
-        },
-        data: {
-          message_id: message_id,
-          timestamp: timestamp,
-          active: true,
           tier: tier,
           name: name,
           email: email,
@@ -320,6 +295,31 @@ app.post("/kofi", async (req, res) => {
 
       await prisma.user.update({
         where: {
+          id: user.id,
+        },
+        data: {
+          subscription_active: true,
+        },
+      });
+
+      console.log(chalk.greenBright("KO-FI INFO"), "Subscription registered");
+    } else {
+      console.log(chalk.greenBright("KO-FI INFO"), "Subscription exists");
+      subscription = await prisma.subscription.update({
+        where: {
+          userId: user.id,
+        },
+        data: {
+          message_id: message_id,
+          timestamp: timestamp,
+          tier: tier,
+          name: name,
+          email: email,
+        },
+      });
+
+      await prisma.user.update({
+        where: {
           email: email,
         },
         data: {
@@ -327,8 +327,10 @@ app.post("/kofi", async (req, res) => {
         },
       });
 
-      return res.status(200).send("Subscription updated");
+      console.log(chalk.greenBright("KO-FI INFO"), "Subscription updated");
     }
+
+    return res.status(200).send("Subscription updated");
   }
 });
 
