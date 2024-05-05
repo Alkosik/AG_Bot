@@ -251,8 +251,13 @@ app.post("/kofi", async (req, res) => {
   }
 
   if (type !== "Subscription") {
-    console.log(chalk.redBright("KO-FI ERROR"), "Not a subscription");
-    return res.status(400).send("Not a subscription");
+    if (type == "Donation") {
+      console.log(chalk.redBright("KO-FI INFO"), "Donation received");
+      return res.status(200).send("Donation received");
+    } else {
+      console.log(chalk.redBright("KO-FI ERROR"), "Not a subscription");
+      return res.status(400).send("Not a subscription");
+    }
   } else {
     console.log(chalk.greenBright("KO-FI INFO"), "Subscription received");
 
