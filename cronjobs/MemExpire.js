@@ -14,10 +14,12 @@ module.exports = (config, client, chalk) => {
   cron.scheduleJob("0 */1 * * *", async function () {
     const { PrismaClient } = require("@prisma/client");
     const prisma = new PrismaClient();
-    const thirtyDaysAgo = new Date(Date.now() - 2592000000);
+    let thirtyDaysAgo = new Date(Date.now() - 2592000000);
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() + 3);
     console.log(chalk.green("CRON INFO"), "Member Expire starting");
     const expired_subscriptions = await prisma.subscription.findMany({
       where: {
+        active: true,
         timestamp: {
           lt: thirtyDaysAgo,
         },
