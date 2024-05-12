@@ -242,9 +242,6 @@ app.post("/kofi", async (req, res) => {
   const email = parsedData.email;
   const tier = parsedData.tier_name;
 
-  const is_first_subscription_payment =
-    parsedData.is_first_subscription_payment;
-
   if (verification_token != process.env.KOFI_TOKEN) {
     console.log(chalk.redBright("KO-FI ERROR"), "Unauthorized");
     return res.status(401).send("Unauthorized");
@@ -287,6 +284,7 @@ app.post("/kofi", async (req, res) => {
         data: {
           message_id: message_id,
           timestamp: timestamp,
+          active: true,
           tier: tier,
           name: name,
           email: email,
@@ -317,6 +315,7 @@ app.post("/kofi", async (req, res) => {
         data: {
           message_id: message_id,
           timestamp: timestamp,
+          active: true,
           tier: tier,
           name: name,
           email: email,
