@@ -306,6 +306,7 @@ app.post("/kofi", async (req, res) => {
       });
 
       console.log(chalk.greenBright("KO-FI INFO"), "Subscription registered");
+      return res.status(200).send("Subscription registered");
     } else {
       console.log(chalk.greenBright("KO-FI INFO"), "Subscription exists");
       subscription = await prisma.subscription.update({
@@ -332,9 +333,8 @@ app.post("/kofi", async (req, res) => {
       });
 
       console.log(chalk.greenBright("KO-FI INFO"), "Subscription updated");
+      return res.status(200).send("Subscription updated");
     }
-
-    return res.status(200).send("Subscription updated");
   }
 });
 
