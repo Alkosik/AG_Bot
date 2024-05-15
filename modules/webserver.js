@@ -129,8 +129,11 @@ app.get("/update-email", async (req, res) => {
 });
 
 app.get("/add-subscriptions", async (req, res) => {
-  console.log(chalk.greenBright("WEBSERVER INFO"), "Adding subscriptions");
-  const members = "./bmac.json";
+  console.log(
+    chalk.greenBright("WEBSERVER INFO"),
+    "Adding yearly subscriptions"
+  );
+  const members = "./yearly.json";
 
   const reqMembers = require(members);
 
@@ -145,9 +148,11 @@ app.get("/add-subscriptions", async (req, res) => {
   );
 
   for (let i = 0; i < data.length; i++) {
+    const timestamp = new Date(data[i].starts);
+    timestamp.setFullYear(timestamp.getFullYear() + 1);
     console.log(
       chalk.greenBright("WEBSERVER INFO"),
-      i + ". Adding subscription: " + data[i].email.toLowerCase()
+      i + ". Updating subscription: " + data[i].email.toLowerCase()
     );
 
     const user = await prisma.user.findUnique({
@@ -161,6 +166,15 @@ app.get("/add-subscriptions", async (req, res) => {
         chalk.redBright("WEBSERVER INFO"),
         "User already exists, updating subscription"
       );
+
+      await prisma.user.update({
+        where: {
+          email: data[i].email.toLowerCase(),
+        },
+        data: {
+          subscription_active: true,
+        },
+      });
     }
 
     if (!user) {
@@ -171,18 +185,40 @@ app.get("/add-subscriptions", async (req, res) => {
         },
       });
 
-      await prisma.subscription.create({
-        data: {
-          tier: "Supporter",
-          name: data[i].name == "Someone" ? null : data[i].name.toString(),
+      const subscription = await prisma.subscription.findFirst({
+        where: {
           email: data[i].email.toLowerCase(),
-          User: {
-            connect: {
-              email: data[i].email.toLowerCase(),
-            },
-          },
         },
       });
+
+      if (!subscription) {
+        await prisma.subscription.create({
+          data: {
+            tier: "Supporter",
+            name: data[i].name == "Someone" ? null : data[i].name.toString(),
+            email: data[i].email.toLowerCase(),
+            timestamp: timestamp,
+            active: true,
+            User: {
+              connect: {
+                email: data[i].email.toLowerCase(),
+              },
+            },
+          },
+        });
+      } else {
+        await prisma.subscription.update({
+          where: {
+            email: data[i].email.toLowerCase(),
+          },
+          data: {
+            tier: "Supporter",
+            name: data[i].name == "Someone" ? null : data[i].name.toString(),
+            timestamp: timestamp,
+            active: true,
+          },
+        });
+      }
     } else {
       await prisma.user.update({
         where: {
@@ -205,6 +241,8 @@ app.get("/add-subscriptions", async (req, res) => {
             tier: "Supporter",
             name: data[i].name == "Someone" ? null : data[i].name.toString(),
             email: data[i].email.toLowerCase(),
+            timestamp: timestamp,
+            active: true,
             User: {
               connect: {
                 id: user.id,
@@ -220,6 +258,8 @@ app.get("/add-subscriptions", async (req, res) => {
           data: {
             tier: "Supporter",
             name: data[i].name == "Someone" ? null : data[i].name.toString(),
+            timestamp: timestamp,
+            active: true,
           },
         });
       }
