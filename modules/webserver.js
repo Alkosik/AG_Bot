@@ -277,7 +277,7 @@ app.post("/member", async (req, res) => {
   const users = database.collection("users");
 
   const user = await users.findOne({
-    id: id,
+    _id: id,
   });
 
   if (!user) {
