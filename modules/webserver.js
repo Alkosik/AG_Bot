@@ -268,6 +268,26 @@ app.get("/add-subscriptions", async (req, res) => {
   res.status(200).send("Subscriptions added");
 });
 
+app.post("/member", async (req, res) => {
+  console.log(chalk.greenBright("MEMBER INFO"), "Fetching member data");
+  const id = await req.body.id;
+
+  const database = mongoClient.db("discord");
+  const users = database.collection("users");
+
+  const user = await users.findOne({
+    id: id,
+  });
+
+  if (!user) {
+    console.log(chalk.redBright("MEMBER INFO"), "Member not found");
+    return res.status(404).send("Member not found");
+  }
+
+  console.log(chalk.greenBright("MEMBER INFO"), "Member found");
+  return res.status(200).send(user);
+});
+
 app.post("/kofi", async (req, res) => {
   console.log(chalk.greenBright("KO-FI INFO"), "New webhook received");
 
