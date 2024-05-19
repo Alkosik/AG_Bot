@@ -271,6 +271,7 @@ app.get("/add-subscriptions", async (req, res) => {
 app.post("/member", async (req, res) => {
   console.log(chalk.greenBright("MEMBER INFO"), "Fetching member data");
   const id = await req.body.id;
+  console.log(chalk.greenBright("MEMBER INFO"), "Member ID: " + id);
 
   const database = mongoClient.db("discord");
   const users = database.collection("users");
