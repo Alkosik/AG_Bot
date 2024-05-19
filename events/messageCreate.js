@@ -120,7 +120,7 @@ module.exports = {
           (async () => {
             const lvlup = new EmbedBuilder()
               .setFooter(
-                "Gang Słoni",
+                "G-MEH",
                 "https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png"
               )
               .setDescription(
