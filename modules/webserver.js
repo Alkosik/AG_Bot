@@ -297,8 +297,10 @@ app.post("/messages/week", async (req, res) => {
   const id = await req.body.id;
   console.log(chalk.greenBright("MESSAGES INFO"), "Member ID: " + id);
 
-  const weekAgo = new Date();
-  weekAgo.setDate(weekAgo.getDate() - 7);
+  const weekAgo = new Date(Date.UTC());
+  weekAgo.setUTCDate(weekAgo.getUTCDate() - 7);
+
+  console.log(chalk.greenBright("MESSAGES INFO"), "Week ago: " + weekAgo);
 
   // Get the amount of messages from the last week from the Time-Series collection
   const messagesData = await messages
@@ -316,7 +318,7 @@ app.post("/messages/week", async (req, res) => {
             month: { $month: "$date" },
             day: { $dayOfMonth: "$date" },
           },
-          messages: { $sum: "$messages" },
+          messages: { $sum: 1 },
         },
       },
       {
@@ -324,7 +326,7 @@ app.post("/messages/week", async (req, res) => {
       },
       {
         $group: {
-          _id: null,
+          _id: id,
           totalMessages: { $sum: "$messages" },
           dailyMessages: { $push: "$$ROOT" },
         },
