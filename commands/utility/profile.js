@@ -63,7 +63,7 @@ module.exports = {
             const ProfileEmbed = new EmbedBuilder()
               .setColor(color.hex)
               .setAuthor({
-                name: `${person.user.username}#${person.user.discriminator}`,
+                name: `${person.user.username}`,
                 iconURL: person.user.avatarURL({ dynamic: true }),
               })
               // .setTitle(`${person.user.username}#${person.user.discriminator}`)
@@ -91,8 +91,8 @@ module.exports = {
               // .setThumbnail(person.user.avatarURL({ dynamic: true }))
               .setTimestamp()
               .setFooter({
-                text: "Gang Słoni",
-                iconURL: "https://i.imgur.com/JRl8WjV.png",
+                text: "G-MEH",
+                iconURL: "https://i.imgur.com/KCMddI7.png",
               });
 
             interaction.editReply({ embeds: [ProfileEmbed] });
