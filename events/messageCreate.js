@@ -24,6 +24,7 @@ module.exports = {
   async execute(message, client) {
     const database = mongoClient.db("discord");
     const users = database.collection("users");
+    const daily_messages = database.collection("daily_messages");
     if (message.channel.type == "DM") {
       if (message.author.bot) return;
       return client.channels.cache
@@ -46,24 +47,6 @@ module.exports = {
       message.react("👍");
       message.react("👎");
     }
-    // connection.query(`SELECT * FROM stats WHERE date = '${formattedDate}'`, function(err, rows) {
-    // 	if (err) {
-    // 		client.emit('error', err);
-    // 		throw err;
-    // 	}
-
-    // 	let msgCount;
-
-    // 	if (rows.length < 1) {
-    // 		msgCount = 1;
-    // 	} else {
-    // 		msgCount = rows[0].messages;
-    // 	}
-    // 	// const sqlQuery = `UPDATE stats SET messages = ${msgCount++}`;
-    // 	connection.query(`UPDATE stats SET messages = ${msgCount + 1} WHERE date = '${formattedDate}'`, function(err) {
-    // 		if (err) throw err;
-    // 	});
-    // });
 
     function generateXp() {
       return Math.floor(Math.random() * (10 - 5 + 1)) + 5;
@@ -76,6 +59,32 @@ module.exports = {
     if (!message.author.bot && !talkedRecently.has(message.author.id)) {
       const query = { _id: message.author.id };
       const userObj = await users.findOne(query);
+
+      // Update daily messages (Time-Series Data)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const daily_message_query = {
+        _id: message.author.id + today.getTime(),
+      };
+
+      const daily_message_obj = await daily_messages.findOne(
+        daily_message_query
+      );
+
+      if (!daily_message_obj) {
+        await daily_messages.insertOne({
+          _id: message.author.id + today.getTime(),
+          messages: 1,
+          created: Date.now(),
+        });
+      } else {
+        await daily_messages.updateOne(daily_message_query, {
+          $set: {
+            messages: daily_message_obj.messages + 1,
+          },
+        });
+      }
 
       if (!userObj) {
         await users.insertOne({
@@ -144,7 +153,7 @@ module.exports = {
           talkedRecently.add(message.author.id);
           setTimeout(() => {
             talkedRecently.delete(message.author.id);
-          }, 20000);
+          }, 15000);
         }
       }
     }
