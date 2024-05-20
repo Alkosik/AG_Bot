@@ -6,6 +6,7 @@ const snooze = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const talkedRecently = new Set();
 
 const { MongoClient, ServerApiVersion } = require("mongodb");
+const e = require("express");
 const mongoClient = new MongoClient(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -111,6 +112,34 @@ module.exports = {
               level: userObj.level + 1,
             },
           });
+
+          // Assign lvl role
+          const member = message.guild.members.cache.get(message.author.id);
+          switch (userObj.level + 1) {
+            case 5:
+              member.roles.add("1075882616210849882");
+              break;
+            case 10:
+              member.roles.add("1075872324504530975");
+              member.roles.remove("1075882616210849882");
+              break;
+            case 20:
+              member.roles.add("1076152193956192407");
+              member.roles.remove("1075872324504530975");
+              break;
+            case 30:
+              member.roles.add("1076155866828525578");
+              member.roles.remove("1076152193956192407");
+              break;
+            case 40:
+              member.roles.add("1076229190560522381");
+              member.roles.remove("1076155866828525578");
+              break;
+            case 50:
+              member.roles.add("1076228333697765416");
+              member.roles.remove("1076229190560522381");
+              break;
+          }
 
           // Level up message
           (async () => {
