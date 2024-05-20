@@ -75,8 +75,8 @@ module.exports = {
       if (!daily_message_obj) {
         await daily_messages.insertOne({
           _id: message.author.id + today.getTime(),
+          date: new Date(),
           messages: 1,
-          created: Date.now(),
         });
       } else {
         await daily_messages.updateOne(daily_message_query, {
