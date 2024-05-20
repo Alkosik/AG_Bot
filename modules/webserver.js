@@ -289,6 +289,55 @@ app.post("/member", async (req, res) => {
   return res.status(200).send(user);
 });
 
+app.post("/messages/week", async (req, res) => {
+  console.log(chalk.greenBright("MESSAGES INFO"), "Fetching messages data");
+  const database = mongoClient.db("discord");
+  const messages = database.collection("messages");
+
+  const id = await req.body.id;
+  console.log(chalk.greenBright("MESSAGES INFO"), "Member ID: " + id);
+
+  // Get the amount of messages from the last week from the Time-Series collection
+  const messagesData = await messages
+    .aggregate([
+      {
+        $match: {
+          _id: id,
+          date: { $gte: weekAgo },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$date" },
+            month: { $month: "$date" },
+            day: { $dayOfMonth: "$date" },
+          },
+          messages: { $sum: "$messages" },
+        },
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 },
+      },
+      {
+        $group: {
+          _id: null,
+          totalMessages: { $sum: "$messages" },
+          dailyMessages: { $push: "$$ROOT" },
+        },
+      },
+    ])
+    .toArray();
+
+  if (!messagesData) {
+    console.log(chalk.redBright("MESSAGES INFO"), "Messages not found");
+    return res.status(404).send("Messages not found");
+  }
+
+  console.log(chalk.greenBright("MESSAGES INFO"), "Messages found");
+  return res.status(200).send(messagesData);
+});
+
 app.post("/kofi", async (req, res) => {
   console.log(chalk.greenBright("KO-FI INFO"), "New webhook received");
 
