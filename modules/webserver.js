@@ -297,6 +297,9 @@ app.post("/messages/week", async (req, res) => {
   const id = await req.body.id;
   console.log(chalk.greenBright("MESSAGES INFO"), "Member ID: " + id);
 
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+
   // Get the amount of messages from the last week from the Time-Series collection
   const messagesData = await messages
     .aggregate([
