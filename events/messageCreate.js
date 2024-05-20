@@ -24,7 +24,7 @@ module.exports = {
   async execute(message, client) {
     const database = mongoClient.db("discord");
     const users = database.collection("users");
-    const daily_messages = database.collection("daily_messages");
+    const messages = database.collection("messages");
     if (message.channel.type == "DM") {
       if (message.author.bot) return;
       return client.channels.cache
@@ -60,31 +60,18 @@ module.exports = {
       const query = { _id: message.author.id };
       const userObj = await users.findOne(query);
 
-      // Update daily messages (Time-Series Data)
+      // Insert to messages (Time-Series Data)
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      const daily_message_query = {
-        _id: message.author.id + today.getTime(),
-      };
-
-      const daily_message_obj = await daily_messages.findOne(
-        daily_message_query
-      );
-
-      if (!daily_message_obj) {
-        await daily_messages.insertOne({
-          _id: message.author.id + today.getTime(),
-          date: new Date(),
-          messages: 1,
-        });
-      } else {
-        await daily_messages.updateOne(daily_message_query, {
-          $set: {
-            messages: daily_message_obj.messages + 1,
-          },
-        });
-      }
+      await messages.insertOne({
+        date: new Date(),
+        id: message.author.id,
+        metadata: {
+          channel: message.channelId,
+          length: message.content.length,
+        },
+      });
 
       if (!userObj) {
         await users.insertOne({
