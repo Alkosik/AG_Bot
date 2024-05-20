@@ -66,7 +66,7 @@ module.exports = {
 
       await messages.insertOne({
         date: new Date(),
-        id: message.author.id,
+        _id: message.author.id,
         metadata: {
           channel: message.channelId,
           length: message.content.length,
