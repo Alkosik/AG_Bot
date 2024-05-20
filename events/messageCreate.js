@@ -144,10 +144,7 @@ module.exports = {
           // Level up message
           (async () => {
             const lvlup = new EmbedBuilder()
-              .setFooter(
-                "G-MEH",
-                "https://i.ibb.co/rk0Z6Mb/Grupfdgggdrszga-1.png"
-              )
+              .setFooter("G-MEH", "https://i.imgur.com/KCMddI7.png")
               .setDescription(
                 `sheeeesh, ${message.author.username} you are now at level ${
                   userObj.level + 1
