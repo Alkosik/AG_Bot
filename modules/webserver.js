@@ -338,7 +338,9 @@ app.post("/messages/week", async (req, res) => {
 
   if (!messagesData) {
     console.log(chalk.redBright("MESSAGES INFO"), "Messages not found");
-    return res.status(404).send("Messages not found");
+    return res
+      .status(404)
+      .send({ status: 404, error: "Messages not found", id: id });
   }
 
   console.log(chalk.greenBright("MESSAGES INFO"), "Messages found");
