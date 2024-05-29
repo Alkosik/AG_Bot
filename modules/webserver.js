@@ -282,7 +282,9 @@ app.post("/member", async (req, res) => {
 
   if (!user) {
     console.log(chalk.redBright("MEMBER INFO"), "Member not found");
-    return res.status(404).send("Member not found");
+    return res
+      .status(404)
+      .send({ status: 404, error: "Member not found", id: id });
   }
 
   console.log(chalk.greenBright("MEMBER INFO"), "Member found");
@@ -1067,6 +1069,7 @@ app.post("/verifyIcon", async (req, res) => {
 
 // Youtube
 const Notifier = require("@daangamesdg/youtube-notifications");
+const { stat } = require("fs");
 
 const notifier = new Notifier({
   hubCallback: "https://api.gangsloni.com/youtube/callback",
