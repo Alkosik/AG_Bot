@@ -15,7 +15,7 @@ module.exports = (config, client, chalk) => {
     const { PrismaClient } = require("@prisma/client");
     const prisma = new PrismaClient();
     let thirtyDaysAgo = new Date(Date.now() - 2592000000);
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() + 3);
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 7);
     console.log(chalk.green("CRON INFO"), "Member Expire starting");
     const expired_subscriptions = await prisma.subscription.findMany({
       where: {
