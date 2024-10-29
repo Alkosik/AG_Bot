@@ -457,6 +457,60 @@ app.post("/kofi", async (req, res) => {
   }
 });
 
+const {
+  S3Client,
+  GetObjectCommand,
+  HeadObjectCommand,
+} = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+
+app.get("/getURL", async (req, res) => {
+  const s3Client = new S3Client({
+    region: "auto",
+    endpoint:
+      "https://4bf8b07e0c97b9c92627fa4405f4975e.r2.cloudflarestorage.com",
+    credentials: {
+      accessKeyId: process.env.R2_KEY_ID,
+      secretAccessKey: process.env.R2_KEY_SECRET,
+    },
+  });
+
+  const bucketName = "gangsloni";
+  const objectKey = req.query.key;
+
+  try {
+    // Check if the file exists
+    await s3Client.send(
+      new HeadObjectCommand({
+        Bucket: bucketName,
+        Key: objectKey,
+      })
+    );
+
+    // If the file exists, generate the signed URL
+    const command = new GetObjectCommand({
+      Bucket: bucketName,
+      Key: objectKey,
+    });
+
+    let url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+
+    url = url.replace(
+      "gangsloni.4bf8b07e0c97b9c92627fa4405f4975e.r2.cloudflarestorage.com",
+      "r2.gangsloni.com"
+    );
+
+    res.status(200).send(url);
+  } catch (error) {
+    if (error.name === "NotFound") {
+      res.status(404).send("File not found");
+    } else {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+});
+
 app.get("/upload-samples", async (req, res) => {
   const samples = "./nexus.json";
   const data = require(samples);
