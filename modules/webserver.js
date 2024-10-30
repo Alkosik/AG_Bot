@@ -500,7 +500,7 @@ app.get("/getURL", async (req, res) => {
       "r2.gangsloni.com"
     );
 
-    res.status(200).send(url);
+    res.status(200).json({ url });
   } catch (error) {
     if (error.name === "NotFound") {
       res.status(404).send("File not found");
