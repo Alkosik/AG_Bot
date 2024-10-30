@@ -495,10 +495,10 @@ app.get("/getURL", async (req, res) => {
 
     let url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
 
-    url = url.replace(
-      "gangsloni.4bf8b07e0c97b9c92627fa4405f4975e.r2.cloudflarestorage.com",
-      "r2.gangsloni.com"
-    );
+    // url = url.replace(
+    //   "gangsloni.4bf8b07e0c97b9c92627fa4405f4975e.r2.cloudflarestorage.com",
+    //   "r2.gangsloni.com"
+    // );
 
     res.status(200).json({ url });
   } catch (error) {
